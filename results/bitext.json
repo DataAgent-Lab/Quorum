@@ -1,0 +1,24 @@
+{
+  "dataset": "bitext",
+  "n_labels": 27,
+  "n_test": 5375,
+  "ensemble_accuracy": 0.7749,
+  "single_member_accuracy": {
+    "Jaehun/PrismNLI-0.4B": 0.7124,
+    "BAAI/bge-large-en-v1.5": 0.7046,
+    "BAAI/bge-base-en-v1.5": 0.6767
+  },
+  "best_single_member": "Jaehun/PrismNLI-0.4B",
+  "mcnemar_ensemble_vs_best_single": {
+    "acc_a": 0.7749,
+    "acc_b": 0.7124,
+    "diff": 0.0625,
+    "b_a_wins": 454,
+    "c_b_wins": 118,
+    "n_discordant": 572,
+    "p_two_sided": 0.0,
+    "verdict": "A significantly better"
+  },
+  "ms_per_item": 49.3,
+  "full_test": true
+}
