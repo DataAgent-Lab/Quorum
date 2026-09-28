@@ -24,6 +24,39 @@ calibrated-decision model. On the standard **Banking77** intent benchmark (77 cl
 > (e.g. reported ~0.84 on CLINC vs our 0.65). The point is different: **a cheap, calibrated-by-design ensemble
 > reliably beats its own strongest part, across domains** — and, at the 24-shot budget, edges a paid closed API.
 
+## How it works
+
+Zero-shot — three complementary members vote, geometric mean, done (no training, no calibration):
+
+```mermaid
+flowchart LR
+  T["customer message"] --> N["PrismNLI-0.4B<br/>(NLI entailment)"]
+  T --> E1["bge-large<br/>(cosine)"]
+  T --> E2["bge-base<br/>(cosine)"]
+  L["verbalized labels<br/>'This message is about {label}.'"] -.-> N
+  L -.-> E1
+  L -.-> E2
+  N --> G["softmax (T=1)<br/>→ geometric mean<br/>(log-prob mean)"]
+  E1 --> G
+  E2 --> G
+  G --> D["calibrated distribution<br/>→ label + confidence"]
+```
+
+24-shot — retrieve 24 examples, two mechanisms read the *same* 24, geometric mean (the pipeline that beats
+Jev; adapter release pending):
+
+```mermaid
+flowchart LR
+  T["message"] --> BM["BM25 retrieve<br/>24 examples"]
+  BM --> R["in-context reader<br/>Qwen3-4B + LoRA<br/>(scores K options, 1 forward)"]
+  BM --> K["bge-large kNN<br/>over the same 24"]
+  T --> R
+  T --> K
+  R --> G2["geometric mean"]
+  K --> G2
+  G2 --> D2["distribution → label + confidence"]
+```
+
 ## The zero-shot method (fully reproducible here)
 
 No single small model is a great zero-shot intent classifier. But three *complementary* ones — one NLI model
