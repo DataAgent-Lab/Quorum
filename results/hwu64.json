@@ -1,0 +1,24 @@
+{
+  "dataset": "hwu64",
+  "n_labels": 64,
+  "n_test": 1076,
+  "ensemble_accuracy": 0.7388,
+  "single_member_accuracy": {
+    "Jaehun/PrismNLI-0.4B": 0.6431,
+    "BAAI/bge-large-en-v1.5": 0.6152,
+    "BAAI/bge-base-en-v1.5": 0.6022
+  },
+  "best_single_member": "Jaehun/PrismNLI-0.4B",
+  "mcnemar_ensemble_vs_best_single": {
+    "acc_a": 0.7388,
+    "acc_b": 0.6431,
+    "diff": 0.0957,
+    "b_a_wins": 156,
+    "c_b_wins": 53,
+    "n_discordant": 209,
+    "p_two_sided": 0.0,
+    "verdict": "A significantly better"
+  },
+  "ms_per_item": 89.5,
+  "full_test": true
+}
