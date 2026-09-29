@@ -36,7 +36,12 @@ class _NLIMember:
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
         self.torch = torch
         self.tok = AutoTokenizer.from_pretrained(model_name)
-        self.model = AutoModelForSequenceClassification.from_pretrained(model_name).to(device).eval()
+        # This checkpoint is stored in fp16. On CPU, fp16 matmul has no fast path (x86 has no native fp16
+        # compute) and runs ~5x slower than fp32 — and fp32 is *higher* precision, so it never hurts accuracy.
+        # Load fp32 on CPU for speed; keep the checkpoint dtype (fp16) on GPU, where fp16 is the fast path.
+        dtype = torch.float32 if device == "cpu" else None
+        self.model = AutoModelForSequenceClassification.from_pretrained(
+            model_name, torch_dtype=dtype).to(device).eval()
         self.device = device
         id2label = {int(k): str(v).lower() for k, v in self.model.config.id2label.items()}
         self.entail = next((i for i, v in id2label.items() if "entail" in v), id2label and max(id2label) or 0)
