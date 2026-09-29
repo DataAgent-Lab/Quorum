@@ -20,9 +20,12 @@ dependencies = [
 
 [project.optional-dependencies]
 serve = ["fastapi>=0.110", "uvicorn>=0.29"]
+# The self-hosted decision service (define/train/predict + web console). Layer 1.5 (24-shot anchor) also needs
+# a GPU and `peft` (installed via service/requirements.txt / the Docker image).
+service = ["fastapi>=0.110", "uvicorn[standard]>=0.29"]
 
 [project.urls]
 Homepage = "https://github.com/DataAgent-Lab/Quorum"
 
 [tool.setuptools.packages.find]
-include = ["quorum*"]
+include = ["quorum*", "service*"]

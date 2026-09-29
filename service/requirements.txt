@@ -1,0 +1,10 @@
+# Quorum Decision Service. Base (Layer 1 zero-shot + Layer 2 trained head) runs on CPU.
+fastapi>=0.110
+uvicorn[standard]>=0.29
+numpy>=1.26
+sentence-transformers>=2.6
+transformers>=4.40
+sentencepiece>=0.2
+protobuf>=4.25
+# Layer 1.5 (24-shot anchor) additionally needs a GPU, `peft`, and access to the gated reader adapter.
+peft>=0.10

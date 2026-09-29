@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Quorum Decision Service</title>
+<style>
+  :root{--bg:#0f1216;--panel:#171b22;--line:#262c36;--fg:#e6e9ee;--mut:#9aa4b2;--acc:#5b9dff;--good:#3ecf8e;--warn:#f5b451}
+  @media (prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f6f7f9;--panel:#fff;--line:#e4e7ec;--fg:#1a1f27;--mut:#5b6472;--acc:#2f6fed;--good:#12a565;--warn:#b7791f}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  header{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:12px}
+  header b{font-size:18px}header span{color:var(--mut);font-size:13px}
+  main{max-width:1080px;margin:0 auto;padding:24px 16px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .card h2{margin:0 0 4px;font-size:15px}.card p.hint{margin:0 0 12px;color:var(--mut);font-size:13px}
+  .full{grid-column:1/3}label{display:block;font-size:12px;color:var(--mut);margin:10px 0 4px}
+  input,textarea,select{width:100%;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font:inherit}
+  textarea{min-height:120px;resize:vertical;font-family:ui-monospace,Menlo,monospace;font-size:13px}
+  button{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:10px 16px;font:inherit;font-weight:600;cursor:pointer;margin-top:12px}
+  button.sec{background:transparent;color:var(--acc);border:1px solid var(--line)}
+  button:disabled{opacity:.5;cursor:default}
+  .row{display:flex;gap:8px;align-items:center}.row>*{margin-top:0}
+  .bar{height:22px;background:var(--bg);border:1px solid var(--line);border-radius:6px;overflow:hidden;position:relative}
+  .bar>i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--acc),#7db4ff);opacity:.85}
+  .barrow{display:grid;grid-template-columns:150px 1fr 54px;gap:8px;align-items:center;margin:6px 0;font-size:13px}
+  .pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:600}
+  .pill.good{background:rgba(62,207,142,.15);color:var(--good)}.pill.warn{background:rgba(245,180,81,.15);color:var(--warn)}
+  .muted{color:var(--mut);font-size:13px}.err{color:#ff6b6b;font-size:13px;white-space:pre-wrap}
+  code{background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12px}
+  .tasks a{display:block;color:var(--acc);text-decoration:none;padding:4px 0;font-size:13px}
+  .step{display:inline-block;width:20px;height:20px;line-height:20px;text-align:center;background:var(--acc);color:#fff;border-radius:50%;font-size:12px;font-weight:700;margin-right:8px}
+</style>
+</head>
+<body>
+<header><b>Quorum Decision Service</b><span>typed, calibrated decisions — trained on your labels, running on your box</span></header>
+<main>
+  <section class="card">
+    <h2><span class="step">1</span>Define the decision</h2>
+    <p class="hint">Name it, list the possible answers. You'll teach it with a few examples next.</p>
+    <label>Task name</label><input id="name" value="support-intent" placeholder="e.g. ticket-severity"/>
+    <label>Primitive</label>
+    <select id="primitive"><option value="choice">Choice (pick one of N)</option><option value="score">Score (ordered levels, low→high)</option><option value="noul">Noul (yes/no)</option></select>
+    <label>Labels (one per line)</label>
+    <textarea id="classes">billing
+technical
+account
+feedback</textarea>
+    <div class="row"><button class="sec" onclick="define()" id="defBtn">Use now (zero-shot, no training)</button><span id="defMsg" class="muted"></span></div>
+    <div class="muted" style="margin-top:6px">Predicts immediately via a zero-shot classifier (Layer 1). Upload labels in step 2 to train a calibrated, higher-accuracy head (Layer 2).</div>
+  </section>
+
+  <section class="card">
+    <h2><span class="step">2</span>Upload labeled examples</h2>
+    <p class="hint">One per line: <code>text | label</code>. ~20 per label beats a zero-shot API. Fewer works, just less sure.</p>
+    <textarea id="examples">my card was charged twice | billing
+i want a refund for last month | billing
+the app crashes on login | technical
+password reset link is broken | technical
+how do i change my email | account
+close my account please | account
+your support is great, thanks | feedback
+this feature is confusing | feedback</textarea>
+    <div class="row"><button onclick="train()" id="trainBtn">Train &amp; publish</button><span id="trainMsg" class="muted"></span></div>
+    <div id="trainOut" style="margin-top:10px"></div>
+  </section>
+
+  <section class="card full">
+    <h2><span class="step">3</span>Prediction Playground</h2>
+    <p class="hint">Type an input; see the calibrated distribution + confidence. Slide the gate to decide when to auto-act vs escalate to a human.</p>
+    <div class="row"><input id="ptext" placeholder="e.g. I was billed twice this month" onkeydown="if(event.key==='Enter')predict()"/><button onclick="predict()">Predict</button></div>
+    <div class="row" style="margin-top:10px"><label style="margin:0">Confidence gate (τ = <span id="tauv">0.70</span>)</label></div>
+    <input type="range" id="tau" min="0" max="1" step="0.01" value="0.70" oninput="tauv.textContent=(+this.value).toFixed(2); if(window._last)renderPred(window._last)"/>
+    <div id="predOut" style="margin-top:12px"></div>
+  </section>
+
+  <section class="card full">
+    <h2>Published tasks</h2>
+    <div id="tasks" class="tasks muted">none yet</div>
+  </section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+async function api(m,u,b){const r=await fetch(u,{method:m,headers:{'Content-Type':'application/json'},body:b?JSON.stringify(b):undefined});const j=await r.json();if(!r.ok)throw new Error(j.detail||JSON.stringify(j));return j;}
+function parseExamples(t){return t.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const i=l.lastIndexOf('|');return{text:l.slice(0,i).trim(),label:l.slice(i+1).trim()};}).filter(e=>e.text&&e.label);}
+async function define(){
+  const name=$('name').value.trim();const classes=$('classes').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  $('defBtn').disabled=true;$('defMsg').textContent='registering…';
+  try{await api('POST',`/api/tasks/${encodeURIComponent(name)}/define`,{classes,primitive:$('primitive').value});
+    $('defMsg').innerHTML='<span class="pill good">ready · Layer 1 zero-shot</span> predict below now';loadTasks();
+  }catch(e){$('defMsg').innerHTML=`<span class="err">${e.message}</span>`;}
+  $('defBtn').disabled=false;
+}
+async function train(){
+  const name=$('name').value.trim();const classes=$('classes').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  const examples=parseExamples($('examples').value);const primitive=$('primitive').value;
+  $('trainBtn').disabled=true;$('trainMsg').textContent='training…';$('trainOut').innerHTML='';
+  try{const m=await api('POST',`/api/tasks/${encodeURIComponent(name)}/train`,{classes,examples,primitive});
+    const thin=(m.thin_classes||[]).length?`<span class="pill warn">thin: ${m.thin_classes.join(', ')} (add ~20 each)</span>`:'';
+    $('trainOut').innerHTML=`<span class="pill good">trained</span> acc ${m.metrics.cal_accuracy} · ECE ${m.metrics.ece} · T ${m.temperature} · ${m.n_examples} ex ${thin}<div class="muted" style="margin-top:6px">Predict now, or add examples for any label the model is unsure about.</div>`;
+    $('trainMsg').textContent='';loadTasks();
+  }catch(e){$('trainOut').innerHTML=`<div class="err">${e.message}</div>`;$('trainMsg').textContent='';}
+  $('trainBtn').disabled=false;
+}
+async function predict(){
+  const name=$('name').value.trim();const text=$('ptext').value.trim();if(!text)return;
+  try{const r=await api('POST',`/api/tasks/${encodeURIComponent(name)}/predict`,{text,tau:+$('tau').value});window._last=r;renderPred(r);}
+  catch(e){$('predOut').innerHTML=`<div class="err">${e.message}</div>`;}
+}
+function renderPred(r){
+  const tau=+$('tau').value;const entries=Object.entries(r.distribution||r.choice||{});
+  const bars=entries.map(([k,v])=>`<div class="barrow"><span>${k}</span><div class="bar"><i style="width:${(v*100).toFixed(1)}%"></i></div><span>${(v*100).toFixed(1)}%</span></div>`).join('');
+  const gate=r.confidence>=tau?`<span class="pill good">auto: ${r.label}</span>`:`<span class="pill warn">escalate to human (conf ${r.confidence.toFixed(2)} &lt; τ ${tau.toFixed(2)})</span>`;
+  const lay=r.layer===2?'<span class="pill good">Layer 2 · trained · calibrated</span>':(r.layer===1.5?'<span class="pill good">Layer 1.5 · 24-shot anchor</span>':'<span class="pill warn">Layer 1 · zero-shot · uncalibrated</span>');
+  let extra='';
+  if(r.primitive==='score')extra=`<div class="pill" style="background:rgba(91,157,255,.15);color:var(--acc)">score ${r.score} (norm ${r.score_normalized})</div> `;
+  if(r.primitive==='noul')extra=`<div class="pill" style="background:rgba(91,157,255,.15);color:var(--acc)">P(true) = ${r.probability_true}</div> `;
+  $('predOut').innerHTML=`<div style="margin-bottom:8px">${extra}${gate} ${lay} <span class="muted">confidence ${r.confidence.toFixed(3)}</span></div>${bars}`;
+}
+async function loadTasks(){try{const t=await api('GET','/api/tasks');$('tasks').innerHTML=t.length?t.map(x=>`<a onclick="$('name').value='${x.name}';$('classes').value=${JSON.stringify(x.classes.join('\n'))}">${x.name}</a> <span class="muted">· ${x.classes.length} labels · acc ${x.metrics?.cal_accuracy??'-'} · ${x.trained_at||x.defined_at||''}</span>`).join(''):'none yet';}catch(e){}}
+loadTasks();
+</script>
+</body>
+</html>
