@@ -1,0 +1,12 @@
+{
+  "dataset": "banking77",
+  "n_labels": 77,
+  "n_test": 3080,
+  "perms": 3,
+  "ensemble_accuracy": 0.9321,
+  "jev_reference": 0.924,
+  "delta_vs_jev": 0.0081,
+  "adapter": "DataAgent/Quorum-Reader-Qwen3-4B-Adapter",
+  "ms_per_item": 1476.6,
+  "full_test": true
+}
