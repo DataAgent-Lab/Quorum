@@ -1,0 +1,12 @@
+{
+  "dataset": "banking77",
+  "n_labels": 77,
+  "n_test": 3080,
+  "label_text": "generic one-line per-class descriptions (examples/banking77_descriptions.py)",
+  "ensemble_accuracy_names": 0.7555,
+  "ensemble_accuracy_descriptions": 0.7737,
+  "delta": 0.0182,
+  "jev_reproduction_reference": 0.801,
+  "note": "Same 3-model ensemble (PrismNLI-0.4B + bge-large + bge-base), only the label text differs. Descriptions are generic rephrasings of the label names, not derived from the dataset. Reproduced in this repo on the full test; matches the study's live recompute (0.7737). Jev (independent reproduction) still leads zero-shot; the open stack overtakes Jev only at the 24-shot budget.",
+  "full_test": true
+}
