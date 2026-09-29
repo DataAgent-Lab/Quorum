@@ -94,6 +94,23 @@ member by a clear, significant margin (paired McNemar p < 0.001, b = 223 / c = 6
 Reproduce: `python scripts/eval_zeroshot.py --dataset banking77 --device cpu` (≈120 ms/item on GPU). These are
 the exact numbers this repo prints on the full test set.
 
+### Optional: descriptions instead of names (the "+quality" path)
+
+The default matches against bare label *names* — zero authoring. When names are short or opaque, a one-line
+*description* per class carries far more signal, and the ensemble already takes it: pass `label_texts` the
+descriptions instead of the names (the returned label stays whatever you pass as `labels`). No extra code, no
+extra model.
+
+```python
+descriptions = ["adding a song to a playlist", "reserving a table at a restaurant", ...]
+name, conf, dist = clf.predict(text, labels, label_texts=descriptions)   # match on descriptions, return names
+```
+
+Measured on SNIPS (full test, 1,400): names **0.853** → descriptions **0.944** (+0.091, McNemar p < 1e-6) —
+above the description-based "dataless" method's reported 0.926. See `examples/snips_descriptions.py` for the
+exact 7 descriptions, and `docs/phases/1.1/` for the write-up. Descriptions are the recommended path when you
+have them; names remain the zero-effort default.
+
 ## Does it generalize beyond Banking77?
 
 The "ensemble beats its own best member" property holds across six different-domain intent datasets
