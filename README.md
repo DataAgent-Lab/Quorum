@@ -14,10 +14,11 @@ calibrated-decision model. On the standard **Banking77** intent benchmark (77 cl
    versus Jev's **~0.80**. About 94% of a paid closed API's accuracy at a tiny fraction of the cost, on CPU in
    ~120 ms. Adding hand-written per-class *descriptions* (optional) narrows the gap further (~0.78). *(We do not
    claim to beat Jev zero-shot — it is ahead here.)*
-2. **24-shot — *significantly beats* Jev, at Jev's own protocol.** Given the same 24 retrieved examples per
-   query and **no weight update**, an open ensemble (a 4B in-context reader + a nearest-neighbour over the same
-   24) scores **0.938 vs Jev's 0.924** — **paired McNemar p = 0.0014** (survives a Bonferroni correction), on
-   the full test set.
+2. **24-shot — *beats* Jev, at Jev's own protocol.** Given the same 24 retrieved examples per query and **no
+   weight update**, an open ensemble (a 4B in-context reader + a nearest-neighbour over the same 24) scores
+   **0.932** on the full test — above Jev's **0.924** — reproducible in this repo. Our study's best
+   configuration reached **0.938** and *significantly* beat Jev (**paired McNemar p = 0.0014**, survives
+   Bonferroni; details below).
 
 > **What this is *not*.** This is not a claim of open zero-shot state-of-the-art. Our baseline throughout is
 > *our own* sub-1B components; a 7–9B open LLM will beat our zero-shot *absolute* accuracy on some datasets
@@ -109,11 +110,22 @@ prints on the full official test set.)
 
 At Jev's 24-shot protocol (retrieve 24 examples per query with BM25, read them in-context, never update
 weights), we ensemble two mechanisms over the *same* 24 examples: a 4B open reader (`Qwen3-4B` with a small
-LoRA fine-tuned on **other public intent datasets, Banking77 excluded**) that scores all classes in one
-forward pass, and a frozen `bge-large` nearest-neighbour. Geometric mean → **0.938 vs Jev's 0.924**, paired
-McNemar **p = 0.0014**. On the three datasets clean for this reader (MASSIVE, MTOP, Bitext) the ensemble again
-beats its best member (3/3). *The 24-shot code and the fine-tuned adapter are being prepared for release — see
-Roadmap.*
+LoRA fine-tuned on **other public intent datasets, Banking77 excluded**) that scores all classes in one forward
+pass, and a frozen `bge-large` nearest-neighbour, geometric mean.
+
+**Two numbers, reported honestly:**
+- **This repo reproduces 0.932** on the full 3,080 test (default config: class names only, no calibration),
+  **above Jev's 0.924** at its own protocol. Reproduce:
+  `python scripts/eval_24shot.py --dataset banking77 --adapter DataAgent/Quorum-Reader-Qwen3-4B-Adapter` (the
+  adapter is gated on the Hub — request access).
+- **Our study's best configuration reached 0.938 and *significantly* beat Jev** — paired McNemar **p = 0.0014**
+  (b = 109, c = 66) against Jev's published per-item predictions — using per-class *descriptions* and a
+  calibration-selected combination. That paired test needs Jev's own predictions, which we do not redistribute,
+  so it is not rerun inside this repo; the repo's default (0.932) is the clean, self-contained reproduction.
+
+The adapter (`DataAgent/Quorum-Reader-Qwen3-4B-Adapter`) is a LoRA on Qwen3-4B trained only on public intent
+datasets with Banking77 held out. It is **contaminated** for datasets *inside* its training mix (CLINC/HWU/
+SNIPS), so don't use it to judge zero-shot generalization on those.
 
 ## What did **not** work (also measured)
 
@@ -154,7 +166,7 @@ test sets.
 ## Roadmap
 
 - [x] Zero-shot ensemble + reproduction (this repo).
-- [ ] 24-shot pipeline (in-context reader + kNN) + the fine-tuned adapter release.
+- [x] 24-shot pipeline (in-context reader + kNN) + gated adapter (`DataAgent/Quorum-Reader-Qwen3-4B-Adapter`).
 - [ ] A tiny FastAPI wrapper (import `quorum`) for a self-hosted service.
 
 ## Models used (all public)
