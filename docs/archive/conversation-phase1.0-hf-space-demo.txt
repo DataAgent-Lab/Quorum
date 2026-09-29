@@ -1,0 +1,59 @@
+Human:
+
+[TASK INITIATED]
+Goal: Publish a Hugging Face Space (interactive demo) under the "Quorum" collection so users can live-test
+      the Quorum service — type a message + candidate intent labels, see the predicted label + calibrated
+      confidence + per-member breakdown.
+Decision Authority: default (autonomous: impl/naming/layout; log-and-proceed: architecture/deps; must-ask:
+      scope expansion, anything irreversible/outward beyond the approved publish).
+Constraints:
+  - Clean-room: no references to private/internal infrastructure, hostnames, or non-public data in anything published.
+  - Token security: HF_TOKEN only via env/stdin, never argv/logs/committed files.
+  - Public naming conventions (product "Quorum").
+Started: 2026-09-29
+Conversation File: conversation-phase1.0-hf-space-demo.txt
+
+===
+AI:
+
+[UNDERSTANDING]
+
+Build + publish a Gradio Space (DataAgent/Quorum-Demo) that runs the zero-shot ensemble
+(quorum.ZeroShotEnsemble = PrismNLI-0.4B + bge-large + bge-base, logprob-mean, no cal) on CPU. User inputs a
+message + a few candidate intent labels; output = ranked distribution + top label + confidence + per-member
+votes. Add the Space to the Quorum collection.
+
+The 24-shot pipeline is out of scope for the live demo: it needs the gated Qwen3-4B+LoRA adapter (~9 GB), too
+heavy for a free CPU Space. Demo = the zero-shot ensemble tier (all sub-1B, CPU).
+
+Proceeding with the fact-first gate before implementation.
+
+===
+AI:
+
+[DECISION #1 | log-and-proceed]
+
+Topic: Is a free HF CPU Space feasible for the zero-shot ensemble, and what latency?
+Context: fact-first gate — the demo's viability + UX (how many labels to allow) depends on real CPU behaviour.
+Measured (ensemble on device="cpu", 3 models, 2026-09-29):
+  - startup model load: ~22 s (one-time at Space boot)
+  - latency: 5 labels ~1.8–2.4 s, 20 labels ~4.6 s (77 labels would be ~15 s+ — NLI does one pair per label)
+  - peak RAM: ~3.3 GB (fits the free CPU Basic tier's 16 GB)
+Decision:
+  - Target the free CPU tier (fits RAM; load once at boot).
+  - UX: let the user enter a SMALL candidate-label set (default ~6), keep it responsive; warn above ~15 labels.
+    Do NOT default to the full 77-label Banking77 set (too slow on CPU) — offer it only as an opt-in note.
+Reversible: yes (upgrade the Space to a paid CPU/GPU tier later if desired).
+
+===
+AI:
+
+[DECISION #2 | log-and-proceed]
+
+Topic: Where does the Space code live?
+Chose: in this repo under `space/` (versioned, part of the open project) AND deployed to the HF Space
+  `DataAgent/Quorum-Demo`. Single source of truth for the app in git; HF Space mirrors it.
+Reasoning: keeps the demo reproducible/inspectable in the public repo; HF Space is the runnable surface.
+Reversible: yes.
+
+===
