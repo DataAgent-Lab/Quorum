@@ -1,0 +1,30 @@
+Human:
+
+[TASK INITIATED — PLANNING ONLY]
+Goal: Evaluate the feasibility & benefit of training our OWN intent-specialised bi-encoder (PIE-style), and
+      ship it as an optional ensemble member only if the benefit is real and regression-free. This attacks the
+      residual gap that Phase 1.1's descriptions lever left on fine-grained sets (CLINC 0.682 vs dataless
+      0.815 / PIE 0.831), since PIE ships no weights and open dialogue encoders (Dialog2Flow) hurt.
+Decision Authority: default (autonomous: impl/naming; log-and-proceed: data sources/base model/deps;
+      must-ask: shipping a new public model, any spend/large compute).
+Constraints: clean-room (no private-infra references published); public training data only, ALL eval targets
+      held out + contamination-checked; measure on full public test sets; honesty-first ship/kill gate.
+Predecessor: Phase 1.1.
+Conversation File: conversation-phase1.2-train-intent-encoder.txt
+
+===
+AI:
+
+[PLANNED — NOT STARTED]
+
+Spec + tasks written (docs/phases/1.2/). Execution deferred until the owner triggers it. The plan's spine:
+  - The specialisation lever (P2) is only reachable by TRAINING our own encoder — verified in Phase 1.1 that
+    PIE has no downloadable weights and Dialog2Flow hurts.
+  - Start with the SIMPLEST method (supervised contrastive utterance↔intent-name, small base), escalate to
+    PIE's full recipe only if needed.
+  - Hard benefit gate: ship only on a significant, regression-free gain on ≥2 datasets; otherwise document as
+    a measured-negative and do not ship. No silent ship, no shipping on a tie.
+
+Awaiting the owner's go to begin T1.
+
+===

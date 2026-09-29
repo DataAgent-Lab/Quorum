@@ -3,51 +3,85 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Quorum — live demo</title>
+<title>Quorum — calibrated intent decisions from tiny open models</title>
+<meta name="description" content="Pick a decision and candidate labels; Quorum returns the choice, a confidence you can gate on, and how each model voted. An ensemble of three sub-1B open models — no training, runs on a laptop." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Quorum — calibrated intent decisions from tiny open models" />
+<meta property="og:description" content="A jury of three sub-1B open models decides an intent and tells you how sure it is — no training, no paid API. Try it live." />
+<meta property="og:url" content="https://huggingface.co/spaces/DataAgent/Quorum-Demo" />
+<meta name="twitter:card" content="summary" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234f46e5'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white'%3E%E2%9A%96%3C/text%3E%3C/svg%3E" />
 <style>
-  :root { --ink:#1a1a2e; --muted:#6b7280; --line:#e5e7eb; --accent:#4f46e5; --bg:#ffffff; }
+  :root { --ink:#1a1a2e; --muted:#6b7280; --line:#e5e7eb; --accent:#4f46e5; --accent-soft:#eef0ff;
+          --bg:#ffffff; --card:#ffffff; --ok:#047857; --ok-bg:#ecfdf5; --warn:#b45309; --warn-bg:#fffbeb; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#e8e8f0; --muted:#9aa0ac; --line:#2b2f3a; --accent:#8b8cf7; --accent-soft:#20223a;
+            --bg:#14151c; --card:#1b1d26; --ok:#34d399; --ok-bg:#0d2b22; --warn:#fbbf24; --warn-bg:#2a2113; }
+  }
   * { box-sizing: border-box; }
   body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-         color: var(--ink); background: var(--bg); margin: 0; line-height: 1.5; }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 28px 18px 60px; }
-  h1 { font-size: 1.6rem; margin: 0 0 4px; }
-  .sub { color: var(--muted); margin: 0 0 16px; }
+         color: var(--ink); background: var(--bg); margin: 0; line-height: 1.55; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 28px 18px 40px; }
+  h1 { font-size: 1.55rem; margin: 0 0 6px; letter-spacing: -.01em; }
+  .sub { color: var(--muted); margin: 0 0 14px; }
   .links a { color: var(--accent); text-decoration: none; margin-right: 14px; font-size: .9rem; }
-  .card { border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-top: 16px; }
-  label { display:block; font-weight:600; font-size:.85rem; margin: 10px 0 4px; }
+  .links a:hover { text-decoration: underline; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-top: 16px; background: var(--card); }
+  label { display:block; font-weight:600; font-size:.85rem; margin: 12px 0 4px; }
   input[type=text], textarea { width:100%; padding:9px 11px; border:1px solid var(--line);
-         border-radius:8px; font: inherit; }
+         border-radius:8px; font: inherit; background: var(--bg); color: var(--ink); }
   textarea { resize: vertical; }
-  button { margin-top: 14px; background: var(--accent); color:#fff; border:0; border-radius:8px;
-           padding: 10px 18px; font-weight:600; cursor:pointer; }
-  button:disabled { opacity:.5; cursor:default; }
+  .presets { display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+  .chip { border:1px solid var(--line); background:var(--bg); color:var(--ink); border-radius:999px;
+          padding:6px 13px; font-size:.85rem; cursor:pointer; }
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+  .go { margin-top: 16px; background: var(--accent); color:#fff; border:0; border-radius:8px;
+        padding: 11px 20px; font-weight:600; font-size:.95rem; cursor:pointer; }
+  .go:disabled { opacity:.55; cursor:default; }
   .note { font-size:.8rem; color:var(--muted); margin-top:8px; }
-  .top { font-size:1.25rem; font-weight:700; margin: 4px 0 2px; }
+  .spin { display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,.5);
+          border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; vertical-align:-2px; margin-right:7px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .status { font-size:.85rem; color:var(--muted); margin-top:10px; }
+  .badge { display:inline-block; background:var(--accent-soft); color:var(--accent); font-weight:700;
+           font-size:1.15rem; padding:4px 12px; border-radius:8px; }
+  .meta { font-size:.8rem; color:var(--muted); margin: 6px 0 2px; }
   .bar { height: 20px; background: var(--accent); border-radius: 4px; }
   .row { display:flex; align-items:center; gap:8px; margin: 5px 0; font-size:.9rem; }
-  .rowlab { width: 44%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .barwrap { flex:1; background:#f1f1f6; border-radius:4px; }
+  .rowlab { width: 40%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .barwrap { flex:1; background:var(--accent-soft); border-radius:4px; }
   .pct { width: 52px; text-align:right; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .members { font-size:.85rem; color:var(--ink); margin-top:12px; }
+  .members { font-size:.85rem; margin-top:14px; }
   .members b { color: var(--accent); }
-  .err { color:#b91c1c; font-size:.9rem; margin-top:10px; white-space:pre-wrap; }
+  .gate { margin-top:16px; border-top:1px dashed var(--line); padding-top:14px; }
+  .gate input[type=range] { width:100%; accent-color: var(--accent); }
+  .decision { margin-top:10px; padding:10px 12px; border-radius:8px; font-weight:600; font-size:.95rem; }
+  .decision.act { background:var(--ok-bg); color:var(--ok); }
+  .decision.esc { background:var(--warn-bg); color:var(--warn); }
+  .err { color:#dc2626; font-size:.9rem; margin-top:10px; white-space:pre-wrap; }
+  details { margin-top:16px; }
+  summary { cursor:pointer; color:var(--muted); font-size:.85rem; }
+  footer { margin-top:28px; padding-top:16px; border-top:1px solid var(--line); font-size:.85rem; color:var(--muted); }
+  footer a { color: var(--accent); text-decoration:none; }
+  .cta { display:inline-block; margin-top:8px; font-weight:600; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>⚖️ Quorum — a jury of tiny open models</h1>
-  <p class="sub">Type a message and a few candidate intent labels. A zero-shot ensemble of three sub-1B open
-    models (PrismNLI-0.4B + bge-large + bge-base, geometric mean) picks the intent and tells you how sure it
-    is — no training, no calibration.</p>
+  <h1>⚖️ Quorum</h1>
+  <p class="sub">Turn a plain message into a decision you can act on — the chosen label, a confidence you can set
+    a threshold on, and a look at how the models voted. No training, no paid API; three sub-1B open models
+    running on ordinary hardware.</p>
   <div class="links">
-    <a href="https://github.com/DataAgent-Lab/Quorum" target="_blank">GitHub</a>
-    <a href="https://huggingface.co/collections/DataAgent/quorum-6abb3255e0fab20d66add39b" target="_blank">Collection</a>
-    <a href="https://huggingface.co/DataAgent/Quorum-Reader-Qwen3-4B-Adapter" target="_blank">24-shot adapter</a>
+    <a href="https://github.com/DataAgent-Lab/Quorum" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://huggingface.co/collections/DataAgent/quorum-6abb3255e0fab20d66add39b" target="_blank" rel="noopener">Models</a>
+    <a href="https://huggingface.co/DataAgent/Quorum-Reader-Qwen3-4B-Adapter" target="_blank" rel="noopener">24-shot adapter</a>
   </div>
 
   <div class="card">
-    <label for="api">API URL (a running Quorum service — see the repo's <code>serve/</code>)</label>
-    <input id="api" type="text" placeholder="https://your-quorum-api.example.com" value="https://quorum-api.idataagent.com" />
+    <label>Try an example</label>
+    <div class="presets" id="presets"></div>
+
     <label for="msg">Message</label>
     <textarea id="msg" rows="2">when will my new card arrive?</textarea>
     <label for="labels">Candidate labels (one per line)</label>
@@ -57,58 +91,121 @@ lost or stolen card
 change pin
 top up by card
 exchange rate</textarea>
-    <button id="go">Decide</button>
-    <div class="note">This is the zero-shot tier. The 24-shot pipeline that edges the closed API Jev
-      (0.932 vs 0.924) uses the gated adapter linked above. The demo points at a small shared server, so the
-      first request can take ~15s under load (&lt;1s when idle). To run your own, self-host from the repo's
-      <code>serve/</code> and paste its URL here (it is remembered in your browser).</div>
-    <div id="err" class="err"></div>
+    <button class="go" id="go">Decide</button>
+    <div class="status" id="status"></div>
+    <div class="err" id="err"></div>
   </div>
 
   <div class="card" id="out" style="display:none">
-    <div class="top" id="toplab"></div>
-    <div class="note" id="topconf"></div>
-    <div id="bars"></div>
+    <div class="meta">Top choice</div>
+    <div class="badge" id="toplab"></div>
+    <span class="meta" id="topconf"></span>
+    <div id="bars" style="margin-top:12px"></div>
     <div class="members" id="members"></div>
+
+    <div class="gate">
+      <label for="tau" style="margin:0">Confidence gate — auto-act when confidence ≥ <span id="tauval">70</span>%</label>
+      <input type="range" id="tau" min="0" max="100" value="70" />
+      <div class="decision" id="decision"></div>
+      <div class="note">The gate is what turns a prediction into an action: auto-act above the line, escalate to a
+        human below it. This live demo is the zero-shot tier (uncalibrated); the self-hosted service adds
+        temperature calibration and a precision-<em>guaranteed</em> (conformal) gate — see the repo.</div>
+    </div>
   </div>
+
+  <details>
+    <summary>Advanced — run against your own Quorum server</summary>
+    <div class="card" style="margin-top:10px">
+      <label for="api">API URL</label>
+      <input id="api" type="text" placeholder="https://your-quorum-api.example.com" value="https://quorum-api.idataagent.com" />
+      <div class="note">The demo talks to a small shared server by default. To use your own, self-host from the
+        repo's <code>serve/</code> (any CPU box), expose it over HTTPS with CORS allowing this page, and paste
+        its URL here — it is remembered in your browser.</div>
+    </div>
+  </details>
+
+  <footer>
+    Built by <b>DataAgent</b>. <a href="https://github.com/DataAgent-Lab/Quorum" target="_blank" rel="noopener">Open source</a>,
+    with a small reproduction study comparing against a closed commercial API (24-shot: 0.932 vs 0.924 on Banking77).<br>
+    <a class="cta" href="https://github.com/DataAgent-Lab/Quorum/issues" target="_blank" rel="noopener">Want this on your own data / labels? Start a conversation →</a>
+  </footer>
 </div>
 
 <script>
   const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
   const api = $("api");
   try { const saved = localStorage.getItem("quorum_api"); if (saved) api.value = saved; } catch (e) {}
   api.addEventListener("change", () => { try { localStorage.setItem("quorum_api", api.value.trim()); } catch (e) {} });
 
+  const EXAMPLES = {
+    "Banking": { msg: "when will my new card arrive?",
+      labels: ["card arrival","card delivery estimate","lost or stolen card","change pin","top up by card","exchange rate"] },
+    "Support triage": { msg: "I was charged twice for the same order and want my money back",
+      labels: ["billing / double charge","refund request","order status","cancel subscription","technical bug","general question"] },
+    "Product feedback": { msg: "the new dashboard is gorgeous but it loads really slowly",
+      labels: ["praise","performance complaint","bug report","feature request","pricing concern","churn risk"] },
+  };
+  const presets = $("presets");
+  Object.keys(EXAMPLES).forEach(name => {
+    const b = document.createElement("button");
+    b.className = "chip"; b.textContent = name;
+    b.onclick = () => { $("msg").value = EXAMPLES[name].msg; $("labels").value = EXAMPLES[name].labels.join("\n"); };
+    presets.appendChild(b);
+  });
+
+  let lastConf = null;
+  function renderDecision() {
+    if (lastConf === null) return;
+    const tau = +$("tau").value; $("tauval").textContent = tau;
+    const el = $("decision"); const c = (lastConf * 100);
+    if (c >= tau) { el.className = "decision act"; el.textContent = `✅ Auto-act — confidence ${c.toFixed(1)}% ≥ ${tau}%`; }
+    else { el.className = "decision esc"; el.textContent = `⚠️ Escalate to a human — confidence ${c.toFixed(1)}% < ${tau}%`; }
+  }
+  $("tau").addEventListener("input", renderDecision);
+
   async function decide() {
-    $("err").textContent = ""; $("out").style.display = "none";
+    $("err").textContent = ""; $("status").textContent = ""; $("out").style.display = "none";
     const base = api.value.trim().replace(/\/+$/, "");
-    if (!base) { $("err").textContent = "Enter the API URL of a running Quorum service (see serve/ in the repo)."; return; }
+    if (!base) { $("err").textContent = "Set an API URL under “Advanced”."; return; }
     const message = $("msg").value.trim();
     const labels = $("labels").value.split("\n").map(s => s.trim()).filter((s, i, a) => s && a.indexOf(s) === i);
     if (!message) { $("err").textContent = "Enter a message."; return; }
     if (labels.length < 2) { $("err").textContent = "Enter at least 2 labels (one per line)."; return; }
-    $("go").disabled = true; $("go").textContent = "Deciding…";
+
+    $("go").disabled = true; $("go").innerHTML = '<span class="spin"></span>Deciding…';
+    const warmTimer = setTimeout(() => { $("status").textContent = "Waking the shared demo server — the first request can take ~15s…"; }, 1500);
+    const ctrl = new AbortController();
+    const timeout = setTimeout(() => ctrl.abort(), 40000);
+    const t0 = performance.now();
     try {
       const r = await fetch(base + "/predict", {
         method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ message, labels }),
+        body: JSON.stringify({ message, labels }), signal: ctrl.signal,
       });
-      if (!r.ok) throw new Error("API returned HTTP " + r.status + " — " + (await r.text()).slice(0, 200));
+      if (!r.ok) throw new Error("The server returned HTTP " + r.status + ".");
       const d = await r.json();
+      const secs = ((performance.now() - t0) / 1000).toFixed(1);
       $("toplab").textContent = d.label;
-      $("topconf").textContent = "calibrated confidence " + (d.confidence * 100).toFixed(1) + "%";
+      $("topconf").textContent = `  confidence ${(d.confidence * 100).toFixed(1)}%  ·  decided in ${secs}s`;
       const entries = Object.entries(d.distribution);
       $("bars").innerHTML = entries.map(([k, v]) =>
-        `<div class="row"><div class="rowlab" title="${k}">${k}</div>` +
+        `<div class="row"><div class="rowlab" title="${esc(k)}">${esc(k)}</div>` +
         `<div class="barwrap"><div class="bar" style="width:${Math.max(2, v * 100).toFixed(1)}%"></div></div>` +
         `<div class="pct">${(v * 100).toFixed(1)}%</div></div>`).join("");
       $("members").innerHTML = "<b>How the jury voted</b><br>" +
-        d.members.map(m => `${m.model} → <b>${m.pick}</b>`).join("<br>");
+        (d.members || []).map(m => `${esc(m.model)} → <b>${esc(m.pick)}</b>`).join("<br>");
+      lastConf = d.confidence; renderDecision();
       $("out").style.display = "block";
     } catch (e) {
-      $("err").textContent = "Could not reach the API.\n" + e.message +
-        "\n\nCheck: the API is running and public over HTTPS, and CORS allows this page (see serve/README.md).";
+      const msg = (e.name === "AbortError")
+        ? "The demo server didn't respond in time — it may be waking up or busy. Please try again in a few seconds."
+        : "Couldn't reach the demo server. Please try again shortly" +
+          (api.value.includes("idataagent.com") ? "." : ", or check your API URL under “Advanced”.");
+      $("err").textContent = msg;
     } finally {
+      clearTimeout(warmTimer); clearTimeout(timeout);
+      $("status").textContent = "";
       $("go").disabled = false; $("go").textContent = "Decide";
     }
   }
