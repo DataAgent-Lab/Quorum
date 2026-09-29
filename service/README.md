@@ -27,8 +27,9 @@ decide auto-act vs escalate-to-human.
 ## Three layers
 
 - **Layer 1 — zero-shot, no training (default).** `quorum.ZeroShotEnsemble`: `PrismNLI-0.4B` (NLI) + `bge-large`
-  + `bge-base` (cosine), logprob-mean, no per-task calibration. Full Banking77 test **0.780**, above the best
-  single member (0.736), and it beats its own best component on 5 of 6 different-domain intent datasets. All
+  + `bge-base` (cosine), logprob-mean, no per-task calibration. Full Banking77 test **0.756**, above the best
+  single member (0.704, McNemar p<0.001), and it beats its own best component on 5 of 6 different-domain intent
+  datasets. All
   members are sub-1B → runs on CPU. A lighter tier (`LAYER1_MODE=single`, NLI only) trades accuracy for speed.
   *Optional `descriptions`*: pass a natural-language description per class as the label text — the gain scales
   with how opaque the names are (small when names are already descriptive; up to +9 points when they are short
