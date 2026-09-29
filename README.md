@@ -5,6 +5,9 @@
 Can an ensemble of tiny open models match — or beat — a paid, closed "calibrated decision" API on intent
 classification? Two honest results, both on public benchmarks, both with paired significance tests.
 
+**Links:** [🤗 Quorum collection](https://huggingface.co/collections/DataAgent/quorum-6abb3255e0fab20d66add39b) ·
+[gated 24-shot adapter](https://huggingface.co/DataAgent/Quorum-Reader-Qwen3-4B-Adapter)
+
 This repo accompanies a small reproduction study. The comparison target is **Jev**, a closed commercial
 calibrated-decision model. On the standard **Banking77** intent benchmark (77 classes, full 3,080-item test):
 
