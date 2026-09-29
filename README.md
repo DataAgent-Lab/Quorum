@@ -21,11 +21,12 @@ calibrated-decision model. On the standard **Banking77** intent benchmark (77 cl
    versus Jev's **~0.80**. About 94% of a paid closed API's accuracy at a tiny fraction of the cost, on CPU in
    ~120 ms. Adding hand-written per-class *descriptions* (optional) narrows the gap further (~0.78). *(We do not
    claim to beat Jev zero-shot — it is ahead here.)*
-2. **24-shot — *beats* Jev, at Jev's own protocol.** Given the same 24 retrieved examples per query and **no
-   weight update**, an open ensemble (a 4B in-context reader + a nearest-neighbour over the same 24) scores
-   **0.932** on the full test — above Jev's **0.924** — reproducible in this repo. Our study's best
-   configuration reached **0.938** and *significantly* beat Jev (**paired McNemar p = 0.0014**, survives
-   Bonferroni; details below).
+2. **24-shot — *beats* the reproduced Jev, at Jev's own protocol.** Given the same 24 retrieved examples per
+   query and **no weight update**, an open ensemble (a 4B in-context reader + a nearest-neighbour over the same
+   24) scores **0.932** on the full test — above an independent reproduction of Jev (**0.924**) — reproducible
+   in this repo. Our study's best configuration reached **0.938** and *significantly* beat that reproduction
+   (**paired McNemar p = 0.0014**, survives Bonferroni). Jev has no official public Banking77 number; see
+   *provenance* below.
 
 > **What this is *not*.** This is not a claim of open zero-shot state-of-the-art. Our baseline throughout is
 > *our own* sub-1B components; a 7–9B open LLM will beat our zero-shot *absolute* accuracy on some datasets
@@ -120,15 +121,22 @@ weights), we ensemble two mechanisms over the *same* 24 examples: a 4B open read
 LoRA fine-tuned on **other public intent datasets, Banking77 excluded**) that scores all classes in one forward
 pass, and a frozen `bge-large` nearest-neighbour, geometric mean.
 
+**On the Jev numbers (provenance).** TypeSafe's *official* Jev evaluation is on their own private 4-workflow
+suite, **not** on public academic benchmarks — there is no official Jev Banking77 number. Every "Jev on
+Banking77" figure here (≈0.924) comes from an **independent community reproduction** (e.g. simonmesmith's;
+2846/3080 = 92.40%). We compare against those, not against an official number.
+
 **Two numbers, reported honestly:**
 - **This repo reproduces 0.932** on the full 3,080 test (default config: class names only, no calibration),
-  **above Jev's 0.924** at its own protocol. Reproduce:
+  **above the reproduced Jev 0.924** at Jev's own protocol. Reproduce:
   `python scripts/eval_24shot.py --dataset banking77 --adapter DataAgent/Quorum-Reader-Qwen3-4B-Adapter` (the
   adapter is gated on the Hub — request access).
-- **Our study's best configuration reached 0.938 and *significantly* beat Jev** — paired McNemar **p = 0.0014**
-  (b = 109, c = 66) against Jev's published per-item predictions — using per-class *descriptions* and a
-  calibration-selected combination. That paired test needs Jev's own predictions, which we do not redistribute,
-  so it is not rerun inside this repo; the repo's default (0.932) is the clean, self-contained reproduction.
+- **Our study's best configuration reached 0.938 and *significantly* beat that reproduction** — paired McNemar
+  **p = 0.0014** (b = 109, c = 66) against an independent reproduction of Jev's per-item predictions — using
+  per-class *descriptions* and a calibration-selected combination. That paired test needs those per-item
+  predictions (not redistributed here), so it is not rerun inside this repo; the repo's default (0.932) is the
+  clean, self-contained reproduction. (A true head-to-head against Jev itself would mean running Jev's API on
+  Banking77 yourself — it is an API-only model.)
 
 The adapter (`DataAgent/Quorum-Reader-Qwen3-4B-Adapter`) is a LoRA on Qwen3-4B trained only on public intent
 datasets with Banking77 held out. It is **contaminated** for datasets *inside* its training mix (CLINC/HWU/
