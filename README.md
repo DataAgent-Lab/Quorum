@@ -15,12 +15,13 @@ classification? Two honest results, both on public benchmarks, both with paired 
 This repo accompanies a small reproduction study. The comparison target is **Jev**, a closed commercial
 calibrated-decision model. On the standard **Banking77** intent benchmark (77 classes, full 3,080-item test):
 
-1. **Zero-shot — *within ~5 points* of Jev with models that fit on a laptop.** A geometric-mean ensemble of
+1. **Zero-shot — *within ~3 points* of Jev with models that fit on a laptop.** A geometric-mean ensemble of
    three sub-1B open models — `Jaehun/PrismNLI-0.4B` + `BAAI/bge-large-en-v1.5` + `BAAI/bge-base-en-v1.5` —
-   scores **0.756** with **no training, no calibration, and zero hand-authored labels** (just the class names),
-   versus Jev's **~0.80**. About 94% of a paid closed API's accuracy at a tiny fraction of the cost, on CPU in
-   ~120 ms. Adding hand-written per-class *descriptions* (optional) narrows the gap further (~0.78). *(We do not
-   claim to beat Jev zero-shot — it is ahead here.)*
+   scores **0.774** when each class is given a one-line plain-language *description* (generic — a rephrasing of
+   the label name that anyone can write; nothing is taken from the dataset), versus a reproduction of Jev at
+   **~0.801**. With bare class names and *zero* authoring it still scores **0.756**. Both are **no training, no
+   calibration**, on CPU in ~120 ms. *(We do not claim to beat Jev zero-shot — Jev is ahead here, and Jev's own
+   input spec is undisclosed; the 24-shot result below is where the open stack overtakes it.)*
 2. **24-shot — *beats* the reproduced Jev, at Jev's own protocol.** Given the same 24 retrieved examples per
    query and **no weight update**, an open ensemble (a 4B in-context reader + a nearest-neighbour over the same
    24) scores **0.932** on the full test — above an independent reproduction of Jev (**0.924**) — reproducible
@@ -80,19 +81,23 @@ labels = ["card arrival", "card delivery estimate", "lost or stolen card", ...]
 name, confidence, dist = clf.predict("when will my new card arrive?", range(len(labels)), label_texts=labels)
 ```
 
-On Banking77 (full 3,080 test, class names only — no authored descriptions) the ensemble beats every single
-member by a clear, significant margin (paired McNemar p < 0.001, b = 223 / c = 65):
+On Banking77 (full 3,080 test) the ensemble beats every single member by a clear, significant margin (paired
+McNemar p < 0.001, b = 223 / c = 65). With bare class names (single members shown for the ensemble-beats-parts
+property), and with generic one-line descriptions:
 
 | system | accuracy |
 |---|---|
-| `PrismNLI-0.4B` alone | 0.704 |
-| `bge-large` alone | 0.700 |
-| `bge-base` alone | 0.672 |
-| **ensemble (this repo)** | **0.756** |
-| *Jev (closed API, reference)* | *~0.80* |
+| `PrismNLI-0.4B` alone (names) | 0.704 |
+| `bge-large` alone (names) | 0.700 |
+| `bge-base` alone (names) | 0.672 |
+| **ensemble — bare names (zero authoring)** | **0.756** |
+| **ensemble — + generic descriptions** | **0.774** |
+| *Jev (independent reproduction, reference)* | *~0.801* |
 
-Reproduce: `python scripts/eval_zeroshot.py --dataset banking77 --device cpu` (≈120 ms/item on GPU). These are
-the exact numbers this repo prints on the full test set.
+Both ensemble numbers are reproduced in this repo on the full test. Reproduce:
+`python scripts/eval_zeroshot.py --dataset banking77 --device cpu` (names; ≈120 ms/item on GPU), or pass the
+descriptions from `examples/banking77_descriptions.py` as `label_texts` for the 0.774 row. Jev still leads
+zero-shot; the open stack overtakes it only at the 24-shot budget (below).
 
 ### Optional: descriptions instead of names (the "+quality" path)
 
@@ -106,11 +111,12 @@ descriptions = ["adding a song to a playlist", "reserving a table at a restauran
 name, conf, dist = clf.predict(text, labels, label_texts=descriptions)   # match on descriptions, return names
 ```
 
-Measured on SNIPS (full test, 1,400): names **0.853** → descriptions **0.944** (+0.091, McNemar p < 1e-6) —
-above the description-based "dataless" method's reported 0.926. The gain scales with how opaque the class
-*names* are: on the 151-intent CLINC150 the same lever still helps significantly (0.652 → **0.682**, +0.030,
-p < 1e-6) but by less — a one-line description doesn't fully close the gap to specialised methods there. See
-`examples/snips_descriptions.py` and `examples/clinc_descriptions.py` for the exact descriptions, and
+Measured, full test, same 3-model ensemble, names → descriptions:
+**Banking77 0.756 → 0.774** (+0.018); **SNIPS 0.853 → 0.944** (+0.091, above the description-based "dataless"
+method's reported 0.926); **CLINC150 0.652 → 0.682** (+0.030) — all McNemar p < 1e-6. The gain scales with how
+opaque the class *names* are: large on SNIPS (short, ambiguous names), smaller on Banking77/CLINC (names
+already fairly descriptive; a one-line description doesn't fully close the gap to specialised methods on the
+151-intent CLINC). See `examples/{banking77,snips,clinc}_descriptions.py` for the exact descriptions, and
 `docs/phases/1.1/` for the write-up. Descriptions are the recommended path when you have them; names remain the
 zero-effort default.
 
