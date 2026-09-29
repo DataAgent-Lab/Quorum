@@ -25,12 +25,12 @@
 - [x] T2.4 (AC-P1) 6-label prediction ~2 s warm on CPU (verified).
 - [x] T2.5 (AC-I3) internal-trace scan of `serve/` + `space/` = clean.
 - [x] T2.6 `serve/app.py` verified via FastAPI TestClient: /health OK, POST /predict 200 -> "card arrival" 0.999 + 3 member picks, <2-labels guard -> 422 (fastapi 0.125).
-- [ ] T2.7 (AC-I2) static Space is listed in the Quorum collection (verified post-deploy).
+- [x] T2.7 (AC-I2) static Space DataAgent/Quorum-Demo deployed + listed in the Quorum collection.
 
 ## T3 — Deploy
-- [ ] T3.1 Create HF **static** Space `DataAgent/Quorum-Demo` (sdk static, FREE), push `index.html` + card.
-- [ ] T3.2 Add the Space to the `Quorum` collection.
-- [ ] T3.3 Link the Space from the GitHub README.
+- [x] T3.1 Created static Space DataAgent/Quorum-Demo (free), pushed index.html + card.
+- [x] T3.2 Added the Space to the Quorum collection.
+- [x] T3.3 Linked the Space + serve/ from the GitHub README.
 - [ ] T3.4 (other machine) run `serve/app.py`, expose HTTPS + CORS, set the Space's default API URL.
 
 ## T4 — Docs sync
