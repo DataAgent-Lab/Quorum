@@ -11,8 +11,20 @@ import argparse, json, sys, time
 from pathlib import Path
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
 from quorum import ZeroShotEnsemble, data, metrics
+
+
+def _load_descriptions(name):
+    """Load the generic per-class descriptions shipped in examples/<name>_descriptions.py (a dict keyed by the
+    label name). Returns {normalized label name -> description}."""
+    import importlib
+    mod = importlib.import_module(f"examples.{name}_descriptions")
+    d = next((v for k, v in vars(mod).items() if k.endswith("_DESCRIPTIONS") and isinstance(v, dict)), None)
+    if d is None:
+        raise SystemExit(f"no *_DESCRIPTIONS dict in examples/{name}_descriptions.py")
+    return {str(k).replace("_", " ").strip().lower(): v for k, v in d.items()}
 
 
 def main():
@@ -20,11 +32,22 @@ def main():
     ap.add_argument("--dataset", required=True)
     ap.add_argument("--device", default="cpu")
     ap.add_argument("--limit", type=int, default=0, help="cap test items (debug only — never for a headline)")
+    ap.add_argument("--descriptions", nargs="?", const=True, default=None,
+                    help="use generic per-class descriptions as label text instead of names; optionally name the "
+                         "examples module (default: <dataset>_descriptions.py)")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
     d = data.load(args.dataset)
-    labels, label_texts, test = list(range(len(d["labels"]))), d["labels"], d["test"]
+    labels, label_texts, test = list(range(len(d["labels"]))), list(d["labels"]), d["test"]
+    if args.descriptions:
+        src = args.dataset if args.descriptions is True else args.descriptions
+        norm = _load_descriptions(src)
+        missing = [l for l in d["labels"] if str(l).replace("_", " ").strip().lower() not in norm]
+        if missing:
+            raise SystemExit(f"descriptions missing for {len(missing)} labels, e.g. {missing[:5]}")
+        label_texts = [norm[str(l).replace("_", " ").strip().lower()] for l in d["labels"]]
+        print(f"  using descriptions from examples/{src}_descriptions.py", flush=True)
     if args.limit:
         test = test[:args.limit]
     y = np.array([r["label"] for r in test])
@@ -50,6 +73,7 @@ def main():
     best_m = max(range(n_members), key=lambda m: metrics.accuracy(mem_pred[m], y))
     mc = metrics.mcnemar(ens_pred, mem_pred[best_m], y)
     rep = {"dataset": args.dataset, "n_labels": len(labels), "n_test": len(test),
+           "label_text": "descriptions" if args.descriptions else "names",
            "ensemble_accuracy": round(ens_acc, 4), "single_member_accuracy": {k: round(v, 4) for k, v in singles.items()},
            "best_single_member": clf.model_names[best_m],
            "mcnemar_ensemble_vs_best_single": mc, "ms_per_item": round(1000 * sec / len(test), 1),
