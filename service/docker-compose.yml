@@ -1,0 +1,16 @@
+services:
+  decision:
+    build:
+      context: ..                 # repo root, so the image can include the `quorum` library
+      dockerfile: service/Dockerfile
+    image: quorum-decision-service:0.1.0
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/data              # registry (trained tasks) + HF model cache persist here
+    environment:
+      - DEVICE=cpu                          # set cuda on a GPU box (required for Layer 1.5)
+      - EMBED_MODEL=BAAI/bge-base-en-v1.5   # Layer-2 trained-head embedder
+      # - LAYER1_MODE=single                # lighter zero-shot tier (NLI only), lower accuracy
+      # - RLCD_ADAPTER=DataAgent/Quorum-Reader-Qwen3-4B-Adapter   # Layer 1.5 gated reader (GPU tier)
+    restart: unless-stopped

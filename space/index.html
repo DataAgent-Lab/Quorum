@@ -47,7 +47,7 @@
 
   <div class="card">
     <label for="api">API URL (a running Quorum service — see the repo's <code>serve/</code>)</label>
-    <input id="api" type="text" placeholder="https://your-quorum-api.example.com" />
+    <input id="api" type="text" placeholder="https://your-quorum-api.example.com" value="https://quorum-api.idataagent.com" />
     <label for="msg">Message</label>
     <textarea id="msg" rows="2">when will my new card arrive?</textarea>
     <label for="labels">Candidate labels (one per line)</label>
@@ -59,8 +59,9 @@ top up by card
 exchange rate</textarea>
     <button id="go">Decide</button>
     <div class="note">This is the zero-shot tier. The 24-shot pipeline that edges the closed API Jev
-      (0.932 vs 0.924) uses the gated adapter linked above. The demo needs a running API — self-host it from
-      the repo's <code>serve/</code> and paste its URL (it is remembered in your browser).</div>
+      (0.932 vs 0.924) uses the gated adapter linked above. The demo points at a small shared server, so the
+      first request can take ~15s under load (&lt;1s when idle). To run your own, self-host from the repo's
+      <code>serve/</code> and paste its URL here (it is remembered in your browser).</div>
     <div id="err" class="err"></div>
   </div>
 
@@ -75,7 +76,7 @@ exchange rate</textarea>
 <script>
   const $ = id => document.getElementById(id);
   const api = $("api");
-  try { api.value = localStorage.getItem("quorum_api") || ""; } catch (e) {}
+  try { const saved = localStorage.getItem("quorum_api"); if (saved) api.value = saved; } catch (e) {}
   api.addEventListener("change", () => { try { localStorage.setItem("quorum_api", api.value.trim()); } catch (e) {} });
 
   async function decide() {
