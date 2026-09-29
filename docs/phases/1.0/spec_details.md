@@ -1,6 +1,10 @@
 # Phase 1.0 — Quorum live demo (Hugging Face Space)
 
 > **Status**: in progress · **Projected-date**: 2026-09-29
+> **Revision (2026-09-29)**: compute (Gradio) HF Spaces require a paid plan (verified: org→Team, personal→PRO;
+> static is free). Pivoted to a FREE **static** Space (`space/index.html`) that calls a **self-hosted** Quorum
+> API (`serve/app.py`, FastAPI). Dev items 1–4 below (Gradio app) are superseded by `serve/` + static `space/`;
+> the fact-first findings + acceptance criteria still hold. See conversation DECISION #3.
 > **Goal**: an interactive Space where anyone can try Quorum's zero-shot decision service on their own text.
 > **Predecessor**: the shipped zero-shot ensemble (`quorum.ZeroShotEnsemble`) and 24-shot pipeline.
 > **Linked-code**: `quorum/ensemble.py`, `space/app.py` (new).

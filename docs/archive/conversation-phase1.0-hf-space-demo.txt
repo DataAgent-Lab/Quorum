@@ -57,3 +57,66 @@ Reasoning: keeps the demo reproducible/inspectable in the public repo; HF Space 
 Reversible: yes.
 
 ===
+AI:
+
+[BLOCKED #1 | must-ask]
+
+Question: Which HF namespace/plan hosts the running Space?
+Context: Creating a Gradio (compute) Space under the ORG `DataAgent` returned HTTP 402 — HF now requires a
+  Team/Enterprise plan to host compute Spaces under an organization. Free cpu-basic compute Spaces are still
+  free for PERSONAL accounts. (Static Spaces are free for orgs, but our demo runs models, so it can't be static.)
+Options:
+  A) Host under the personal account (JiunYi/Quorum-Demo), free CPU, and ADD it to the DataAgent/Quorum
+     collection (a collection can list a repo from any namespace). — free; only the Space's owner namespace
+     differs from the org.
+  B) Upgrade the DataAgent org to a paid Team/Enterprise plan to host DataAgent/Quorum-Demo. — costs money.
+My recommendation: A (free, still surfaces in the Quorum collection).
+Impact: blocks T3.1 (create Space) / T3.2 (add to collection) / T3.3 (link from README).
+Workaround: none for hosting — the Space code is built, tested (decide() logic passes on CPU), committed and
+  pushed; only the hosting namespace/plan is blocked.
+
+===
+AI:
+
+[BLOCKED #1 — UPDATE: option A was wrong; hosting a compute Space is NOT free anywhere]
+
+Correction: creating the Gradio Space under the PERSONAL account also returned 402 — HF now requires a **PRO**
+subscription for personal accounts to host Gradio/Docker (compute) Spaces on free cpu-basic (and Team/Enterprise
+for orgs). Only **static** Spaces are free. So a permanently-hosted, free, *running* Quorum demo is not
+possible on HF without a paid plan. Verified twice (org 402 → Team/Enterprise; personal 402 → PRO).
+Revised options:
+  A′) Pay — PRO (~$9/mo) on JiunYi, or Team on DataAgent → deploy the running Gradio Space + add to collection.
+  B′) Free **static** landing Space (no live inference) — a page in the collection that explains Quorum, shows
+      the results, and links to the repo + gated adapter. Free, on-brand, but not "live-testable".
+  C′) No hosted Space — keep `space/app.py` in the repo (anyone runs it locally with `gradio`). Free.
+My recommendation: A′ if a live demo matters (cheap, monthly, cancellable); else B′ (free landing) or C′.
+This is a spend decision — must-ask.
+
+===
+Human:
+
+[RESUME] Chosen path: a FREE **static** Space that calls an API the user self-hosts (their own machine).
+Confirmed feasible. This also lets the on-prem service work continue on that machine.
+
+===
+AI:
+
+[DECISION #3 | log-and-proceed] — resolves BLOCKED #1
+
+Topic: How to ship a free, live-testable demo given compute Spaces are paid.
+Chose: **static HF Space (free) + a self-hosted Quorum API.**
+  - `serve/app.py` — a tiny FastAPI wrapper around `quorum.ZeroShotEnsemble` (`POST /predict`, `GET /health`,
+    configurable CORS). It imports the PUBLIC `quorum` package (no private code). `pyproject.toml` gains a
+    `serve` extra (fastapi, uvicorn). Deploy cheat-sheet in `serve/README.md` (run → tunnel to HTTPS → CORS).
+  - `space/` becomes a **static** Space: `index.html` (vanilla JS: paste the API URL, POST message+labels,
+    render distribution + top label + per-member votes; API URL remembered in localStorage) + `README.md`
+    with `sdk: static`. Removed the earlier Gradio `app.py`/`requirements.txt` (compute Space — paid).
+Feasibility facts (verified): a static Space is free (incl. orgs); its browser JS can call an external API iff
+  the API is public **HTTPS** (mixed-content rule) and **CORS**-allows the Space origin. Demo is live only while
+  the user's API + tunnel are up.
+Division of labour: this session writes the code (public repo = SSoT + full context); the OTHER machine's
+  session runs the API + tunnel + CORS and returns the public URL, which then powers the static Space. That API
+  work also advances the separate on-prem "service" productization on that machine.
+Reversible: yes (upgrade to a paid compute Space later for an always-on demo).
+
+===
