@@ -120,3 +120,30 @@ Division of labour: this session writes the code (public repo = SSoT + full cont
 Reversible: yes (upgrade to a paid compute Space later for an always-on demo).
 
 ===
+===
+AI:
+
+[STATUS SUMMARY]
+
+## Completed
+- ✅ Fact-first gate: ensemble on CPU (load ~22s, ~2s/6-label, RAM 3.3GB) — free-tier feasible.
+- ✅ serve/app.py — FastAPI wrapper (POST /predict, GET /health, CORS); verified via TestClient (200 +
+  guards); pyproject `serve` extra; serve/README.md deploy cheat-sheet.
+- ✅ space/ — free STATIC Space (index.html + sdk:static card) calling a self-hosted API URL.
+- ✅ Deployed: https://huggingface.co/spaces/DataAgent/Quorum-Demo (static, free) + added to the Quorum
+  collection; linked from the GitHub README. All committed + pushed; trace-scan clean.
+
+## Decisions Made (review recommended)
+- DECISION #3: compute Spaces are paid -> free static Space + self-hosted FastAPI (serve/). Resolved BLOCKED #1.
+
+## Not done — needs the OTHER machine (T3.4)
+- Run serve/app.py on the API machine, expose over HTTPS (tunnel) + CORS, and set that URL as the Space's
+  default (or paste it into the demo's API-URL box). Until then the demo is deployed but has no backend to call.
+  This also advances the on-prem "service" productization on that machine.
+
+## Next Steps
+1. On the API machine: `git clone` the repo, `pip install -e ".[serve]"`, `uvicorn serve.app:app`, tunnel to
+   HTTPS, set CORS_ORIGINS, report the public URL.
+2. Back here: set the demo Space's default API URL to that URL -> demo goes live.
+
+===
