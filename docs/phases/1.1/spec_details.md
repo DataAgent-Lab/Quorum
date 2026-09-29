@@ -35,16 +35,33 @@ SNIPS full test (1400), same ensemble, `label_texts` = per-class descriptions vs
 McNemar (descriptions vs names): b=154, c=26, p≈0 → descriptions **significantly** better. Descriptions close
 the SNIPS gap to the dataless method *and clear it*, with **no new inference code** — the same ensemble, only
 richer `label_texts`. This confirms P1: the dataless edge is a label-text lever Quorum already supports, not a
-missing capability. (SNIPS is a favourable case — 7 opaque names; the CLINC 151-intent case is unmeasured, T2.3.)
+missing capability.
+
+**CLINC150 (T2.3, full test 5500), 151 authored descriptions:**
+
+| label text | accuracy | vs names | vs dataless 0.815 / PIE 0.831 |
+|---|---|---|---|
+| names | 0.6518 | — | −0.163 / −0.179 |
+| **descriptions** | **0.6816** | **+0.0298** (McNemar p≈0) | −0.133 / −0.149 |
+
+So the lever's *magnitude* depends on how opaque the names are: it **clears** the reference on SNIPS (7 opaque
+names) but only **narrows** the gap on CLINC (151 fine-grained intents — a one-line description per class
+recovers part, not all). The residual on CLINC is consistent with the encoder-specialisation lever (P2), for
+which no usable open checkpoint exists (see AC-3). Honest scope: descriptions are a real, significant,
+zero-new-code lever — not a universal fix.
 
 ## Acceptance criteria
 
 - **AC-1 (P1 validated)** ✅: SNIPS full test, descriptions 0.9443 vs names 0.8529 (+0.0914, McNemar p≈0),
-  above the dataless reference 0.9257. See Result above.
+  above the dataless reference 0.9257; CLINC150 full test, descriptions 0.6816 vs names 0.6518 (+0.0298,
+  McNemar p≈0) — significant on both, magnitude scales with name opacity. See Result above.
 - **AC-2 (P1 documented)**: descriptions are a documented first-class option (README + a shipped example
   description set); the default stays names (zero-authoring) with descriptions as the "+quality" path.
-- **AC-3 (P2 speced)**: a concrete, sourced plan to add an intent-specialised encoder member (candidate model,
-  how it plugs into the ensemble, how to evaluate) — implemented only if a suitable open checkpoint is found.
+- **AC-3 (P2)** ✅ (measured negative): PIE has no downloadable weights (training-code-only, archived); the
+  only usable open specialised checkpoint, `sergioburdisso/dialog2flow-joint-bert-base`, was added as a 4th
+  member and **significantly HURT** SNIPS names (0.8529→0.8350, McNemar p=0.0026) — its dialogue-action
+  objective ≠ intent-name matching. No usable open intent-specialised encoder improves the ensemble; PIE-style
+  specialisation is inaccessible without training our own encoder (out of scope). See T3 in tasks.md.
 - **AC-4 (honest scope)**: no overclaim — descriptions/PIE are *known* levers; report where they help and where
   they don't; the cross-domain "ensemble beats its own parts" claim is unaffected.
 

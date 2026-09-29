@@ -50,10 +50,36 @@ lever is proven, the 151-intent authoring is a larger effort not done speculativ
 [DECISION | log-and-proceed] Ship descriptions as a documented "+quality" path, default stays names
 (zero-authoring). Shipped examples/snips_descriptions.py (the exact 7 descriptions used) + a README section.
 
-[T3 — P2 speced only] Intent-specialised encoder member (PIE-style) left as a sourced future direction (AC-3):
-add an open intent-specialised encoder as an optional cosine member IF a suitable public checkpoint is found;
-not implemented this session (no verified open PIE checkpoint pulled). Honest scope per AC-4.
+[RESULT | T3 — P2 measured, NEGATIVE]
 
-Phase 1.1 outcome: P1 done & validated (AC-1, AC-2), P2 speced (AC-3), no overclaim (AC-4).
+Searched for an open intent-specialised encoder:
+  - PIE (arXiv:2305.14827, amazon-science/intent-aware-encoder, Apache-2.0): NO pretrained weights released
+    (training code only; repo archived 2024-08). Using it => pre-train our own encoder = out of scope.
+  - dataless's encoder = bge-large = a member we already have; its edge is descriptions (P1), not the encoder.
+  - Only usable open English dialogue/intent-specialised ST checkpoint: sergioburdisso/dialog2flow-joint-bert-base
+    (EMNLP'24, MIT).
+
+Added Dialog2Flow as a 4th ensemble member, measured on SNIPS names (full 1400):
+  3-member = 0.8529   +Dialog2Flow(4) = 0.8350   delta = -0.0179
+  McNemar 4-vs-3: b=20 c=45 p=0.0026 -> the 3-member is SIGNIFICANTLY better -> Dialog2Flow HURTS.
+Root cause (as predicted up front, not post-hoc): D2F optimises utterance<->dialogue-action similarity, not
+utterance<->intent-NAME matching, so cosine-to-label-text is a noisy member.
+
+Verdict: no usable open intent-specialised encoder improves the ensemble; PIE-style specialisation is
+inaccessible without training an encoder ourselves (out of scope). AC-3 satisfied as a measured negative.
+
+[RESULT | T2.3 — CLINC150 descriptions, full test 5500]
+
+names = 0.6518   descriptions = 0.6816   delta = +0.0298   McNemar b=518 c=354 p≈0 -> significantly better.
+BUT does not close the gap to the external refs (dataless 0.815 / PIE 0.831) — a one-line description per class
+recovers part, not all, of a 151-way fine-grained gap. So the descriptions lever's MAGNITUDE scales with name
+opacity: clears the ref on SNIPS (+9.1), only narrows it on CLINC (+3.0). The residual is consistent with the
+encoder-specialisation lever (P2), which has no usable open checkpoint. Shipped examples/clinc_descriptions.py.
+
+Phase 1.1 outcome: P1 done & validated (AC-1 SNIPS +9.1 / CLINC +3.0 both significant, AC-2 shipped examples +
+README); P2 measured negative (AC-3, Dialog2Flow hurts, PIE unavailable); no overclaim, honest where levers
+help and where they don't (AC-4).
+
+===
 
 ===

@@ -107,9 +107,12 @@ name, conf, dist = clf.predict(text, labels, label_texts=descriptions)   # match
 ```
 
 Measured on SNIPS (full test, 1,400): names **0.853** → descriptions **0.944** (+0.091, McNemar p < 1e-6) —
-above the description-based "dataless" method's reported 0.926. See `examples/snips_descriptions.py` for the
-exact 7 descriptions, and `docs/phases/1.1/` for the write-up. Descriptions are the recommended path when you
-have them; names remain the zero-effort default.
+above the description-based "dataless" method's reported 0.926. The gain scales with how opaque the class
+*names* are: on the 151-intent CLINC150 the same lever still helps significantly (0.652 → **0.682**, +0.030,
+p < 1e-6) but by less — a one-line description doesn't fully close the gap to specialised methods there. See
+`examples/snips_descriptions.py` and `examples/clinc_descriptions.py` for the exact descriptions, and
+`docs/phases/1.1/` for the write-up. Descriptions are the recommended path when you have them; names remain the
+zero-effort default.
 
 ## Does it generalize beyond Banking77?
 
