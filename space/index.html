@@ -113,17 +113,6 @@ exchange rate</textarea>
     </div>
   </div>
 
-  <details>
-    <summary>Advanced — run against your own Quorum server</summary>
-    <div class="card" style="margin-top:10px">
-      <label for="api">API URL</label>
-      <input id="api" type="text" placeholder="https://your-quorum-api.example.com" value="https://quorum-api.idataagent.com" />
-      <div class="note">The demo talks to a small shared server by default. To use your own, self-host from the
-        repo's <code>serve/</code> (any CPU box), expose it over HTTPS with CORS allowing this page, and paste
-        its URL here — it is remembered in your browser.</div>
-    </div>
-  </details>
-
   <footer>
     Built by <b>DataAgent</b>. <a href="https://github.com/DataAgent-Lab/Quorum" target="_blank" rel="noopener">Open source</a>,
     with a small reproduction study comparing against a closed commercial API (24-shot: 0.932 vs 0.924 on Banking77).<br>
@@ -134,9 +123,7 @@ exchange rate</textarea>
 <script>
   const $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
-  const api = $("api");
-  try { const saved = localStorage.getItem("quorum_api"); if (saved) api.value = saved; } catch (e) {}
-  api.addEventListener("change", () => { try { localStorage.setItem("quorum_api", api.value.trim()); } catch (e) {} });
+  const API_BASE = "https://quorum-api.idataagent.com";
 
   const EXAMPLES = {
     "Banking": { msg: "when will my new card arrive?",
@@ -166,15 +153,14 @@ exchange rate</textarea>
 
   async function decide() {
     $("err").textContent = ""; $("status").textContent = ""; $("out").style.display = "none";
-    const base = api.value.trim().replace(/\/+$/, "");
-    if (!base) { $("err").textContent = "Set an API URL under “Advanced”."; return; }
+    const base = API_BASE;
     const message = $("msg").value.trim();
     const labels = $("labels").value.split("\n").map(s => s.trim()).filter((s, i, a) => s && a.indexOf(s) === i);
     if (!message) { $("err").textContent = "Enter a message."; return; }
     if (labels.length < 2) { $("err").textContent = "Enter at least 2 labels (one per line)."; return; }
 
     $("go").disabled = true; $("go").innerHTML = '<span class="spin"></span>Deciding…';
-    const warmTimer = setTimeout(() => { $("status").textContent = "Waking the shared demo server — the first request can take ~15s…"; }, 1500);
+    const warmTimer = setTimeout(() => { $("status").textContent = "Running on a small shared CPU server — a prediction takes a few seconds (longer under load)…"; }, 1200);
     const ctrl = new AbortController();
     const timeout = setTimeout(() => ctrl.abort(), 40000);
     const t0 = performance.now();
@@ -198,11 +184,9 @@ exchange rate</textarea>
       lastConf = d.confidence; renderDecision();
       $("out").style.display = "block";
     } catch (e) {
-      const msg = (e.name === "AbortError")
-        ? "The demo server didn't respond in time — it may be waking up or busy. Please try again in a few seconds."
-        : "Couldn't reach the demo server. Please try again shortly" +
-          (api.value.includes("idataagent.com") ? "." : ", or check your API URL under “Advanced”.");
-      $("err").textContent = msg;
+      $("err").textContent = (e.name === "AbortError")
+        ? "The demo server didn't respond in time — it may be busy. Please try again in a few seconds."
+        : "Couldn't reach the demo server. Please try again shortly.";
     } finally {
       clearTimeout(warmTimer); clearTimeout(timeout);
       $("status").textContent = "";
