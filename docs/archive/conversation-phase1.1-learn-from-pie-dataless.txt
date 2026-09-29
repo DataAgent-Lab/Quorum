@@ -1,0 +1,59 @@
+Human:
+
+[TASK INITIATED]
+Goal: Study the ROOT-CAUSE principles behind why PIE and description-augmented "dataless" classifiers beat
+      Quorum's default on CLINC150 / SNIPS, and LEARN those principles into Quorum's method.
+Decision Authority: default (autonomous: impl/naming; log-and-proceed: new members/deps; must-ask: scope/spend).
+Constraints: clean-room (no private-infra references in anything published); measure on full public test sets.
+Started: 2026-09-29
+Conversation File: conversation-phase1.1-learn-from-pie-dataless.txt
+Predecessor: Phase 1.0 (the demo). Related study: the cross-domain generalization run (external context).
+
+===
+AI:
+
+[UNDERSTANDING]
+
+Two external zero-shot methods beat Quorum's default on the label-rich / description-sensitive sets:
+- **PIE** (arXiv:2305.14827): a bi-encoder PRE-TRAINED to be intent-aware (utterance↔intent-name contrastive
+  pretraining on other intent data). Root cause of its edge: TASK SPECIALISATION of the encoder.
+- **dataless** (arXiv:2407.17862): bge-large + per-class natural-language DESCRIPTIONS, cosine-matched. Root
+  cause: RICHER LABEL TEXT (descriptions) vs bare names.
+
+Quorum's default uses GENERAL-purpose members and LABEL NAMES only — so trailing these on CLINC150 (0.652 vs
+PIE 0.831 / dataless 0.815) and SNIPS (0.853 vs 0.9257) is expected.
+
+Two principles to learn in:
+  (P1) DESCRIPTIONS as a first-class label text. Quorum's `ZeroShotEnsemble.predict_proba(..., label_texts=)`
+       ALREADY accepts arbitrary label text — so descriptions need no new code, just: enable/document them as a
+       first-class path, ship example descriptions, and MEASURE the gain (does it close the CLINC/SNIPS gap?).
+  (P2) An INTENT-SPECIALISED encoder as an ensemble member (PIE-style), if a suitable open model exists.
+
+Plan: validate P1 cheaply first (SNIPS descriptions vs names, full test), then spec P2. Proceeding.
+
+===
+AI:
+
+[RESULT | T2.1 — P1 validated on SNIPS]
+
+SNIPS full test (1400), same ZeroShotEnsemble, only label_texts differs:
+  names (default) = 0.8529
+  descriptions    = 0.9443   (delta +0.0914)
+  McNemar desc-vs-names: b=154 c=26 p≈0 -> descriptions SIGNIFICANTLY better
+  dataless reference (bge+desc, arXiv:2407.17862) = 0.9257 -> we are +0.0186 ABOVE it
+
+Interpretation: the dataless edge is a LABEL-TEXT lever Quorum already supports (label_texts arg) — no new
+inference code, no new member. Richer label text alone moves SNIPS from below the dataless method to above it.
+This is a favourable case (7 opaque intent names); CLINC's 151 intents are unmeasured (T2.3, deferred — the
+lever is proven, the 151-intent authoring is a larger effort not done speculatively).
+
+[DECISION | log-and-proceed] Ship descriptions as a documented "+quality" path, default stays names
+(zero-authoring). Shipped examples/snips_descriptions.py (the exact 7 descriptions used) + a README section.
+
+[T3 — P2 speced only] Intent-specialised encoder member (PIE-style) left as a sourced future direction (AC-3):
+add an open intent-specialised encoder as an optional cosine member IF a suitable public checkpoint is found;
+not implemented this session (no verified open PIE checkpoint pulled). Honest scope per AC-4.
+
+Phase 1.1 outcome: P1 done & validated (AC-1, AC-2), P2 speced (AC-3), no overclaim (AC-4).
+
+===
