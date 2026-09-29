@@ -6,7 +6,11 @@ Can an ensemble of tiny open models match — or beat — a paid, closed "calibr
 classification? Two honest results, both on public benchmarks, both with paired significance tests.
 
 **Links:** [🤗 Quorum collection](https://huggingface.co/collections/DataAgent/quorum-6abb3255e0fab20d66add39b) ·
+[live demo (Space)](https://huggingface.co/spaces/DataAgent/Quorum-Demo) ·
 [gated 24-shot adapter](https://huggingface.co/DataAgent/Quorum-Reader-Qwen3-4B-Adapter)
+
+> The demo is a static frontend that calls a Quorum API you self-host (see [`serve/`](serve/)) — free, and the
+> inference stays on your machine.
 
 This repo accompanies a small reproduction study. The comparison target is **Jev**, a closed commercial
 calibrated-decision model. On the standard **Banking77** intent benchmark (77 classes, full 3,080-item test):
