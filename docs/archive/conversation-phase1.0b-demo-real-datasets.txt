@@ -1,0 +1,65 @@
+Human:
+
+[TASK INITIATED]
+Goal: Redesign the demo frontend (space/index.html) so every example is a REAL benchmark test sentence answered from
+      the permanent cache (Phase 1.0a), and polish the result panel so seeing a result feels impressive and refined.
+Agreed design (user, 2026-10-04 — see conversation-phase1.0a-demo-api-cache.txt DECISION #5):
+  - chips = all 7 benchmark domains (Banking77, CLINC150, HWU64, MASSIVE, MTOP, SNIPS, Bitext) + "Your own labels";
+    no duplicate entry points, no second input box — a chip fills the SAME message/labels boxes
+  - a chip draws a RANDOM real test sentence (random only, no picker); default = Banking + random sentence
+  - labels sent to the model = the DESCRIPTION variant; shown as name (normal size) + description (small)
+  - result panel + animation get a polish pass ("impressive, refined, quality")
+  - visitors' own inputs are stored by the API (1.0a decision) -> the page states this
+Decision Authority: default; go-live (publishing the Space) = user approval in this session.
+Constraints: public artifact — de-identified; accessible; works on mobile and in dark mode; static Space (no build).
+Predecessor: Phase 1.0a (cache + lazy worker). Data dependency: benchmark dumps + descriptions for 4 datasets from
+  the research session (branch research/benchmark-predictions).
+Started: 2026-10-04
+Conversation File: conversation-phase1.0b-demo-real-datasets.txt
+
+===
+AI:
+
+[DESIGN PROTOTYPE] docs/phases/1.0b/prototype/ (template.html + build_prototype.py -> prototype.html; shoot.py ->
+shots/). Real test sentences (40 per dataset, Bitext items with {{placeholders}} excluded) and real label names +
+descriptions where they exist; results SIMULATED (benchmark rows not in the cache yet).
+Direction "The Verdict": paper/ink palette + one vermilion seal accent; serif display (Instrument Serif) + grotesk
+(Hanken Grotesk) + mono (IBM Plex Mono). Reveal: 3 juror cards flip in (staggered) -> verdict label rises + seal
+stamps with a counting confidence -> ranked bars grow -> dataset-answer line (✓ / ✗ with the real answer).
+Self-review fixes after the first screenshots: cramped seal, unrealistic simulated confidence, chip subtitles
+breaking, tall juror cards on mobile. Chromium check: 0 console errors; edited 151-label sentence disables Decide.
+Awaiting user review/consensus before wiring it to the API and replacing space/index.html.
+
+===
+Human:
+
+[RESUME] User: wire the real API, with the cold-start handling done properly (2026-10-04). Design accepted as in
+the prototype; titles/copy can change later.
+
+===
+AI:
+
+[DECISION #1 | log-and-proceed]
+Topic: How the page handles a cold model (first live answer after an idle unload takes ~30-90 s).
+Chose: requests that are known to be cached (unedited domain sample, own-labels default) use a 30 s timeout and no
+  special UI; anything that may need live computation first asks /health — if the model is asleep the panel says
+  the jury is waking up (with an elapsed clock) and the fetch waits up to 180 s; a timeout / network error / 503 /
+  504 is retried once after 3 s (the server keeps finished results, so the retry usually hits); a second failure
+  shows a calm error with "Try again". Server budgets stay as in 1.0a (load 300 s, job 120 s).
+
+===
+AI:
+
+[DECISION #2 | log-and-proceed]
+Topic: API base override. Added `?api=<url>` (default unchanged) — needed to test the page against a local API
+  (production CORS only allows the Space origin) and useful for self-hosters; the visible API-URL field stays removed.
+
+===
+AI:
+
+[MILESTONE] Built + tested: space/index.html (prototype design on real data), space/samples.json (300 real
+sentences per domain, exported by serve/export_demo_samples.py from the same dumps that seeded the cache),
+space/README.md, seed list + drift test follow the new page. AC-8 35/35 live hits; browser E2E 19/19 (see tasks.md).
+Not published: the Space needs the user's go-live approval and an HF write token (none on this host).
+
+===
