@@ -333,11 +333,19 @@ def phase_compare_default():
     (OUT / "compare_default.json").write_text(json.dumps(rec, indent=1)); print(json.dumps(rec), flush=True)
 
 
-def phase_test():
+def phase_test(args):
     sel_path = OUT / "selection_scores.json"
     if not sel_path.exists():
         sys.exit("refusing: selection_scores.json not written — run `select` first")
-    sel = json.loads(sel_path.read_text()); win = sel["selected"]; prm_rec = sel["refit_on_full_selection_split"]
+    OUTP = ROOT / "results" / "predictions"
+    dump_path, meta_path = OUTP / "banking77_24shot_clean.jsonl.gz", OUTP / "banking77_24shot_clean_meta.json"
+    if (dump_path.exists() or meta_path.exists()) and not args.rerun_after_crash:
+        sys.exit("refusing: the single test run already produced output; pass --rerun-after-crash REASON "
+                 "only if that run crashed (the rerun is disclosed in the meta, protocol §8)")
+    sel_bytes = sel_path.read_bytes(); sel = json.loads(sel_bytes)
+    assert sel["protocol_commit"] == PROTOCOL_COMMIT, "selection was made under a different protocol commit"
+    assert sel["code"]["sha256"] == code_fingerprint()["sha256"], "code differs from the code that made the selection"
+    win = sel["selected"]; prm_rec = sel["refit_on_full_selection_split"]
     S = load_split(); raw, train, P, opts, eng, zs = setup(S)
     from datasets import load_dataset
     test = [{"text": r["text"], "label": int(r["label"])}
@@ -354,11 +362,12 @@ def phase_test():
     Pf = softmax(np.log(comb_raw + 1e-12) if rule != "rank_mean" else comb_raw, prm_rec["final_temperature"])
     g7 = lambda v: [float(f"{x:.7g}") for x in v]
     cal = [softmax(L, T) for L, T in zip(Ls, prm["T"])]
-    OUTP = ROOT / "results" / "predictions"; OUTP.mkdir(parents=True, exist_ok=True)
+    OUTP.mkdir(parents=True, exist_ok=True)
     preds, gold = [], []
-    with gzip.open(OUTP / "banking77_24shot_clean.jsonl.gz", "wt") as f:
+    with gzip.open(dump_path, "wt") as f:
         for i, r in enumerate(test):
-            probs = g7(comb[i]); pred = int(np.argmax(probs)); preds.append(pred); gold.append(r["label"])
+            probs = g7(comb[i])                                   # rounded for storage only
+            pred = int(np.argmax(comb[i])); preds.append(pred); gold.append(r["label"])   # unrounded argmax
             row = {"idx": i, "text": r["text"], "gold": r["label"], "pred": pred, "probs": probs,
                    "reader_probs": g7(cal[0][i]), "knn_probs": g7(cal[1][i]),
                    "retrieved_idx": [P[j] for j in eng.shots_idx(r["text"])],
@@ -389,7 +398,11 @@ def phase_test():
     except Exception as e:
         sec["reproduction_reported"] = {"error": f"{type(e).__name__}: {e}"}
     import torch, transformers, peft, sentence_transformers
-    meta = {"protocol_commit": PROTOCOL_COMMIT, "code": code_fingerprint(), "dataset": DATASET,
+    meta = {"protocol_commit": PROTOCOL_COMMIT, "code": code_fingerprint(),
+            "selection_file_sha256": hashlib.sha256(sel_bytes).hexdigest(),
+            "rerun": bool(args.rerun_after_crash), "rerun_reason": args.rerun_after_crash or None,
+            "pred_rule": "argmax of the unrounded combined scores; stored probabilities are rounded to 7 significant digits",
+            "dataset": DATASET,
             "dataset_revision": DATASET_REV, "base": BASE, "base_revision": BASE_REV, "adapter": ADAPTER,
             "adapter_revision": ADAPTER_REV, "knn_embedder": KNN_EMBEDDER, "task_description": TASK_DESC,
             "selected": win, "fitted": prm_rec, "pool_size": len(P), "n_test": len(test),
@@ -404,13 +417,18 @@ def phase_test():
                          "peft": peft.__version__, "sentence_transformers": sentence_transformers.__version__},
             "device": torch.cuda.get_device_name(0) if torch.cuda.is_available() else "cpu",
             "wall_seconds": round(secs, 1), "written_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
-    (OUTP / "banking77_24shot_clean_meta.json").write_text(json.dumps(meta, indent=1))
+    meta_path.write_text(json.dumps(meta, indent=1))
     print(f"TEST: accuracy={acc:.4f}  mcnemar={json.dumps(mc)}", flush=True)
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("phase", choices=["split", "smoke", "select", "test", "compare-default"])
+    ap.add_argument("--rerun-after-crash", metavar="REASON", default=None,
+                    help="test phase only: allow re-running after a crashed test run; the reason goes in the meta")
     a = ap.parse_args()
-    {"split": phase_split, "smoke": phase_smoke, "select": phase_select, "test": phase_test,
-     "compare-default": phase_compare_default}[a.phase]()
+    if a.phase == "test":
+        phase_test(a)
+    else:
+        {"split": phase_split, "smoke": phase_smoke, "select": phase_select,
+         "compare-default": phase_compare_default}[a.phase]()

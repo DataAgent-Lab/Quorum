@@ -8,3 +8,6 @@ venv/
 .ipynb_checkpoints/
 *.log
 serve/data/
+
+# logit caches of the clean 24-shot run (large, regenerable)
+results/clean/cache/
