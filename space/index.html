@@ -3,197 +3,527 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Quorum — calibrated intent decisions from tiny open models</title>
-<meta name="description" content="Pick a decision and candidate labels; Quorum returns the choice, a confidence you can gate on, and how each model voted. An ensemble of three sub-1B open models — no training, runs on a laptop." />
+<title>Quorum — ask the jury</title>
+<meta name="description" content="Three tiny open models read a message, each casts a vote, and Quorum returns a verdict with a confidence you can act on. Try it on real benchmark sentences." />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Quorum — calibrated intent decisions from tiny open models" />
-<meta property="og:description" content="A jury of three sub-1B open models decides an intent and tells you how sure it is — no training, no paid API. Try it live." />
+<meta property="og:title" content="Quorum — ask the jury" />
+<meta property="og:description" content="A jury of three sub-1B open models decides an intent and tells you how sure it is — no training, no paid API. Try it on real benchmark sentences." />
 <meta property="og:url" content="https://huggingface.co/spaces/DataAgent/Quorum-Demo" />
 <meta name="twitter:card" content="summary" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234f46e5'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white'%3E%E2%9A%96%3C/text%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23b8391f'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white'%3E%E2%9A%96%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
-  :root { --ink:#1a1a2e; --muted:#6b7280; --line:#e5e7eb; --accent:#4f46e5; --accent-soft:#eef0ff;
-          --bg:#ffffff; --card:#ffffff; --ok:#047857; --ok-bg:#ecfdf5; --warn:#b45309; --warn-bg:#fffbeb; }
+  :root {
+    --paper:#f4efe5; --paper-2:#ece4d5; --card:#fbf8f1; --ink:#1c1813; --ink-2:#4b443a; --muted:#7c7367;
+    --line:#ddd3c3; --line-2:#cbbfab; --seal:#b8391f; --seal-2:#d9573a; --seal-soft:#f5ddd3;
+    --ok:#2c6a3c; --ok-soft:#e1efe1; --no:#a0341f; --no-soft:#f6e1da;
+    --shadow: 0 1px 0 rgba(28,24,19,.04), 0 10px 30px -18px rgba(28,24,19,.35);
+    --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+    --sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    --ease: cubic-bezier(.2,.8,.2,1);
+  }
   @media (prefers-color-scheme: dark) {
-    :root { --ink:#e8e8f0; --muted:#9aa0ac; --line:#2b2f3a; --accent:#8b8cf7; --accent-soft:#20223a;
-            --bg:#14151c; --card:#1b1d26; --ok:#34d399; --ok-bg:#0d2b22; --warn:#fbbf24; --warn-bg:#2a2113; }
+    :root:not([data-theme="light"]) {
+      --paper:#13100c; --paper-2:#1a1611; --card:#1c1813; --ink:#f0e8da; --ink-2:#cfc4b3; --muted:#9b9081;
+      --line:#2e2821; --line-2:#3c342b; --seal:#ee6a49; --seal-2:#ff8a6a; --seal-soft:#3a1d15;
+      --ok:#86c897; --ok-soft:#16271b; --no:#f2907a; --no-soft:#35190f;
+      --shadow: 0 1px 0 rgba(0,0,0,.4), 0 16px 40px -20px rgba(0,0,0,.8);
+    }
   }
   * { box-sizing: border-box; }
-  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-         color: var(--ink); background: var(--bg); margin: 0; line-height: 1.55; }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 28px 18px 40px; }
-  h1 { font-size: 1.55rem; margin: 0 0 6px; letter-spacing: -.01em; }
-  .sub { color: var(--muted); margin: 0 0 14px; }
-  .links a { color: var(--accent); text-decoration: none; margin-right: 14px; font-size: .9rem; }
-  .links a:hover { text-decoration: underline; }
-  .card { border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-top: 16px; background: var(--card); }
-  label { display:block; font-weight:600; font-size:.85rem; margin: 12px 0 4px; }
-  input[type=text], textarea { width:100%; padding:9px 11px; border:1px solid var(--line);
-         border-radius:8px; font: inherit; background: var(--bg); color: var(--ink); }
-  textarea { resize: vertical; }
-  .presets { display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
-  .chip { border:1px solid var(--line); background:var(--bg); color:var(--ink); border-radius:999px;
-          padding:6px 13px; font-size:.85rem; cursor:pointer; }
-  .chip:hover { border-color: var(--accent); color: var(--accent); }
-  .go { margin-top: 16px; background: var(--accent); color:#fff; border:0; border-radius:8px;
-        padding: 11px 20px; font-weight:600; font-size:.95rem; cursor:pointer; }
-  .go:disabled { opacity:.55; cursor:default; }
-  .note { font-size:.8rem; color:var(--muted); margin-top:8px; }
-  .spin { display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,.5);
-          border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; vertical-align:-2px; margin-right:7px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .status { font-size:.85rem; color:var(--muted); margin-top:10px; }
-  .badge { display:inline-block; background:var(--accent-soft); color:var(--accent); font-weight:700;
-           font-size:1.15rem; padding:4px 12px; border-radius:8px; }
-  .meta { font-size:.8rem; color:var(--muted); margin: 6px 0 2px; }
-  .bar { height: 20px; background: var(--accent); border-radius: 4px; }
-  .row { display:flex; align-items:center; gap:8px; margin: 5px 0; font-size:.9rem; }
-  .rowlab { width: 40%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .barwrap { flex:1; background:var(--accent-soft); border-radius:4px; }
-  .pct { width: 52px; text-align:right; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .members { font-size:.85rem; margin-top:14px; }
-  .members b { color: var(--accent); }
-  .gate { margin-top:16px; border-top:1px dashed var(--line); padding-top:14px; }
-  .gate input[type=range] { width:100%; accent-color: var(--accent); }
-  .decision { margin-top:10px; padding:10px 12px; border-radius:8px; font-weight:600; font-size:.95rem; }
-  .decision.act { background:var(--ok-bg); color:var(--ok); }
-  .decision.esc { background:var(--warn-bg); color:var(--warn); }
-  .err { color:#dc2626; font-size:.9rem; margin-top:10px; white-space:pre-wrap; }
-  details { margin-top:16px; }
-  summary { cursor:pointer; color:var(--muted); font-size:.85rem; }
-  footer { margin-top:28px; padding-top:16px; border-top:1px solid var(--line); font-size:.85rem; color:var(--muted); }
-  footer a { color: var(--accent); text-decoration:none; }
-  .cta { display:inline-block; margin-top:8px; font-weight:600; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin:0; font-family:var(--sans); color:var(--ink); background:var(--paper); line-height:1.55;
+         font-size:15.5px; min-height:100vh; }
+  body::before { /* paper grain */
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap { position:relative; z-index:1; max-width:1120px; margin:0 auto; padding:22px 20px 56px; }
+  a { color:inherit; }
+
+  /* masthead */
+  .mast { display:flex; justify-content:space-between; align-items:baseline; gap:16px; flex-wrap:wrap;
+          border-bottom:1px solid var(--line); padding-bottom:14px; }
+  .brand { font:400 1.65rem/1 var(--serif); letter-spacing:.01em; }
+  .brand small { font:500 .78rem var(--mono); color:var(--muted); margin-left:10px; letter-spacing:.04em; }
+  .mast nav { display:flex; gap:18px; font-size:.88rem; }
+  .mast nav a { text-decoration:none; color:var(--ink-2); border-bottom:1px solid transparent; }
+  .mast nav a:hover { border-color:var(--ink-2); }
+
+  /* hero */
+  .hero { display:grid; grid-template-columns: 1.15fr .85fr; gap:28px; align-items:end; margin:34px 0 26px; }
+  .hero h1 { font:400 clamp(2.6rem, 6vw, 4.6rem)/.95 var(--serif); margin:0; letter-spacing:-.01em; }
+  .hero h1 em { color:var(--seal); }
+  .hero p { margin:0; color:var(--ink-2); font-size:1rem; max-width:44ch; }
+
+  /* court: case | verdict */
+  .court { display:grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap:22px; align-items:start; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); }
+  .case { padding:22px 22px 20px; }
+  .step { display:flex; align-items:baseline; gap:10px; font:500 .72rem/1 var(--mono); letter-spacing:.12em;
+          text-transform:uppercase; color:var(--muted); margin:2px 0 12px; }
+  .step b { color:var(--seal); font-weight:500; }
+  .step + * + .step, .block + .step { margin-top:22px; }
+
+  /* domain chips */
+  .domains { display:flex; flex-wrap:wrap; gap:8px; }
+  .chip { text-align:left; border:1px solid var(--line); background:var(--paper); color:var(--ink);
+          border-radius:12px; padding:9px 11px 8px; cursor:pointer; font:inherit;
+          transition: border-color .2s, background .2s, transform .2s var(--ease); }
+  .chip:hover { border-color:var(--line-2); transform:translateY(-1px); }
+  .chip .t { display:block; font-weight:600; font-size:.88rem; line-height:1.2; white-space:nowrap; }
+  .chip .s { display:block; font:400 .7rem var(--mono); color:var(--muted); margin-top:3px; white-space:nowrap; }
+  .chip[aria-pressed="true"] { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .chip[aria-pressed="true"] .s { color:color-mix(in srgb, var(--paper) 70%, transparent); }
+  .chip.own .t::before { content:"✎ "; }
+  .chip:focus-visible, .btn:focus-visible, .linkbtn:focus-visible, textarea:focus-visible, input:focus-visible {
+    outline:2px solid var(--seal); outline-offset:2px; }
+
+  /* message */
+  .fieldhead { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:7px; }
+  .tag { font:500 .7rem/1 var(--mono); letter-spacing:.04em; color:var(--ok); background:var(--ok-soft);
+         border-radius:999px; padding:5px 9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .tag.edited { color:var(--muted); background:var(--paper-2); }
+  .linkbtn { background:none; border:0; padding:4px 2px; color:var(--ink-2); font:500 .82rem var(--sans);
+             cursor:pointer; text-decoration:underline; text-decoration-color:var(--line-2); text-underline-offset:3px; }
+  .linkbtn:hover { color:var(--seal); text-decoration-color:var(--seal); }
+  textarea { width:100%; border:1px solid var(--line); border-radius:12px; background:var(--paper); color:var(--ink);
+             font: 400 1.12rem/1.45 var(--serif); padding:12px 14px; resize:vertical; min-height:74px; }
+  textarea#own-labels { font:400 .92rem/1.5 var(--sans); min-height:140px; }
+
+  /* labels summary */
+  .labels-sum { display:flex; justify-content:space-between; align-items:center; gap:12px; border:1px solid var(--line);
+                border-radius:12px; background:var(--paper); padding:11px 14px; }
+  .labels-sum .n { font:400 1.35rem/1 var(--serif); }
+  .labels-sum .what { font-size:.88rem; color:var(--ink-2); }
+  .labels-list { margin-top:8px; max-height:220px; overflow:auto; border:1px solid var(--line); border-radius:12px;
+                 padding:4px 0; background:var(--paper); }
+  .labels-list li { list-style:none; padding:6px 14px; border-bottom:1px dashed var(--line); }
+  .labels-list li:last-child { border-bottom:0; }
+  .labels-list .nm { font-weight:600; font-size:.88rem; }
+  .labels-list .ds { display:block; font-size:.76rem; color:var(--muted); }
+  .hint { font-size:.8rem; color:var(--muted); margin-top:6px; }
+  .hint.warn { color:var(--no); }
+
+  .actions { display:flex; align-items:center; gap:14px; margin-top:22px; flex-wrap:wrap; }
+  .btn { position:relative; border:0; border-radius:12px; padding:13px 22px 12px; cursor:pointer;
+         background:var(--ink); color:var(--paper); font:600 .98rem var(--sans); letter-spacing:.01em;
+         transition: transform .2s var(--ease), background .2s; }
+  .btn:hover { transform:translateY(-1px); background:var(--seal); }
+  .btn:disabled { opacity:.45; cursor:not-allowed; transform:none; background:var(--ink); }
+  .btn .arrow { display:inline-block; transition:transform .25s var(--ease); margin-left:6px; }
+  .btn:hover .arrow { transform:translateX(3px); }
+  .privacy { font-size:.74rem; color:var(--muted); max-width:34ch; }
+
+  /* verdict panel */
+  .verdict { padding:22px; min-height:520px; position:sticky; top:18px; overflow:hidden; }
+  .empty { height:100%; min-height:470px; display:grid; place-items:center; text-align:center; color:var(--muted); }
+  .empty .glyph { font:400 4.2rem/1 var(--serif); color:var(--line-2); }
+  .empty p { max-width:30ch; margin:10px auto 0; font-size:.92rem; }
+
+  .jurors { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; perspective:900px; }
+  .juror { border:1px solid var(--line); border-radius:12px; padding:10px 10px 9px; background:var(--paper);
+           min-height:86px; transform-origin:50% 0; }
+  .juror .who { font:500 .66rem/1.2 var(--mono); letter-spacing:.05em; color:var(--muted); text-transform:uppercase; }
+  .juror .role { font-size:.72rem; color:var(--muted); }
+  .juror .vote { margin-top:7px; font-weight:600; font-size:.86rem; line-height:1.25; }
+  .juror .agree { font:500 .66rem var(--mono); margin-top:4px; letter-spacing:.04em; }
+  .juror .agree.y { color:var(--ok); } .juror .agree.n { color:var(--no); }
+  .juror.thinking .vote { color:var(--muted); }
+  .dots span { display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--muted); margin-right:3px;
+               animation: blink 1.2s infinite both; }
+  .dots span:nth-child(2) { animation-delay:.2s } .dots span:nth-child(3) { animation-delay:.4s }
+  @keyframes blink { 0%,80%,100% { opacity:.2 } 40% { opacity:1 } }
+
+  .ruling { display:grid; grid-template-columns: minmax(0,1fr) auto; gap:16px; align-items:center;
+            margin:22px 0 6px; padding:18px 0 16px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .eyebrow { font:500 .7rem/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--seal); }
+  .ruling .name { font:400 clamp(2rem, 4.2vw, 2.9rem)/1 var(--serif); margin:8px 0 6px; overflow-wrap:anywhere; }
+  .ruling .desc { font-size:.86rem; color:var(--ink-2); }
+  .seal { width:136px; height:136px; position:relative; flex:none; }
+  .seal svg { position:absolute; inset:0; }
+  .seal .num { position:absolute; inset:0; display:grid; place-items:center; text-align:center; color:var(--seal); }
+  .seal .num b { display:block; font:500 1.18rem/1 var(--mono); letter-spacing:-.03em; }
+  .seal .num i { display:block; font:500 .5rem/1 var(--mono); letter-spacing:.18em; text-transform:uppercase;
+                 font-style:normal; margin-top:5px; opacity:.85; }
+
+  .truth { display:flex; gap:10px; align-items:flex-start; border-radius:12px; padding:11px 13px; margin-top:14px;
+           font-size:.9rem; }
+  .truth .ic { font:600 1rem/1.3 var(--mono); }
+  .truth.ok { background:var(--ok-soft); color:var(--ok); }
+  .truth.no { background:var(--no-soft); color:var(--no); }
+  .truth.na { background:var(--paper-2); color:var(--ink-2); }
+  .truth small { display:block; color:var(--ink-2); opacity:.85; margin-top:2px; font-size:.78rem; }
+
+  .bars { margin-top:16px; }
+  .bar-row { display:grid; grid-template-columns: minmax(0, 1fr) 54px; gap:4px 10px; align-items:center; padding:6px 0; }
+  .bar-row .lab { font-size:.86rem; font-weight:600; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .bar-row .lab span { font-weight:400; color:var(--muted); font-size:.74rem; margin-left:6px; }
+  .bar-row .pct { font:500 .8rem var(--mono); text-align:right; color:var(--ink-2); grid-row: span 2; }
+  .track { height:6px; background:var(--paper-2); border-radius:99px; overflow:hidden; }
+  .fill { height:100%; width:0; background:var(--line-2); border-radius:99px; transition: width .9s var(--ease); }
+  .bar-row.top .fill { background:var(--seal); }
+  .bar-row.top .lab { color:var(--seal); }
+  .more { margin-top:4px; }
+
+  .gate { margin-top:18px; padding-top:14px; border-top:1px dashed var(--line); }
+  .gate-head { display:flex; justify-content:space-between; font-size:.84rem; color:var(--ink-2); }
+  .gate-head b { font-family:var(--mono); font-weight:500; }
+  input[type=range] { width:100%; accent-color:var(--seal); margin:10px 0 6px; }
+  .decision { border-radius:10px; padding:10px 12px; font-weight:600; font-size:.9rem; }
+  .decision.act { background:var(--ok-soft); color:var(--ok); }
+  .decision.esc { background:var(--no-soft); color:var(--no); }
+  .footnote { margin-top:14px; font:400 .72rem/1.5 var(--mono); color:var(--muted); display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+  .err { margin-top:14px; color:var(--no); font-size:.95rem; }
+  .err .btn { margin-top:14px; }
+  .waking { margin-top:18px; border:1px dashed var(--line-2); border-radius:12px; padding:14px 16px; }
+  .waking b { display:block; font:400 1.35rem/1.15 var(--serif); }
+  .waking p { margin:6px 0 0; font-size:.86rem; color:var(--ink-2); }
+  .waking .clock { font:500 .8rem var(--mono); color:var(--seal); margin-top:8px; }
+
+  /* reveal choreography */
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal .juror { animation: flip .55s var(--ease) both; }
+    .reveal .juror:nth-child(2) { animation-delay:.12s } .reveal .juror:nth-child(3) { animation-delay:.24s }
+    .reveal .ruling .eyebrow, .reveal .ruling .name, .reveal .ruling .desc { animation: rise .6s var(--ease) both; }
+    .reveal .ruling .eyebrow { animation-delay:.42s } .reveal .ruling .name { animation-delay:.5s }
+    .reveal .ruling .desc { animation-delay:.6s }
+    .reveal .seal { animation: stamp .55s cubic-bezier(.3,1.6,.5,1) .62s both; }
+    .reveal .truth { animation: rise .5s var(--ease) 1.05s both; }
+    .reveal .bars, .reveal .gate, .reveal .footnote { animation: fade .6s var(--ease) .9s both; }
+    .verdict.deliberating .juror { animation: pulse 1.4s ease-in-out infinite; }
+  }
+  @keyframes flip { from { transform: rotateX(-88deg); opacity:0 } to { transform:none; opacity:1 } }
+  @keyframes rise { from { transform: translateY(14px); opacity:0 } to { transform:none; opacity:1 } }
+  @keyframes fade { from { opacity:0 } to { opacity:1 } }
+  @keyframes stamp { 0% { transform: scale(1.9) rotate(-18deg); opacity:0 } 60% { opacity:1 }
+                     100% { transform: scale(1) rotate(-8deg); opacity:1 } }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:.55 } }
+  .seal { transform: rotate(-8deg); }
+
+  footer { margin-top:44px; padding-top:18px; border-top:1px solid var(--line); font-size:.82rem; color:var(--muted);
+           display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  footer a { color:var(--ink-2); }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns:1fr; gap:14px; margin-top:26px; }
+    .court { grid-template-columns:1fr; }
+    .verdict { position:relative; top:auto; min-height:0; }
+    .empty { min-height:220px; }
+    .domains .chip { flex:1 1 calc(50% - 4px); }
+  }
+  @media (max-width: 420px) {
+    .wrap { padding:16px 14px 40px; }
+    .case, .verdict { padding:16px; }
+    .jurors { grid-template-columns:1fr; gap:6px; }
+    .juror { min-height:0; display:grid; grid-template-columns:minmax(0,1fr) auto; column-gap:12px; padding:9px 11px; }
+    .juror .who, .juror .role { grid-column:1; }
+    .juror .vote { grid-column:2; grid-row:1; margin:0; text-align:right; }
+    .juror .agree { grid-column:2; grid-row:2; margin:0; text-align:right; }
+    .seal { width:112px; height:112px; }
+    .seal .num b { font-size:1rem; }
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>⚖️ Quorum</h1>
-  <p class="sub">Turn a plain message into a decision you can act on — the chosen label, a confidence you can set
-    a threshold on, and a look at how the models voted. No training, no paid API; three sub-1B open models
-    running on ordinary hardware.</p>
-  <div class="links">
-    <a href="https://github.com/DataAgent-Lab/Quorum" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://huggingface.co/collections/DataAgent/quorum-6abb3255e0fab20d66add39b" target="_blank" rel="noopener">Models</a>
-    <a href="https://huggingface.co/DataAgent/Quorum-Reader-Qwen3-4B-Adapter" target="_blank" rel="noopener">24-shot adapter</a>
-  </div>
 
-  <div class="card">
-    <label>Try an example</label>
-    <div class="presets" id="presets"></div>
+  <header class="mast">
+    <div class="brand">Quorum<small>a jury of tiny open models</small></div>
+    <nav aria-label="Project links">
+      <a href="https://github.com/DataAgent-Lab/Quorum" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://huggingface.co/collections/DataAgent/quorum-6abb3255e0fab20d66add39b" target="_blank" rel="noopener">Models</a>
+      <a href="https://huggingface.co/DataAgent/Quorum-Reader-Qwen3-4B-Adapter" target="_blank" rel="noopener">24-shot adapter</a>
+    </nav>
+  </header>
 
-    <label for="msg">Message</label>
-    <textarea id="msg" rows="2">when will my new card arrive?</textarea>
-    <label for="labels">Candidate labels (one per line)</label>
-    <textarea id="labels" rows="6">card arrival
-card delivery estimate
-lost or stolen card
-change pin
-top up by card
-exchange rate</textarea>
-    <button class="go" id="go">Decide</button>
-    <div class="status" id="status"></div>
-    <div class="err" id="err"></div>
-  </div>
+  <section class="hero">
+    <h1>Ask the <em>jury</em>.</h1>
+    <p>Three sub-1B open models read a message and each casts a vote. Quorum returns the verdict and a confidence
+      you can act on — no training, no paid API. Every example is a real test sentence from a public benchmark, so
+      you can see when the jury gets it right, and when it doesn't.</p>
+  </section>
 
-  <div class="card" id="out" style="display:none">
-    <div class="meta">Top choice</div>
-    <div class="badge" id="toplab"></div>
-    <span class="meta" id="topconf"></span>
-    <div id="bars" style="margin-top:12px"></div>
-    <div class="members" id="members"></div>
+  <main class="court">
+    <section class="case card" aria-labelledby="case-title">
+      <h2 id="case-title" class="step"><b>01</b> Choose a domain</h2>
+      <div class="domains" id="domains" role="group" aria-label="Domains"></div>
 
-    <div class="gate">
-      <label for="tau" style="margin:0">Confidence gate — auto-act when confidence ≥ <span id="tauval">70</span>%</label>
-      <input type="range" id="tau" min="0" max="100" value="70" />
-      <div class="decision" id="decision"></div>
-      <div class="note">The gate is what turns a prediction into an action: auto-act above the line, escalate to a
-        human below it. This live demo is the zero-shot tier (uncalibrated); the self-hosted service adds
-        temperature calibration and a precision-<em>guaranteed</em> (conformal) gate — see the repo.</div>
-    </div>
-  </div>
+      <div class="step" style="margin-top:22px"><b>02</b> The message</div>
+      <div class="fieldhead">
+        <span class="tag" id="msg-tag"></span>
+        <button class="linkbtn" id="another" type="button">🎲 Another real sentence</button>
+      </div>
+      <label for="msg" class="sr">Message</label>
+      <textarea id="msg" rows="2" spellcheck="false"></textarea>
+
+      <div class="step" style="margin-top:22px"><b>03</b> Candidate labels</div>
+      <div id="labels-area"></div>
+      <div class="hint" id="labels-hint"></div>
+
+      <div class="actions">
+        <button class="btn" id="go" type="button">Hear the verdict<span class="arrow">→</span></button>
+        <div class="privacy">Sentences you type yourself are kept on the demo server so repeats answer instantly.</div>
+      </div>
+    </section>
+
+    <section class="verdict card" id="verdict" aria-live="polite" aria-label="Verdict">
+      <div class="empty" id="empty">
+        <div><div class="glyph">⚖</div><p>Pick a domain and hear the verdict. The three jurors vote, then Quorum
+          rules — and the dataset tells you whether it was right.</p></div>
+      </div>
+    </section>
+  </main>
 
   <footer>
-    Built by <b>DataAgent</b>. <a href="https://github.com/DataAgent-Lab/Quorum" target="_blank" rel="noopener">Open source</a>,
-    with a small reproduction study comparing against a closed commercial API (24-shot: 0.932 vs 0.924 on Banking77).<br>
-    <a class="cta" href="https://github.com/DataAgent-Lab/Quorum/issues" target="_blank" rel="noopener">Want this on your own data / labels? Start a conversation →</a>
+    <div>Test sentences: Banking77, CLINC150, HWU64, MASSIVE, MTOP, SNIPS and Bitext — public research datasets.</div>
+    <div><a href="https://github.com/DataAgent-Lab/Quorum/issues" target="_blank" rel="noopener">Want this on your own labels? Start a conversation →</a></div>
   </footer>
 </div>
 
+<style>.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}</style>
 <script>
-  const $ = id => document.getElementById(id);
-  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
-  const API_BASE = "https://quorum-api.idataagent.com";
+let DATA = null;                        // space/samples.json — real benchmark test sentences + description labels
+const API_BASE = (new URLSearchParams(location.search).get("api") || "https://quorum-api.idataagent.com").replace(/\/$/, "");
+const HIT_TIMEOUT = 30000, LIVE_TIMEOUT = 180000;   // a cold start (models load on demand) takes ~30-90 s
+const LIVE_LIMIT = 50;                  // labels the server computes live; larger sets are cache-only
+const MEMBERS = [["PrismNLI-0.4B", "NLI reader"], ["bge-large", "Embedder · large"], ["bge-base", "Embedder · base"]];
+const OWN = { key: "own", title: "Your own labels", dataset: "free text",
+  msg: "I was charged twice for the same order and want my money back",
+  labels: ["billing / double charge", "refund request", "order status", "cancel subscription", "technical bug", "general question"] };
 
-  const EXAMPLES = {
-    "Banking": { msg: "when will my new card arrive?",
-      labels: ["card arrival","card delivery estimate","lost or stolen card","change pin","top up by card","exchange rate"] },
-    "Support triage": { msg: "I was charged twice for the same order and want my money back",
-      labels: ["billing / double charge","refund request","order status","cancel subscription","technical bug","general question"] },
-    "Product feedback": { msg: "the new dashboard is gorgeous but it loads really slowly",
-      labels: ["praise","performance complaint","bug report","feature request","pricing concern","churn risk"] },
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const state = { ds: null, sample: null, edited: false, showLabels: false };
+
+/* ---------- domains ---------- */
+function renderDomains() {
+  const all = [...DATA.domains, OWN];
+  $("domains").innerHTML = all.map(d => `<button type="button" class="chip${d.key === "own" ? " own" : ""}" data-key="${d.key}"
+      aria-pressed="false"><span class="t">${esc(d.title)}</span><span class="s">${d.key === "own" ? "type anything"
+      : `${esc(d.dataset)} · ${d.labels.length}`}</span></button>`).join("");
+  $("domains").querySelectorAll(".chip").forEach(b => b.onclick = () => select(b.dataset.key));
+}
+function select(key) {
+  state.ds = key === "own" ? OWN : DATA.domains.find(d => d.key === key);
+  $("domains").querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.key === key)));
+  state.showLabels = false;
+  if (key === "own") { state.sample = null; $("msg").value = OWN.msg; }
+  else draw();
+  renderLabels(); syncMessageState();
+}
+function draw() {
+  const d = state.ds, prev = state.sample;
+  let s; do { s = d.samples[Math.floor(Math.random() * d.samples.length)]; } while (d.samples.length > 1 && s === prev);
+  state.sample = s; $("msg").value = s.t; state.edited = false; syncMessageState();
+}
+
+/* ---------- labels ---------- */
+function currentLabels() {   // [{name, desc, send}] — `send` is the exact string sent to the API
+  if (state.ds.key === "own") {
+    const seen = new Set();
+    return ($("own-labels") ? $("own-labels").value : OWN.labels.join("\n")).split("\n").map(s => s.trim())
+      .filter(s => s && !seen.has(s) && seen.add(s)).map(s => ({ name: s, desc: null, send: s }));
+  }
+  return state.ds.labels.map(l => ({ name: l.name, desc: l.desc, send: l.desc || l.name }));
+}
+function renderLabels() {
+  const d = state.ds;
+  if (d.key === "own") {
+    $("labels-area").innerHTML = `<label for="own-labels" class="sr">Candidate labels</label>
+      <textarea id="own-labels" spellcheck="false">${esc(OWN.labels.join("\n"))}</textarea>`;
+    $("own-labels").addEventListener("input", syncMessageState);
+    return;
+  }
+  const n = d.labels.length;
+  $("labels-area").innerHTML = `<div class="labels-sum"><div><span class="n">${n}</span>
+      <span class="what">intents · from ${esc(d.dataset)}</span></div>
+      <button class="linkbtn" id="toggle-labels" type="button" aria-expanded="${state.showLabels}">${state.showLabels ? "Hide" : "Show"} labels</button></div>
+    ${state.showLabels ? `<ul class="labels-list">${d.labels.map(l => `<li><span class="nm">${esc(l.name)}</span>${l.desc
+      ? `<span class="ds">${esc(l.desc)}</span>` : ""}</li>`).join("")}</ul>` : ""}`;
+  $("toggle-labels").onclick = () => { state.showLabels = !state.showLabels; renderLabels(); };
+}
+
+/* ---------- message state ---------- */
+function syncMessageState() {
+  const d = state.ds, own = d.key === "own";
+  state.edited = !own && state.sample && $("msg").value.trim() !== state.sample.t;
+  const tag = $("msg-tag");
+  if (own) { tag.className = "tag edited"; tag.textContent = "Your sentence"; }
+  else if (state.edited) { tag.className = "tag edited"; tag.textContent = "Edited — no longer a test sentence"; }
+  else { tag.className = "tag"; tag.textContent = "Real test sentence"; }
+  $("another").hidden = own;
+  const n = currentLabels().length, hint = $("labels-hint"), go = $("go");
+  hint.className = "hint"; hint.textContent = ""; go.disabled = false;
+  if (own && n > LIVE_LIMIT) { hint.className = "hint warn"; hint.textContent = `Up to ${LIVE_LIMIT} labels can be computed live — you have ${n}.`; go.disabled = true; }
+  else if (own && n < 2) { hint.className = "hint warn"; hint.textContent = "Add at least 2 labels, one per line."; go.disabled = true; }
+  else if (state.edited && n > LIVE_LIMIT) {
+    hint.className = "hint warn";
+    hint.textContent = `Edited sentences are computed live, which this small server does for up to ${LIVE_LIMIT} labels — ${d.dataset} has ${n}. Use 🎲 for another real sentence, or switch to “Your own labels”.`;
+    go.disabled = true;
+  } else if (!own) hint.textContent = "The jury ranks every one of these labels for the message.";
+}
+
+/* ---------- deciding ---------- */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+function isOwnDefault() {
+  return state.ds.key === "own" && $("msg").value.trim() === OWN.msg &&
+    currentLabels().map(l => l.send).join("\n") === OWN.labels.join("\n");
+}
+async function decide() {
+  const labels = currentLabels(), message = $("msg").value.trim();
+  if (!message || $("go").disabled) return;
+  const gold = (!state.edited && state.sample) ? state.sample.g : null;
+  const maybeLive = state.ds.key === "own" ? !isOwnDefault() : state.edited;   // everything else is pre-computed
+  $("go").disabled = true;
+  showDeliberating();
+  const timed = async () => {   // the footnote reports the real response time, not the deliberation animation
+    const t0 = performance.now(), out = await apiPredict(message, labels, maybeLive);
+    return { ...out, secs: (performance.now() - t0) / 1000 };
   };
-  const presets = $("presets");
-  Object.keys(EXAMPLES).forEach(name => {
-    const b = document.createElement("button");
-    b.className = "chip"; b.textContent = name;
-    b.onclick = () => { $("msg").value = EXAMPLES[name].msg; $("labels").value = EXAMPLES[name].labels.join("\n"); };
-    presets.appendChild(b);
-  });
-
-  let lastConf = null;
-  function renderDecision() {
-    if (lastConf === null) return;
-    const tau = +$("tau").value; $("tauval").textContent = tau;
-    const el = $("decision"); const c = (lastConf * 100);
-    if (c >= tau) { el.className = "decision act"; el.textContent = `✅ Auto-act — confidence ${c.toFixed(1)}% ≥ ${tau}%`; }
-    else { el.className = "decision esc"; el.textContent = `⚠️ Escalate to a human — confidence ${c.toFixed(1)}% < ${tau}%`; }
-  }
-  $("tau").addEventListener("input", renderDecision);
-
-  async function decide() {
-    $("err").textContent = ""; $("status").textContent = ""; $("out").style.display = "none";
-    const base = API_BASE;
-    const message = $("msg").value.trim();
-    const labels = $("labels").value.split("\n").map(s => s.trim()).filter((s, i, a) => s && a.indexOf(s) === i);
-    if (!message) { $("err").textContent = "Enter a message."; return; }
-    if (labels.length < 2) { $("err").textContent = "Enter at least 2 labels (one per line)."; return; }
-
-    $("go").disabled = true; $("go").innerHTML = '<span class="spin"></span>Deciding…';
-    const warmTimer = setTimeout(() => { $("status").textContent = "Running on a small shared CPU server — a prediction takes a few seconds (longer under load)…"; }, 1200);
-    const ctrl = new AbortController();
-    const timeout = setTimeout(() => ctrl.abort(), 40000);
-    const t0 = performance.now();
-    try {
-      const r = await fetch(base + "/predict", {
-        method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ message, labels }), signal: ctrl.signal,
-      });
-      if (!r.ok) throw new Error("The server returned HTTP " + r.status + ".");
-      const d = await r.json();
-      const secs = ((performance.now() - t0) / 1000).toFixed(1);
-      $("toplab").textContent = d.label;
-      $("topconf").textContent = `  confidence ${(d.confidence * 100).toFixed(1)}%  ·  decided in ${secs}s`;
-      const entries = Object.entries(d.distribution);
-      $("bars").innerHTML = entries.map(([k, v]) =>
-        `<div class="row"><div class="rowlab" title="${esc(k)}">${esc(k)}</div>` +
-        `<div class="barwrap"><div class="bar" style="width:${Math.max(2, v * 100).toFixed(1)}%"></div></div>` +
-        `<div class="pct">${(v * 100).toFixed(1)}%</div></div>`).join("");
-      $("members").innerHTML = "<b>How the jury voted</b><br>" +
-        (d.members || []).map(m => `${esc(m.model)} → <b>${esc(m.pick)}</b>`).join("<br>");
-      lastConf = d.confidence; renderDecision();
-      $("out").style.display = "block";
-    } catch (e) {
-      $("err").textContent = (e.name === "AbortError")
-        ? "The demo server didn't respond in time — it may be busy. Please try again in a few seconds."
-        : "Couldn't reach the demo server. Please try again shortly.";
-    } finally {
-      clearTimeout(warmTimer); clearTimeout(timeout);
-      $("status").textContent = "";
-      $("go").disabled = false; $("go").textContent = "Decide";
+  try {
+    const [{ res, source, secs }] = await Promise.all([timed(), sleep(350)]);
+    showVerdict(res, labels, gold, source, secs);
+  } catch (e) { showError(e); }
+  finally { stopClock(); syncMessageState(); }
+}
+async function post(message, labels, timeout) {
+  const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), timeout);
+  try {
+    const r = await fetch(API_BASE + "/predict", { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ message, labels: labels.map(l => l.send) }), signal: ctrl.signal });
+    if (!r.ok) {
+      let detail = ""; try { detail = (await r.json()).detail || ""; } catch (_) {}
+      throw Object.assign(new Error(typeof detail === "string" ? detail : ""), { status: r.status });
     }
+    return { res: await r.json(), source: r.headers.get("X-Quorum-Cache") || "miss" };
+  } finally { clearTimeout(timer); }
+}
+async function modelAwake() {
+  try { const r = await fetch(API_BASE + "/health", { signal: AbortSignal.timeout(5000) });
+        return (await r.json()).model_loaded; } catch (_) { return null; }
+}
+async function apiPredict(message, labels, maybeLive) {
+  const timeout = maybeLive ? LIVE_TIMEOUT : HIT_TIMEOUT;
+  if (maybeLive && (await modelAwake()) === false) showWaking();
+  try { return await post(message, labels, timeout); }
+  catch (e) {
+    // Timeouts, network errors, 503 (busy / restarting) and 504 are worth one retry: the server keeps a result it
+    // finishes, so the second attempt is usually answered from the cache.
+    const retriable = e.name === "AbortError" || e.name === "TypeError" || e.status === 503 || e.status === 504;
+    if (!retriable) throw e;
+    showWaking("Still working — trying once more…");
+    await sleep(3000);
+    return await post(message, labels, timeout);
   }
-  $("go").addEventListener("click", decide);
+}
+
+/* ---------- rendering ---------- */
+function jurorsHTML(members, verdictSend, byS) {
+  return `<div class="jurors">${MEMBERS.map(([m, role], i) => {
+    const mv = members && members[i];
+    if (!mv) return `<div class="juror thinking"><div class="who">${m}</div><div class="role">${role}</div>
+      <div class="vote"><span class="dots"><span></span><span></span><span></span></span></div></div>`;
+    const lab = byS.get(mv.pick), agree = mv.pick === verdictSend;
+    return `<div class="juror"><div class="who">${m}</div><div class="role">${role}</div>
+      <div class="vote">${esc(lab ? lab.name : mv.pick)}</div>
+      <div class="agree ${agree ? "y" : "n"}">${agree ? "✓ with the verdict" : "≠ dissents"}</div></div>`;
+  }).join("")}</div>`;
+}
+let clock = null;
+function showDeliberating() {
+  const v = $("verdict"); v.className = "verdict card deliberating";
+  v.innerHTML = jurorsHTML(null) + `<div id="delib-note"><p class="hint" style="margin-top:16px">The jury is deliberating…</p></div>`;
+}
+function showWaking(headline) {
+  const note = $("delib-note"); if (!note) return;
+  const t0 = clock ? clock.t0 : performance.now();
+  note.innerHTML = `<div class="waking"><b>${esc(headline || "Waking the jury up")}</b>
+    <p>The models sleep when the demo is quiet and load on demand, so this first answer can take a minute or two.
+      Answers after that are quick, and anything already computed comes back instantly.</p>
+    <div class="clock" id="clock">0 s</div></div>`;
+  stopClock();
+  clock = { t0, id: setInterval(() => { const c = $("clock"); if (c) c.textContent = `${Math.round((performance.now() - t0) / 1000)} s`; }, 1000) };
+}
+function stopClock() { if (clock) { clearInterval(clock.id); clock = null; } }
+function showVerdict(res, labels, gold, source, secs) {
+  const byS = new Map(labels.map((l, i) => [l.send, { ...l, i }]));
+  const top = byS.get(res.label), pct = res.confidence * 100;
+  const entries = Object.entries(res.distribution);
+  const truth = gold == null ? `<div class="truth na"><span class="ic">i</span><div>Not a test sentence, so there is no
+      reference answer to check against.</div></div>`
+    : gold === top.i ? `<div class="truth ok"><span class="ic">✓</span><div>Correct — this is the dataset's answer.
+      <small>${accLine()}</small></div></div>`
+    : `<div class="truth no"><span class="ic">✗</span><div>The dataset's answer is <b>${esc(labels[gold].name)}</b>.
+      <small>${accLine()}</small></div></div>`;
+  const bar = ([s, p], i) => { const l = byS.get(s);
+    return `<div class="bar-row${i === 0 ? " top" : ""}"><div class="lab" title="${esc(l.desc || l.name)}">${esc(l.name)}${l.desc
+      ? `<span>${esc(l.desc)}</span>` : ""}</div><div class="pct">${(p * 100).toFixed(1)}%</div>
+      <div class="track"><div class="fill" data-w="${Math.max(1.5, p * 100)}"></div></div></div>`; };
+  const v = $("verdict"); v.className = "verdict card reveal";
+  v.innerHTML = jurorsHTML(res.members, res.label, byS) + `
+    <div class="ruling"><div><div class="eyebrow">The verdict</div><div class="name">${esc(top.name)}</div>
+      ${top.desc ? `<div class="desc">${esc(top.desc)}</div>` : ""}</div>
+      <div class="seal" aria-label="confidence ${pct.toFixed(1)} percent">${sealSVG()}<div class="num"><div>
+        <b id="conf">0.0%</b><i>confidence</i></div></div></div></div>
+    ${truth}
+    <div class="bars">${entries.slice(0, 5).map(bar).join("")}<div id="more-bars" hidden>${entries.slice(5).map((e, i) => bar(e, i + 5)).join("")}</div>
+      ${entries.length > 5 ? `<button class="linkbtn more" id="more" type="button" aria-expanded="false">Show all ${entries.length} labels</button>` : ""}</div>
+    <div class="gate"><div class="gate-head"><span>Auto-act when confidence ≥ <b id="tauv">70</b>%</span><span>else hand to a human</span></div>
+      <input type="range" id="tau" min="0" max="100" value="70" aria-label="Confidence threshold" />
+      <div class="decision" id="decision"></div></div>
+    <div class="footnote"><span>${source === "hit" ? "answered from the cache" : "computed live"} in ${secs.toFixed(2)} s</span>
+      <span>${state.ds.key === "own" ? "zero-shot · your labels" : `zero-shot · ${esc(state.ds.dataset)} · label descriptions`}</span></div>`;
+  requestAnimationFrame(() => setTimeout(() => v.querySelectorAll(".bars > .bar-row .fill").forEach((f, i) =>
+    setTimeout(() => f.style.width = f.dataset.w + "%", matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 950 + i * 70)), 0));
+  countUp($("conf"), pct);
+  if ($("more")) $("more").onclick = () => { const m = $("more-bars"), open = m.hidden; m.hidden = !open;
+    $("more").setAttribute("aria-expanded", String(open)); $("more").textContent = open ? "Show top 5" : `Show all ${entries.length} labels`;
+    m.querySelectorAll(".fill").forEach(f => f.style.width = open ? f.dataset.w + "%" : 0); };
+  const gate = () => { const t = +$("tau").value; $("tauv").textContent = t; const d = $("decision");
+    d.className = "decision " + (pct >= t ? "act" : "esc");
+    d.textContent = pct >= t ? `Auto-act — ${pct.toFixed(1)}% ≥ ${t}%` : `Escalate to a human — ${pct.toFixed(1)}% < ${t}%`; };
+  $("tau").oninput = gate; gate();
+}
+function accLine() { const d = state.ds;
+  return `Quorum gets ${(d.accuracy * 100).toFixed(1)}% of ${d.n_test.toLocaleString()} ${esc(d.dataset)} test sentences right (zero-shot).`; }
+function sealSVG() {
+  const id = "c" + Math.random().toString(36).slice(2, 7);
+  return `<svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="${id}" d="M60,60 m-48,0 a48,48 0 1,1 96,0 a48,48 0 1,1 -96,0"/></defs>
+    <circle cx="60" cy="60" r="58" fill="none" stroke="var(--seal)" stroke-width="1.4"/>
+    <circle cx="60" cy="60" r="40" fill="var(--seal-soft)" stroke="var(--seal)" stroke-width="1"/>
+    <text font-family="IBM Plex Mono, monospace" font-size="7.4" letter-spacing="2.9" fill="var(--seal)">
+      <textPath href="#${id}">QUORUM · VERDICT · QUORUM · VERDICT ·</textPath></text></svg>`;
+}
+function countUp(el, target) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = target.toFixed(1) + "%"; return; }
+  const t0 = performance.now() + 620, dur = 800;
+  const tick = now => { const k = Math.min(1, Math.max(0, (now - t0) / dur)), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = (target * e).toFixed(1) + "%"; if (k < 1) requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+}
+function showError(e) {
+  const v = $("verdict"); v.className = "verdict card";
+  const msg = e && e.status === 422 && e.message ? e.message
+    : "The jury couldn't answer just now. The demo runs on a small shared server, so please try again in a moment.";
+  v.innerHTML = `<div class="err">${esc(msg)}</div>${e && e.status === 422 ? "" :
+    `<button class="btn" id="retry" type="button">Try again<span class="arrow">→</span></button>`}`;
+  if ($("retry")) $("retry").onclick = decide;
+}
+
+/* ---------- boot ---------- */
+$("msg").addEventListener("input", syncMessageState);
+$("another").onclick = draw;
+$("go").onclick = decide;
+$("go").disabled = true;
+fetch("samples.json").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(d => {
+  DATA = d; renderDomains(); select("banking77");
+}).catch(() => {
+  $("verdict").innerHTML = `<div class="err">The examples could not be loaded — please refresh the page.</div>`;
+});
 </script>
 </body>
 </html>
