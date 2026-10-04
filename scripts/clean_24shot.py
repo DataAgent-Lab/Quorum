@@ -76,9 +76,39 @@ def code_fingerprint():
         head = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
         dirty = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain", "--"] + files,
                                capture_output=True, text=True).stdout.strip()
-    except Exception:
-        head, dirty = None, None
+    except Exception:                       # no git binary (e.g. inside a container): read .git directly
+        head, dirty = _read_git_head(), "unknown (no git binary; rely on sha256)"
     return {"git_head": head or None, "tracked_files_modified": dirty or "", "sha256": sha}
+
+
+def _read_git_head():
+    g = ROOT / ".git"
+    try:
+        ref = (g / "HEAD").read_text().strip()
+        if not ref.startswith("ref: "):
+            return ref
+        name = ref[5:]
+        if (g / name).exists():
+            return (g / name).read_text().strip()
+        for line in (g / "packed-refs").read_text().splitlines():
+            if line.endswith(" " + name):
+                return line.split()[0]
+    except Exception:
+        return None
+
+
+def resolved_revisions():
+    """Snapshot revision actually loaded for every model/dataset (protocol §1: recorded in the meta)."""
+    hub = Path(os.environ.get("HF_HOME", Path.home() / ".cache" / "huggingface")) / "hub"
+    from quorum.ensemble import DEFAULT_NLI, DEFAULT_EMBEDDERS
+    out = {}
+    for kind, rid in [("models", BASE), ("models", ADAPTER), ("models", KNN_EMBEDDER), ("models", DEFAULT_NLI),
+                      *[("models", e) for e in DEFAULT_EMBEDDERS], ("datasets", DATASET)]:
+        ref = hub / f"{kind}--{rid.replace('/', '--')}" / "refs" / "main"
+        snaps = hub / f"{kind}--{rid.replace('/', '--')}" / "snapshots"
+        out[rid] = {"refs_main": ref.read_text().strip() if ref.exists() else None,
+                    "cached_snapshots": sorted(p.name for p in snaps.iterdir()) if snaps.exists() else []}
+    return out
 
 
 # ---------------- calibration + combination (as in the study's combiner) ----------------
@@ -275,7 +305,7 @@ def phase_select():
     comb = combine(Ls, prm, win["rule"])
     tfin = fit_temperature(np.log(comb + 1e-12) if win["rule"] != "rank_mean" else comb, y)
     rec = {"protocol_commit": PROTOCOL_COMMIT, "code": code_fingerprint(), "n_selection": len(y),
-           "prompt_lengths_selection": plen, "zero_shot_nli_dtype": "fp32",
+           "prompt_lengths_selection": plen, "zero_shot_nli_dtype": "fp32", "revisions": resolved_revisions(),
            "selection_rule": "max out-of-fold correct; ties -> fewer members, fewer orders, names before "
                              "descriptions, rule order " + " > ".join(RULES),
            "n_candidates": len(table), "candidates": sorted(table, key=key), "selected": win,
@@ -409,6 +439,7 @@ def phase_test(args):
             "accuracy": round(acc, 4), "correct": int(sum(np.array(preds) == np.array(gold))),
             "mcnemar_vs_reproduction": mc, "secondary": sec, "prompt_lengths_test": plen_test,
             "zero_shot_nli_dtype": "fp32", "max_prompt_tokens": MAX_PROMPT_TOKENS, "truncation": False,
+            "revisions": resolved_revisions(), "hf_offline": os.environ.get("HF_HUB_OFFLINE"),
             "fields": {"probs": "combined distribution of the calibrated members (rank_mean: normalised scores)",
                        "reader_probs/knn_probs/zs_probs": "softmax(member logits / fitted member temperature)",
                        "perm_reader_probs": "softmax(per-order reader logits) at T=1",
