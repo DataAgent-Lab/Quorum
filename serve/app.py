@@ -14,6 +14,8 @@ demand and stopped after an idle window, so a quiet server holds almost no memor
 Env:
     CORS_ORIGINS                comma-separated allowed origins for the browser demo (default "*"); set it to
                                 your Space origin in production.
+    CORS_ORIGIN_REGEX           optional regex of additional allowed origins (e.g. a hosting provider's per-deploy
+                                preview URLs); matched in full against the request's Origin.
     QUORUM_DEVICE               "cpu" (default) or "cuda".
     QUORUM_CACHE_PATH           SQLite cache file (default serve/data/quorum_cache.sqlite3). Keep it on
                                 persistent storage: entries never expire.
@@ -100,6 +102,7 @@ def create_app(cache: Optional[PredictionCache] = None, worker: Optional[ModelWo
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[o.strip() for o in os.environ.get("CORS_ORIGINS", "*").split(",")],
+        allow_origin_regex=os.environ.get("CORS_ORIGIN_REGEX") or None,
         allow_methods=["*"], allow_headers=["*"], expose_headers=[CACHE_HEADER],
     )
     app.state.cache, app.state.worker = cache, worker

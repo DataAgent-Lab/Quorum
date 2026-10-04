@@ -88,6 +88,7 @@ Space (or edit `space/index.html`'s `API_BASE`) and set it to your `https://…`
 | Env | Default | Meaning |
 |---|---|---|
 | `CORS_ORIGINS` | `*` | allowed browser origins (comma-separated) |
+| `CORS_ORIGIN_REGEX` | unset | regex for additional allowed origins (e.g. per-deploy preview URLs) |
 | `QUORUM_DEVICE` | `cpu` | `cpu` or `cuda` |
 | `PORT` | `8000` | when run as `python -m serve.app` |
 | `QUORUM_CACHE_PATH` | `serve/data/quorum_cache.sqlite3` | cache file — keep it on persistent storage |

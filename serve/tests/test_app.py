@@ -184,3 +184,19 @@ def test_a_cache_write_failure_still_returns_the_answer(cache, monkeypatch):
     with _app(cache, FakeWorker()) as c:
         r = c.post("/predict", json={"message": MSG, "labels": LABELS})
     assert r.status_code == 200 and r.json()["label"] == "card arrival"
+
+
+def test_cors_origin_list_plus_regex(cache, worker, monkeypatch):
+    from fastapi.testclient import TestClient
+    from serve.app import create_app
+    monkeypatch.setenv("CORS_ORIGINS", "https://site.example,http://localhost:3003")
+    monkeypatch.setenv("CORS_ORIGIN_REGEX", r"^https://app-[a-z0-9-]+-team\.preview\.example$")
+    with TestClient(create_app(cache=cache, worker=worker)) as c:
+        def allowed(origin):
+            r = c.options("/predict", headers={"Origin": origin, "Access-Control-Request-Method": "POST",
+                                                "Access-Control-Request-Headers": "content-type"})
+            return r.headers.get("access-control-allow-origin") == origin
+        assert allowed("https://site.example") and allowed("http://localhost:3003")
+        assert allowed("https://app-k2pmknqr6-team.preview.example")
+        assert not allowed("https://evil.example")
+        assert not allowed("https://app-x-team.preview.example.evil.example")  # must match in full
