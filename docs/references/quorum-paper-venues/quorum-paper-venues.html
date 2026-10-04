@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quorum 投稿管道指南</title>
+<meta name="description" content="Quorum(小型開源模型集成做 zero-shot 意圖分類)這篇論文該投哪?期刊/會議/workshop 全盤比較,含截止日、格式、費用、一稿多投規則與投稿時間軸,2026-10-04 查證。">
+<style>
+  :root{
+    --bg:#ffffff; --fg:#1a1c20; --muted:#5b6169; --line:#e5e7eb;
+    --accent:#3355dd; --card:#f7f8fa; --ok:#0a7d3c; --warn:#b26b00; --no:#b01c2e;
+    --code-bg:#f2f3f5;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14161a; --fg:#e6e8ec; --muted:#9aa1ab; --line:#2a2e35;
+      --accent:#8aa2ff; --card:#1b1e24; --ok:#4cc27f; --warn:#e0a13a; --no:#ff6b7d;
+      --code-bg:#1f232a;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#14161a; --fg:#e6e8ec; --muted:#9aa1ab; --line:#2a2e35;
+    --accent:#8aa2ff; --card:#1b1e24; --ok:#4cc27f; --warn:#e0a13a; --no:#ff6b7d;
+    --code-bg:#1f232a;
+  }
+  *{box-sizing:border-box}
+  body{
+    background:var(--bg); color:var(--fg); margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.7; font-size:17px;
+  }
+  .wrap{max-width:960px; margin:0 auto; padding:48px 16px 80px}
+  h1{font-size:1.9rem; line-height:1.25; margin:0 0 .2em}
+  h1 .en{display:block; font-size:1.05rem; color:var(--muted); font-weight:600; margin-top:.35em}
+  h2{font-size:1.35rem; margin:2.2em 0 .6em; padding-top:.4em; border-top:1px solid var(--line)}
+  h2 .en{color:var(--muted); font-weight:600; font-size:.95rem}
+  h3{font-size:1.08rem; margin:1.6em 0 .4em}
+  p,li{color:var(--fg)}
+  em{color:var(--muted); font-style:italic}
+  a{color:var(--accent); text-decoration:none} a:hover{text-decoration:underline}
+  code{background:var(--code-bg); padding:.12em .4em; border-radius:5px; font-size:.9em;
+       font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace}
+  pre{background:var(--code-bg); padding:16px; border-radius:10px; overflow:auto; font-size:.86rem; line-height:1.55}
+  pre code{background:none; padding:0}
+  .asof{color:var(--muted); font-size:.92rem; border-left:3px solid var(--accent);
+        background:var(--card); padding:10px 14px; border-radius:0 8px 8px 0; margin:1.2em 0}
+  .tldr{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin:1.4em 0}
+  .tldr strong{color:var(--accent)}
+  table{border-collapse:collapse; width:100%; margin:1em 0; font-size:.9rem; display:block; overflow-x:auto}
+  th,td{border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top}
+  th{background:var(--card); font-weight:700; white-space:nowrap}
+  .ok{color:var(--ok); font-weight:700} .warn{color:var(--warn); font-weight:700} .no{color:var(--no); font-weight:700}
+  .req th{white-space:normal}
+  .foot{color:var(--muted); font-size:.9rem; margin-top:2.4em; border-top:1px solid var(--line); padding-top:1em}
+  ul{padding-left:1.3em} li{margin:.3em 0}
+  .lead{font-size:1.02rem}
+  .star{color:var(--accent); font-weight:700}
+
+  blockquote{color:var(--fg); border-left:3px solid var(--accent); background:var(--card);
+             margin:1.2em 0; padding:10px 16px; border-radius:0 8px 8px 0}
+  blockquote p{margin:.4em 0}
+  .tw{overflow-x:auto; margin:1em 0}
+  .tw table{display:table; margin:0}
+  h1 + h2{border-top:none; margin-top:.2em; padding-top:0; color:var(--muted); font-size:1.05rem}
+  hr{border:none; border-top:1px solid var(--line); margin:2em 0}
+  td a, li a, p a{word-break:break-all}
+
+  blockquote{color:var(--fg); border-left:3px solid var(--accent); background:var(--card);
+             margin:1.2em 0; padding:10px 16px; border-radius:0 8px 8px 0}
+  blockquote p{margin:.4em 0}
+  .tw{overflow-x:auto; margin:1em 0}
+  .tw table{display:table; margin:0}
+  h1 + h2{border-top:none; margin-top:.2em; padding-top:0; color:var(--muted); font-size:1.05rem}
+  hr{border:none; border-top:1px solid var(--line); margin:2em 0}
+  td a, li a, p a{word-break:break-all}
+
+  blockquote{color:var(--fg); border-left:3px solid var(--accent); background:var(--card);
+             margin:1.2em 0; padding:10px 16px; border-radius:0 8px 8px 0}
+  blockquote p{margin:.4em 0}
+  .tw{overflow-x:auto; margin:1em 0}
+  .tw table{display:table; margin:0}
+  h1 + h2{border-top:none; margin-top:.2em; padding-top:0; color:var(--muted); font-size:1.05rem}
+  hr{border:none; border-top:1px solid var(--line); margin:2em 0}
+  td a, li a, p a{word-break:break-all}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Quorum 這篇論文,該投去哪?——學術投稿管道全盤整理</h1>
+<h2>Where should the Quorum paper go? — A venue guide for submission (journals / conferences / workshops)</h2>
+<blockquote>
+<p><strong>狀態 / As of:</strong> 2026-10-04(同日二次查證:原「待查證清單」已逐項對照官方頁面確認並寫回本文,見文末〈查證紀錄〉)。標注【已查證】者皆附官方來源;官方頁面本身未公布的,標為【官方未公布】而非猜測。投稿方案與費用變動快,送出前請再看一次官方 CFP。
+Re-verified on 2026-10-04: every item from the former "to-verify" list was checked against official pages and folded back in (see the verification log at the end). Items the official pages don't state are marked <strong>[not stated officially]</strong> rather than guessed.</p>
+</blockquote>
+<hr />
+<h2>前言 · 這篇論文到底在賣什麼(決定它適合投哪) · What this paper is (and why that dictates the venue)</h2>
+<p>Quorum 是一個「小型開源模型的陪審團」,做 <strong>calibration-free 的 zero-shot(與 24-shot)意圖分類</strong>。要選投稿管道,重點不是「它做意圖分類」,而是<strong>它的貢獻長什麼樣子</strong>——因為是貢獻型態、不是任務,決定了哪個 venue 家族會收。</p>
+<p>Quorum is "a jury of tiny open models" for <strong>calibration-free zero-shot (and 24-shot) intent classification</strong>. What picks the venue is <strong>the <em>shape</em> of the contribution</strong>, not the task:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>貢獻 / Contribution</th>
+<th>對應的投稿家族 / Maps to venue family</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 「集成穩定打敗自己最強的單一成員」,6 個資料集 + <strong>paired McNemar 顯著性</strong> / a cheap ensemble reliably beats its own best member, with paired significance tests</td>
+<td>主會議 / Findings / TMLR / TACL(紮實的實證貢獻)</td>
+</tr>
+<tr>
+<td>② 三個 &lt;1B 模型、CPU ~120ms、無訓練無校準 / tiny models, CPU-only, no training/calibration</td>
+<td><strong>高效/綠色 NLP</strong>(SustaiNLP、ENLSP——目前皆停辦)、On-device/efficient ML workshops</td>
+</tr>
+<tr>
+<td>③ 可量測的<strong>負面結果</strong> + 「五個抓到自己出錯的地方」自我批判 / measured negative results + methodological self-critique</td>
+<td><strong>Insights from Negative Results</strong>、ICBINB、Eval4NLP;期刊中 <strong>Computational Linguistics</strong> 明文歡迎</td>
+</tr>
+<tr>
+<td>④ 嚴謹、可重現、全開源 MIT / rigorous, reproducible, fully open-source</td>
+<td><strong>TMLR</strong>(只看「證據是否充分 + 是否有人感興趣」)、TACL。⚠️ <strong>ReScience C 不適用</strong>(不收作者自己的研究,見清單 D)</td>
+</tr>
+<tr>
+<td>⑤ 現場 demo + 可自架 FastAPI 服務、勝過「重現版閉源商用 API」 / live demo + self-hostable service, beats a reproduced closed commercial API</td>
+<td><strong>System Demonstrations track</strong>、<strong>Industry Track</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>→ 結論:<strong>這篇論文可以餵養好幾個 venue 家族</strong>(同儕審查主家 1 個 + 條件式的 Demo 1 篇 + 非典藏 workshop 摘要 + arXiv preprint)。下面先講「能不能一稿多投」的規則,再給時間軸與完整清單。</p>
+<hr />
+<h2>⚠️ 先搞懂:能「同時投多個」嗎?一稿多投規則 · Can you submit to several at once? The dual-submission rules</h2>
+<p>可以並行,但有硬規則,<strong>踩線會被 desk-reject</strong>(以下引文皆已查證):</p>
+<p>You <em>can</em> pursue several venues in parallel, but within hard rules (violating them = desk reject). All quotes verified:</p>
+<ol>
+<li><strong>同一篇完整論文,同一時間只能有「一個同儕審查的典藏之家」。</strong> 走會議(ARR)或走期刊,擇一。<ul>
+<li>TACL:「no material in any paper submitted to TACL may be under review (or published) at another journal, conference, or archival workshop venue at any time while it is under consideration by TACL.」【<a href="https://transacl.org/index.php/tacl/about/submissions">src</a>】</li>
+<li>TMLR:不得與「published, accepted for publication, or submitted in parallel at another archival, peer-reviewed venue」的論文重用文字/圖/結果;且「<strong>We do not accept submissions that are expanded versions of conference papers.</strong>」【<a href="https://jmlr.org/tmlr/editorial-policies.html">src</a>】→ 若先在會議發表,之後就不能把擴充版投 TMLR。</li>
+</ul>
+</li>
+<li><strong>主會議 vs Industry Track 互斥</strong>(同一篇只能投其一),依想強調「實證嚴謹」或「落地應用」擇一框架。</li>
+<li><strong>System Demonstrations:可以「另寫一篇」,但有條件。</strong> NAACL 2027 Demo CFP:「We will not consider any submissions that <strong>overlap substantially in content or results</strong> with papers being reviewed or already published elsewhere.」【<a href="https://2027.naacl.org/calls/system_demonstration/">src</a>】<ul>
+<li>→ Demo 論文必須聚焦<strong>系統本身</strong>(架構、API、部署、延遲、使用流程、可自架),<strong>不可大幅重用主論文的實驗內容/結果</strong>;引用主論文的 arXiv 版即可。</li>
+<li>→ <strong>走 TACL 時風險最高</strong>(TACL 禁止「任何材料」同時在別處審查)。若主家選 TACL,建議 <strong>Demo 不並行</strong>,等主論文定案後再投下一屆 Demo。走 ARR / TMLR 時,只要 Demo 內容清楚區隔,一般可行。</li>
+</ul>
+</li>
+<li><strong>非典藏(non-archival)workshop 可與「別處已發表/審查中的完整論文」並存。</strong> 例:Insights 收「1-2 page non-archival abstract submissions for papers published elsewhere」;ICBINB「there will always be an option for authors to have their paper in a non-archival track」。TACL/TMLR 也明說非典藏 workshop 不算典藏發表。</li>
+<li><strong>arXiv preprint 任何時候都可以。</strong><ul>
+<li>TACL:「Preprint servers such as arXiv.org … are <em>not</em> considered archival」,但投稿時須在 Comments to the Editor 揭露 preprint 資訊。</li>
+<li>TMLR:與「preprint servers such as arXiv」重疊是允許的。</li>
+<li>先上 arXiv 卡時間戳與可引用性,不影響後續投稿。</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>合法並行組合 / The legal parallel bundle:</strong>
+<code>arXiv 先行</code> + <code>一個典藏主家(會議 ARR 其一 ‖ 期刊其一)</code> + <code>(條件式)一篇內容區隔的 System Demo</code> + <code>若干非典藏 workshop 摘要</code>。</p>
+</blockquote>
+<hr />
+<h2>先講結論 · TL;DR 推薦路線 · Recommended plan</h2>
+<blockquote>
+<p><strong>今天(2026-10-04)的現實:2026 會議年的投稿幾乎全數截止。</strong> 還開著的「活」窗口在下面;最對味的 thematic workshops(SustaiNLP、ENLSP、NLP4ConvAI)目前停辦,2027 workshop 清單也還沒公布(提案已於 10/2 放榜,清單應很快出爐)。
+<strong>Reality check:</strong> almost every 2026-cycle deadline has passed. Live windows below; the best-fit thematic workshops are dormant, and the 2027 workshop lists aren't out yet.</p>
+</blockquote>
+<p><strong>建議執行順序 / Do this, in order:</strong></p>
+<ol>
+<li><strong>現在就上 arXiv(cs.CL)</strong> — 免費、可引用、卡時間戳。<strong>注意 2026-01-21 起 endorsement 規則變嚴</strong>:首次投 cs 類別、且沒有既有 arXiv 論文的人,即使有學校信箱也<strong>需要一位現役作者個人 endorse</strong>——先去約。</li>
+<li><strong>主家二選一(不可並行):</strong><ul>
+<li><strong>路線 A(會議):</strong> 完整論文投 <strong>ARR 2026 年 10 月 cycle(10/12)</strong> → commit <strong>NAACL 2027</strong>(舊金山,6/1–5,可能被收為 Main 或 Findings)或 <strong>COLING 2027</strong>(澳門,5/9–14,只有 Main)。<strong>錯過 10/12 的話</strong>:下一個是 <strong>ARR 2027 年 1 月 cycle(2027-01-04)→ ACL 2027</strong>(京都,8/17–22,未入選 main 者自動考慮 Findings)。</li>
+<li><strong>路線 B(期刊):</strong> 投 <strong>TMLR</strong>(免費、無截止、明文「novelty 非必要」、雙盲)或 <strong>TACL</strong>(免費、<strong>下個截止 2026-11-01 23:59 夏威夷時間</strong>、雙盲、NLP 原生)。獨立作者、無會議死線壓力時最舒服。</li>
+</ul>
+</li>
+<li><strong>條件式加投 System Demo:</strong> <strong>NAACL 2027 System Demonstrations(直投,11/1 開放投稿,12/4 截止,單盲)</strong>——你已有現場 demo + 可自架服務 + 可錄影 + 已量測;但 Demo 論文<strong>內容須與主論文區隔</strong>(見規則 3)。</li>
+<li><strong>或改走落地框架:</strong> 強調「打敗重現版商用 API、CPU ~120ms、可自架」,把主論文投 <strong>NAACL 2027 Industry Track(直投,10/31 截止)</strong>(與路線 A 擇一)。</li>
+<li><strong>Workshop(負面結果/效率/評估):</strong> 2027 清單尚未公布。依 ACL 2027 聯合 workshop call 的<strong>建議時程</strong>,下一批 workshop 論文截止約為:<strong>EACL 2027 workshops ≈ 2026-12-15</strong>、<strong>ICLR 2027 workshops ≈ 2027-02-01</strong>、<strong>NAACL 2027 workshops ≈ 2027-02-05</strong>。清單一出就挑 negative results / efficiency / evaluation / conversational AI 主題的去投(非典藏軌可與主論文並行)。</li>
+</ol>
+<hr />
+<h2>🗓️ 投稿時間軸(還開著的) · Live submission calendar (as of 2026-10-04)</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>截止日 / Deadline</th>
+<th>Venue / 管道</th>
+<th>路由 / Route</th>
+<th>性質 / Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>隨時</strong> / rolling</td>
+<td><strong>arXiv cs.CL</strong></td>
+<td>直接</td>
+<td>preprint,先做(首投需個人 endorse)</td>
+</tr>
+<tr>
+<td><strong>隨時</strong> / rolling</td>
+<td><strong>TMLR</strong></td>
+<td>OpenReview</td>
+<td>期刊,免費,無死線</td>
+</tr>
+<tr>
+<td><strong>隨時</strong> / rolling</td>
+<td><strong>Computational Linguistics / JAIR</strong></td>
+<td>各自平台</td>
+<td>期刊,免費,無死線</td>
+</tr>
+<tr>
+<td><strong>2026-10-12</strong>(AoE)【已查證】</td>
+<td><strong>ARR 2026 Oct cycle</strong></td>
+<td>ARR/OpenReview</td>
+<td>→ commit NAACL/COLING 2027</td>
+</tr>
+<tr>
+<td><strong>2026-10-31</strong>(AoE)【已查證】</td>
+<td><strong>NAACL 2027 Industry Track</strong></td>
+<td>直投 OpenReview</td>
+<td>不走 ARR</td>
+</tr>
+<tr>
+<td><strong>2026-11-01</strong> 23:59 HST【已查證】</td>
+<td><strong>TACL</strong>(之後每月 1 號)</td>
+<td>OpenReview</td>
+<td>期刊,免費,雙盲</td>
+</tr>
+<tr>
+<td>2026-11-01 開放 → <strong>2026-12-04</strong>【已查證】</td>
+<td><strong>NAACL 2027 System Demonstrations</strong></td>
+<td>直投 OpenReview</td>
+<td>單盲;內容須與主論文區隔</td>
+</tr>
+<tr>
+<td><strong>≈2026-12-15</strong>(建議時程)</td>
+<td><strong>EACL 2027 workshops</strong>(清單未公布;ARR commit ≈12/22)</td>
+<td>各 workshop</td>
+<td>2027 第一批 workshop</td>
+</tr>
+<tr>
+<td><strong>2026-12-23</strong>【已查證】</td>
+<td>ARR commitment → <strong>NAACL 2027 / COLING 2027 主會議</strong></td>
+<td>ARR</td>
+<td>須先在 10/12 cycle 內</td>
+</tr>
+<tr>
+<td><strong>2027-01-04</strong>【已查證】</td>
+<td><strong>ARR 2027 Jan cycle → ACL 2027</strong>(京都 8/17–22)</td>
+<td>ARR</td>
+<td>路線 A 的下一班車</td>
+</tr>
+<tr>
+<td><strong>≈2027-02-01</strong>(建議時程)</td>
+<td><strong>ICLR 2027 workshops</strong>(清單未公布;ICBINB 2027 未宣布)</td>
+<td>各 workshop</td>
+<td>ICLR 2027:4/26–30,workshop 4/29–30</td>
+</tr>
+<tr>
+<td><strong>≈2027-02-05</strong>(建議時程)</td>
+<td><strong>NAACL 2027 workshops</strong>(清單未公布;ARR commit ≈3/12)</td>
+<td>各 workshop</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>其餘 2026 cycle venue(EMNLP 2026 主/Industry/Demo、AACL 2026、Insights@EMNLP2026、所有 NeurIPS 2026 workshop、ICBINB@ICLR2026…)<strong>均已截止</strong>。</p>
+</blockquote>
+<hr />
+<h2>完整清單 A · 主會議與 ARR 各 track · Main conferences &amp; ARR tracks</h2>
+<p>所有 ACL 家族主 track 都走 <strong>ACL Rolling Review (ARR)</strong>:投一次到 ARR → 審完 → commit 到某個 venue 由其決定收否。<strong>ARR 無投稿費,ACL Anthology 完全開放、無 APC。</strong> ARR 審稿雙盲。
+All ACL-family main tracks go through <strong>ARR</strong>. <strong>No submission fee; ACL Anthology is free OA.</strong> Double-blind.</p>
+<p><strong>ARR 2026 cycle 截止日【已查證】:</strong> Jan 5 / Mar 16 / May 25 / Aug 3 / <strong>Oct 12</strong>(皆 2026)。<strong>ARR 2027 各 cycle 日期【官方未公布】</strong>,僅知 ACL 2027 對應 2027 年 1 月 cycle(1/4)。
+【src: <a href="https://github.com/acl-org/aclrollingreview/blob/main/dates.md">https://github.com/acl-org/aclrollingreview/blob/main/dates.md</a> 、 <a href="https://aclrollingreview.org/authors">https://aclrollingreview.org/authors</a> 】</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Venue / track</th>
+<th>狀態 / Status</th>
+<th>截止 / Deadline</th>
+<th>地點 / Location</th>
+<th>格式 / Format</th>
+<th>適配 / Fit</th>
+<th>來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>NAACL 2027 主會議</strong> ⭐</td>
+<td><strong>活 / LIVE</strong></td>
+<td>ARR <strong>10/12/2026</strong> → commit <strong>12/23/2026</strong>;通知 2/10/2027;camera-ready 3/3/2027;會議 <strong>6/1–5/2027</strong>(皆 AoE)【已查證】</td>
+<td>San Francisco, USA</td>
+<td>長 8pp / 短 4pp(+1 camera-ready),refs/appendix 不計,須 limitations 段,ACL/ARR 模板,雙盲。<strong>FAQ:錄取可為 Main 或 Findings</strong></td>
+<td><strong>5/5</strong> — matched-budget + McNemar + 負面結果 + 自我批判,就是主會議實證論文</td>
+<td><a href="https://2027.naacl.org/calls/main_conference_papers/">https://2027.naacl.org/calls/main_conference_papers/</a> 、 <a href="https://2027.naacl.org/faq/">https://2027.naacl.org/faq/</a></td>
+</tr>
+<tr>
+<td><strong>COLING 2027 主會議</strong></td>
+<td><strong>活 / LIVE</strong></td>
+<td>同 ARR 10/12 cycle → commit 12/23;通知 2/10/2027;<strong>camera-ready【官方未公布】</strong>;會議 <strong>5/9–14/2027</strong>(線上 5/6–7)【已查證】</td>
+<td>Macau, China</td>
+<td>長 8pp / 短 4pp;ACL/ARR 模板。<strong>FAQ:「Acceptances at COLING are in the Main Conference proceedings」→ 無 Findings</strong>。主 call 未另述匿名規則(ARR 階段雙盲)</td>
+<td><strong>4/5</strong> — 與 NAACL 擇一 commit;無 Findings 退路</td>
+<td><a href="https://2027.coling-iccl.org/calls/main_conference_papers/">https://2027.coling-iccl.org/calls/main_conference_papers/</a> 、 <a href="https://2027.coling-iccl.org/faq/">https://2027.coling-iccl.org/faq/</a></td>
+</tr>
+<tr>
+<td><strong>ACL 2027 主會議</strong> ⭐</td>
+<td><strong>下一班 / NEXT</strong></td>
+<td>ARR <strong>2027-01-04</strong>(「at latest, by the ARR 2027 January cycle」);commit/通知/camera-ready【官方 TBA】【已查證】</td>
+<td><strong>Kyoto, Japan</strong>,8/17–22/2027(主會議 8/20–22)</td>
+<td>長/短;<strong>未入選 main 者自動考慮 Findings</strong></td>
+<td><strong>5/5</strong> — 錯過 10/12 時的最佳主會議選項</td>
+<td><a href="https://2027.aclweb.org/">https://2027.aclweb.org/</a> 、 <a href="https://2027.aclweb.org/calls/main/">https://2027.aclweb.org/calls/main/</a></td>
+</tr>
+<tr>
+<td><strong>EMNLP 2027</strong></td>
+<td><strong>未正式公布</strong></td>
+<td>對應哪個 ARR cycle【官方未公布】</td>
+<td>「tentatively early November 2027 … Mexico or Central America」(混合制)</td>
+<td>—</td>
+<td><strong>5/5(最佳 thematic)</strong> — 盯 ARR 2027 日期公布</td>
+<td><a href="https://www.aclweb.org/portal/content/joint-call-workshops-proposals-2027">https://www.aclweb.org/portal/content/joint-call-workshops-proposals-2027</a></td>
+</tr>
+<tr>
+<td>ACL 2026</td>
+<td><strong>已過 / PASSED</strong></td>
+<td>7/2026 已舉行</td>
+<td>San Diego</td>
+<td>有 Findings</td>
+<td>→ 改看 ACL 2027</td>
+<td><a href="https://2026.aclweb.org/">https://2026.aclweb.org/</a></td>
+</tr>
+<tr>
+<td>EMNLP 2026</td>
+<td><strong>已過 / PASSED</strong></td>
+<td>ARR 5/25/2026;會議 10/24–29/2026</td>
+<td>Budapest</td>
+<td>有 Findings</td>
+<td>→ 改看 EMNLP 2027</td>
+<td><a href="https://2026.emnlp.org/">https://2026.emnlp.org/</a></td>
+</tr>
+<tr>
+<td>EACL 2027</td>
+<td><strong>形同錯過</strong></td>
+<td>ARR 8/3/2026;commit 10/11(限 8 月 cycle 稿件);會議 3/9–14/2027</td>
+<td>Athens</td>
+<td>ACL/ARR</td>
+<td>新稿無法進</td>
+<td><a href="https://2027.eacl.org/calls/papers/">https://2027.eacl.org/calls/papers/</a></td>
+</tr>
+<tr>
+<td>AACL-IJCNLP 2026</td>
+<td><strong>已過 / PASSED</strong></td>
+<td>ARR 5/25/2026;會議 11/6–10/2026</td>
+<td>Hengqin</td>
+<td>ACL/ARR</td>
+<td>關閉</td>
+<td><a href="https://2026.aaclnet.org/">https://2026.aaclnet.org/</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3>費用參考:ACL 家族會議註冊費 · Registration fees (ACL-family reference)</h3>
+<p>NAACL 2027(「Coming soon!」)與 COLING 2027(「will be announced soon」)<strong>註冊費【官方未公布】</strong>。最新可參考的是 <strong>EMNLP 2026(布達佩斯)實際費率【已查證】</strong>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>類別</th>
+<th>實體 Author/Presenter</th>
+<th>實體 Early</th>
+<th>實體 Late</th>
+<th>實體 Onsite</th>
+<th>線上 Author</th>
+<th>線上 Early</th>
+<th>線上 Late</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Student</td>
+<td>$550</td>
+<td>$350</td>
+<td>$500</td>
+<td>$600</td>
+<td>$250</td>
+<td>$150</td>
+<td>$300</td>
+</tr>
+<tr>
+<td>Academic</td>
+<td>$850</td>
+<td>$650</td>
+<td>$800</td>
+<td>$900</td>
+<td>$400</td>
+<td>$300</td>
+<td>$450</td>
+</tr>
+<tr>
+<td>Industry</td>
+<td>$1,150</td>
+<td>$950</td>
+<td>$1,100</td>
+<td>$1,200</td>
+<td>$550</td>
+<td>$450</td>
+<td>$600</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>另加每篇論文報告費</strong>:實體 $200(1–2 篇)、第 3–6 篇各 $100;線上 $100 / 各 $50。「Accepted Findings papers that are not being presented are not required to pay the Paper Presentation Registration Fee」。</li>
+<li><strong>ACL 會員(必須)</strong>:一般 1 年 $100、學生 $50;非高所得國家會員優惠 $50 / 學生 $25。</li>
+<li>【src: <a href="https://2026.emnlp.org/registration/">https://2026.emnlp.org/registration/</a> 、 <a href="https://www.aclweb.org/portal/content/membership-fees">https://www.aclweb.org/portal/content/membership-fees</a> 】</li>
+<li>→ 獨立作者以「academic/industry 實體 + 會員 + 報告費」粗估約 <strong>US$950–1,500</strong>;線上報告可大幅降低。</li>
+</ul>
+<hr />
+<h2>完整清單 B · Industry Track 與 System Demonstrations(直投,不走 ARR)· Direct-submission tracks</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Venue / track</th>
+<th>狀態</th>
+<th>截止 / Deadline</th>
+<th>格式 / Format</th>
+<th>為何契合 / Why it fits</th>
+<th>來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>NAACL 2027 Industry Track</strong> ⭐</td>
+<td><strong>活 / LIVE</strong></td>
+<td><strong>10/31/2026</strong>(AoE);通知 2/24/2027;camera-ready【官方 TBD】【已查證】</td>
+<td><strong>6 pages</strong>(+1);直投 OpenReview,不走 ARR;與主會議擇一</td>
+<td>落地意圖分類、勝過重現版商用 API、CPU ~120ms、可自架服務——正中 track 要旨(不必 SOTA)</td>
+<td><a href="https://2027.naacl.org/calls/industry_track/">https://2027.naacl.org/calls/industry_track/</a></td>
+</tr>
+<tr>
+<td><strong>NAACL 2027 System Demonstrations</strong> ⭐</td>
+<td><strong>活 / LIVE</strong></td>
+<td>投稿系統 <strong>11/1/2026</strong> 開放 → <strong>12/4/2026</strong> 截止;通知 2/10/2027;camera-ready 3/3/2027【已查證】</td>
+<td><strong>≤6 pages</strong>(超過即 desk reject),appendix ≤2pp;<strong>單盲(不需匿名)</strong>;須附論文 + ≤2.5 分鐘錄影 + 可用 demo/套件;無評估 = desk reject;<strong>禁止與審查中/已發表論文的內容或結果大幅重疊</strong></td>
+<td>已有現場 demo + 可自架 MIT 服務 + 已量測;<strong>論文須寫系統,不重寫主論文實驗</strong></td>
+<td><a href="https://2027.naacl.org/calls/system_demonstration/">https://2027.naacl.org/calls/system_demonstration/</a></td>
+</tr>
+<tr>
+<td>COLING 2027 Industry</td>
+<td>參考</td>
+<td>camera-ready【官方 TBD】;<strong>2027 起改為雙盲</strong></td>
+<td>—</td>
+<td>備案</td>
+<td><a href="https://2027.coling-iccl.org/calls/industry_track/">https://2027.coling-iccl.org/calls/industry_track/</a></td>
+</tr>
+<tr>
+<td>EMNLP 2026 Industry / Demo</td>
+<td><strong>已過 / PASSED</strong></td>
+<td>Industry 6/16;Demo 7/10(2026)</td>
+<td>6pp</td>
+<td>關閉 → 看 2027</td>
+<td><a href="https://2026.emnlp.org/calls/industry_track/">https://2026.emnlp.org/calls/industry_track/</a></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>完整清單 C · Workshops(主題最契合,但 2026 cycle 全過、2027 清單未出)· Workshops</h2>
+<p><strong>現況(2026-10-04 查證):</strong> 最對味的 thematic workshops 多數停辦;EACL / NAACL 2027 的 workshop 清單<strong>都還沒公布</strong>(EACL 2027 workshops 頁 404;NAACL 2027「Coming soon!」)。2027 聯合 workshop 提案已於 9/4 截止、<strong>10/2 放榜</strong>,且「there will not be a second call」,所以清單應很快出爐。</p>
+<p><strong>2027 workshop 論文建議時程(各 workshop 可自訂)【已查證】:</strong></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th>EACL 2027 workshops</th>
+<th>NAACL 2027 workshops</th>
+<th>ICLR 2027 workshops</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一次 CFP</td>
+<td>2026-10-13</td>
+<td>2026-10-26</td>
+<td>(提案 10/9 截止,11/29 放榜)</td>
+</tr>
+<tr>
+<td>直投截止</td>
+<td><strong>2026-12-15</strong></td>
+<td><strong>2027-02-05</strong></td>
+<td><strong>≈2027-02-01</strong></td>
+</tr>
+<tr>
+<td>ARR commit 截止</td>
+<td>2026-12-22</td>
+<td>2027-03-12</td>
+<td>—</td>
+</tr>
+<tr>
+<td>通知</td>
+<td>2027-01-05</td>
+<td>2027-03-26</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<p>【src: <a href="https://2027.eacl.org/calls/workshops/">https://2027.eacl.org/calls/workshops/</a> 、 <a href="https://iclr.cc/Conferences/2027/CallForWorkshops">https://iclr.cc/Conferences/2027/CallForWorkshops</a> 】聯合 call 也寫明「workshops may also accept non-archival submissions, such as findings papers」。</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Workshop</th>
+<th>契合 / Fit</th>
+<th>典藏? / Archival</th>
+<th>2026-10-04 狀態 / Status</th>
+<th>下一步 / Next</th>
+<th>來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Insights from Negative Results in NLP</strong></td>
+<td><strong>5/5</strong>(負面結果 + 自我批判正是其 mandate)</td>
+<td><strong>典藏 short ≤4pp(錄取 +1 頁)或 非典藏 1–2pp 摘要(限已在別處發表的論文)</strong> ✅;今年無 long 軌</td>
+<td>第 7 屆 @ EMNLP 2026(布達佩斯);<strong>投稿 6/8/2026 已過</strong>【已查證】;<strong>2027 未宣布</strong></td>
+<td>盯 2027 workshop 清單。典藏軌禁與「審查期重疊」的投稿並行</td>
+<td><a href="https://insights-workshop.github.io/2026/cfp">https://insights-workshop.github.io/2026/cfp</a></td>
+</tr>
+<tr>
+<td><strong>SustaiNLP</strong>(Simple &amp; Efficient NLP)</td>
+<td><strong>5/5</strong></td>
+<td>典藏(歷年)</td>
+<td><strong>停辦</strong>:最後一屆 ACL 2023,2024–2027 無【已查證】。替代:ACL 2026 曾辦「SELVA」(Sustainable and Efficient Language, Vision, and Action Models,已過)</td>
+<td>盯 2027 清單是否有 SELVA 續辦等效率主題</td>
+<td><a href="https://aclanthology.org/venues/sustainlp/">https://aclanthology.org/venues/sustainlp/</a></td>
+</tr>
+<tr>
+<td><strong>ENLSP @ NeurIPS</strong></td>
+<td><strong>5/5</strong></td>
+<td>非典藏(歷年)</td>
+<td><strong>停辦</strong>:2024 後無,不在 NeurIPS 2025/2026 清單【已查證】</td>
+<td>改看 NeurIPS 2027 效率類 workshop</td>
+<td><a href="https://neurips2024-enlsp.github.io/">https://neurips2024-enlsp.github.io/</a></td>
+</tr>
+<tr>
+<td><strong>NLP4ConvAI</strong></td>
+<td><strong>5/5</strong></td>
+<td>典藏 + 非典藏可選</td>
+<td><strong>停辦</strong>:最後一屆 ACL 2024,2025–2027 無【已查證】</td>
+<td>改看對話類 workshop</td>
+<td><a href="https://aclanthology.org/venues/nlp4convai/">https://aclanthology.org/venues/nlp4convai/</a></td>
+</tr>
+<tr>
+<td><strong>Eval4NLP</strong></td>
+<td><strong>4/5</strong></td>
+<td>典藏 或 非典藏 ✅</td>
+<td><strong>2026 無</strong>(不在 AACL 2026 的 12 個 workshop 中)【已查證】;最後一屆 2025</td>
+<td>盯 EACL/NAACL 2027 清單;替代:GEM、EvalEval(ACL 系列評估 workshop)</td>
+<td><a href="https://2026.aaclnet.org/program/workshops/">https://2026.aaclnet.org/program/workshops/</a></td>
+</tr>
+<tr>
+<td><strong>ICBINB</strong>("I Can't Believe It's Not Better")</td>
+<td><strong>4/5</strong></td>
+<td><strong>永遠有非典藏選項</strong>(引文見規則 4)✅;ICLR 2026 版 ≤4pp</td>
+<td>ICLR 2026 版 1/31 已過;<strong>ICLR 2027 版未宣布</strong>(ICLR 2027 workshop 名單 11/29 才放榜);NeurIPS 2026 只有生物版【已查證】</td>
+<td>11/29 後看 ICLR 2027 workshop 名單</td>
+<td><a href="https://sites.google.com/view/icbinb-2026/submit">https://sites.google.com/view/icbinb-2026/submit</a></td>
+</tr>
+<tr>
+<td><strong>RepL4NLP</strong></td>
+<td>4/5</td>
+<td>典藏 + 非典藏可選</td>
+<td>最後一屆 NAACL 2025;2026 無</td>
+<td>盯 2027 清單</td>
+<td><a href="https://aclanthology.org/venues/repl4nlp/">https://aclanthology.org/venues/repl4nlp/</a></td>
+</tr>
+<tr>
+<td>NeurIPS 2026 效率類(LIGHT / ODI / AXIOM / SLM-Agents / Resource-Aware Agentic AI)</td>
+<td>3–4/5</td>
+<td>多為非典藏</td>
+<td>NeurIPS 建議論文截止 8/29/2026,<strong>多半已過</strong>(未逐一確認各自頁面)</td>
+<td>看 NeurIPS 2027</td>
+<td><a href="https://blog.neurips.cc/2026/08/10/announcing-the-neurips-2026-workshops/">https://blog.neurips.cc/2026/08/10/announcing-the-neurips-2026-workshops/</a></td>
+</tr>
+<tr>
+<td>BlackboxNLP 2026</td>
+<td>2/5</td>
+<td>典藏 8pp + 非典藏 2pp</td>
+<td>7/17 已過</td>
+<td>低優先</td>
+<td><a href="https://blackboxnlp.github.io/2026/">https://blackboxnlp.github.io/2026/</a></td>
+</tr>
+<tr>
+<td>UncertaiNLP 2026</td>
+<td>2/5</td>
+<td>典藏/非典藏</td>
+<td>8/7 已過</td>
+<td>不建議硬湊(本文未做 UQ)</td>
+<td><a href="https://uncertainlp.github.io/2026/">https://uncertainlp.github.io/2026/</a></td>
+</tr>
+<tr>
+<td>SIGDIAL 2026</td>
+<td>3/5</td>
+<td>典藏</td>
+<td>已過</td>
+<td>下屆參考</td>
+<td><a href="https://2026.sigdial.org/">https://2026.sigdial.org/</a></td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>非典藏、對一稿多投最友善:</strong> Insights(1–2pp 摘要軌)、ICBINB、Eval4NLP(Presenting-Published 軌)、BlackboxNLP(2pp)、多數 NeurIPS 效率 workshop。</p>
+</blockquote>
+<hr />
+<h2>完整清單 D · 期刊(獨立作者最友善:免費 + 無死線)· Journals &amp; reproducibility venues</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Venue</th>
+<th>截止 / Model</th>
+<th>費用 / Fee</th>
+<th>格式 / Format</th>
+<th>審稿速度</th>
+<th>契合</th>
+<th>來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>TMLR</strong> ⭐</td>
+<td><strong>滾動、無死線</strong></td>
+<td><strong>免費</strong>:「imposes no fees or payments to authors」【已查證】</td>
+<td>無硬頁數上限;OpenReview;<strong>雙盲</strong>;不收會議論文擴充版</td>
+<td>無單一官方總目標;各階段目標:AE 指派 1 週內、審稿 2 週(≤12 頁)/4 週(&gt;12 頁)、AE 於討論開始後 5 週內提決定 → <strong>加總約 2–3 個月</strong>(此為推算)</td>
+<td><strong>5/5</strong> — 收錄只看兩條(證據充分 + 有人感興趣),<strong>novelty 非必要</strong>。⚠️ <strong>Reproducibility Certification 多半不適用</strong>:它頒給「primary purpose is reproduction of other published work」的論文,Quorum 主體是原創集成方法</td>
+<td><a href="https://jmlr.org/tmlr/editorial-policies.html">https://jmlr.org/tmlr/editorial-policies.html</a> 、 <a href="https://jmlr.org/tmlr/acceptance-criteria.html">https://jmlr.org/tmlr/acceptance-criteria.html</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>TACL</strong> ⭐</td>
+<td><strong>每月 1 號 23:59 夏威夷時間</strong>;下個 <strong>2026-11-01</strong>【已查證】</td>
+<td><strong>免費</strong>:「imposes neither author processing charges nor submission charges」【已查證】</td>
+<td><strong>正文 10 頁</strong>(refs 不計);2024-03 起 appendix 不計入,重現細節 ≤5 頁、補充結果 ≤3 頁;TACL 模板(A4);<strong>雙盲</strong>,禁止洩漏身分的自我引用</td>
+<td>~6 週目標(歷年約 46–60 天,為社群數據)</td>
+<td><strong>5/5</strong> — correctness 導向 NLP 期刊;錄取後可選在 ACL/NAACL/EACL/EMNLP/AACL 口頭報告(非必要)</td>
+<td><a href="https://transacl.org/index.php/tacl/about/submissions">https://transacl.org/index.php/tacl/about/submissions</a> 、 <a href="https://transacl.org/index.php/tacl/announcement/view/105">https://transacl.org/index.php/tacl/announcement/view/105</a></td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Computational Linguistics (CL)</strong></td>
+<td><strong>滾動</strong>(「accepted on a rolling basis」)【已查證】</td>
+<td><strong>免費</strong>:「does not charge any submission, processing or publication fees」【已查證】</td>
+<td>Long ≤40pp / Short ≤20pp / Squib ≤8pp;<strong>單盲</strong></td>
+<td>目標審稿:≤20 頁 3 週、≤40 頁 4 週、≤45 頁 5 週、更長 6 週(不保證);<strong>實際平均首次決定 16.5 天(排除 desk reject 為 55 天)</strong>;2025 IF 13.4【已查證】</td>
+<td><strong>4/5</strong> — Short 軌明文「Well-analyzed negative results … are also suitable」</td>
+<td><a href="https://submissions.cljournal.org/index.php/cljournal/about">https://submissions.cljournal.org/index.php/cljournal/about</a> 、 <a href="https://submissions.cljournal.org/index.php/cljournal">https://submissions.cljournal.org/index.php/cljournal</a></td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>JAIR</strong></td>
+<td>滾動</td>
+<td><strong>免費</strong>(CC BY)</td>
+<td>無硬頁數;<strong>須 LaTeX</strong>(不符即退);單盲</td>
+<td>~8–12 週</td>
+<td>3/5 — 免費/可敬,但無 novelty-agnostic 專軌</td>
+<td><a href="https://www.jair.org/index.php/jair/about/submissions">https://www.jair.org/index.php/jair/about/submissions</a></td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>PeerJ Computer Science</strong></td>
+<td>滾動</td>
+<td><strong>貴:APC US$2,155</strong>(未稅)【已查證】;先前提到的 $695 / $1,395 <strong>皆為過時資訊</strong>。另有終身會員方案(Basic $755 起,但<strong>所有作者都須是會員</strong>)</td>
+<td>無硬字數(&gt;35 頁加收);單盲</td>
+<td>首次決定 30–35 天;接受到出版 32 天;接受率 33%【已查證】</td>
+<td>4/5 範圍/速度;<strong>費用是主要障礙</strong></td>
+<td><a href="https://peerj.com/pricing/">https://peerj.com/pricing/</a> 、 <a href="https://peerj.com/journals/computer-science/">https://peerj.com/journals/computer-science/</a></td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Natural Language Processing</strong>(前 JNLE,Cambridge)</td>
+<td>隨時經 ScholarOne 投稿(官方未使用「rolling」字樣);年出 6 期 + FirstView</td>
+<td><strong>最貴:APC £2,610 / US$3,655</strong>(可能另加稅)【已查證】</td>
+<td>單一匿名(single-anonymized),≥2 位外審;Cambridge 模板</td>
+<td><strong>【官方未公布】</strong>(metrics 頁:「will soon be providing annual statistics」)</td>
+<td>3/5 — 落地範圍契合但 APC 最高</td>
+<td><a href="https://www.cambridge.org/core/journals/natural-language-processing/information/author-instructions/fees-and-pricing">https://www.cambridge.org/core/journals/natural-language-processing/information/author-instructions/fees-and-pricing</a></td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>arXiv (cs.CL)</strong> ⭐</td>
+<td>滾動</td>
+<td><strong>免費</strong></td>
+<td>6 種授權擇一且<strong>不可更改</strong>:CC BY 4.0(建議,呼應 MIT)、CC BY-SA 4.0、CC BY-NC-SA 4.0、CC BY-NC-ND 4.0、arXiv non-exclusive license 1.0、CC0【已查證】</td>
+<td>次工作日上架</td>
+<td><strong>5/5 作為「先行步驟」</strong></td>
+<td><a href="https://info.arxiv.org/help/license/index.html">https://info.arxiv.org/help/license/index.html</a></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>APC 減免條件【已查證】(獨立作者必看):</strong></p>
+<ul>
+<li><strong>PeerJ CS</strong>:世界銀行「低所得經濟體」國家作者可申請「no questions asked」減免(每人每年一次、須在審稿前核准);大學部學生共同作者有會員減免;機構會員(AIM)可能全額支付。<strong>一般的經濟困難減免【官方未載明】</strong>;申請管道在現行頁面上【官方未載明】。【src: <a href="https://peerj.com/questions/6089-are-any-waivers-or-discounts-available-for-lower">https://peerj.com/questions/6089-are-any-waivers-or-discounts-available-for-lower</a> 】</li>
+<li><strong>Cambridge NLP</strong>:Cambridge Open Equity Initiative 自動為 100+ 個中低所得國家的通訊作者付 Gold OA;其餘作者可在<strong>錄取後</strong>填 Author Information Form 時申請折扣或全免(不保證)。【src: <a href="https://www.cambridge.org/core/journals/natural-language-processing/information/journal-policies/open-access-options">https://www.cambridge.org/core/journals/natural-language-processing/information/journal-policies/open-access-options</a> 】</li>
+</ul>
+<p><strong>arXiv endorsement(2026 年新規)【已查證】:</strong> 自 <strong>2026-01-21</strong> 起,學校信箱<strong>不再能單獨</strong>作為新作者的 endorsement 條件;自動 endorsement 須同時具備「機構信箱」與「已有同一 endorsement domain 的 arXiv 論文」。否則須找<strong>同領域的現役 arXiv 作者個人 endorse</strong>,且「arXiv staff cannot waive endorsement requirements」。→ 獨立作者首投 cs.CL:<strong>一定要先找 endorser</strong>。【src: <a href="https://blog.arxiv.org/2026/01/21/attention-authors-updated-endorsement-policy/">https://blog.arxiv.org/2026/01/21/attention-authors-updated-endorsement-policy/</a> 、 <a href="https://info.arxiv.org/help/endorsement.html">https://info.arxiv.org/help/endorsement.html</a> 】</p>
+<blockquote>
+<p><strong>ReScience C:不適用(1/5)【已查證,修正前版】。</strong> 官方 FAQ:「Can I submit the replication of my own research? <strong>No.</strong>」;作者指南:「you cannot submit the replication of your own research」;且被重現的原研究須是「already published research」。Quorum 是作者自己的方法,被比較的對象(社群對閉源 API 的重現)也不是已發表論文 → 不符。(免費、收負面結果這兩點屬實,但範圍不合。)【src: <a href="https://rescience.github.io/faq/">https://rescience.github.io/faq/</a> 、 <a href="https://rescience.github.io/write/">https://rescience.github.io/write/</a> 】
+<strong>MLRC(NeurIPS 2026 可重現性軌):不適用(1/5)。</strong> 作業單位是「重現<strong>別人</strong>已發表的論文」,且 TMLR-decision 死線 9/30/2026 已過。【src: <a href="https://reproml.org/">https://reproml.org/</a> 】
+<strong>JASNH / 心理學 null-result 期刊:領域不符。</strong></p>
+</blockquote>
+<hr />
+<h2>完整清單 E · 已過期 / 停辦 / 不建議 · Passed / dormant / not recommended</h2>
+<ul>
+<li><strong>已過 2026 cycle:</strong> ACL 2026、EMNLP 2026(主/Industry/Demo)、AACL 2026、Insights@EMNLP2026、ICBINB@ICLR2026、NeurIPS 2026 各 workshop、BlackboxNLP/UncertaiNLP 2026、NeurIPS 2026 Evaluations &amp; Datasets、SIGDIAL 2026。</li>
+<li><strong>停辦(2026-10-04 查證仍無新版):</strong> SustaiNLP(最後 2023)、ENLSP(最後 2024)、NLP4ConvAI(最後 2024)、Eval4NLP(2026 無)、RepL4NLP(最後 2025)。</li>
+<li><strong>不建議:</strong> <strong>ReScience C</strong>(不收自己研究的重現)、MLRC(重現別人論文用)、UncertaiNLP / EIML(本文未做 UQ)、JASNH(領域不符)。</li>
+</ul>
+<hr />
+<h2>查證紀錄(原「待查證清單」逐項結案)· Verification log — former to-verify list, closed item by item</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>原待查證項目</th>
+<th>查證結果(2026-10-04)</th>
+<th>狀態</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>TACL 下一個確切截止日</td>
+<td><strong>2026-11-01 23:59 夏威夷時間</strong>,之後每月 1 號;正文 10 頁,appendix 另計(≤5 / ≤3 頁);免費</td>
+<td>✅ 已查證</td>
+</tr>
+<tr>
+<td>2a</td>
+<td>NAACL 2027 是否有 Findings</td>
+<td>主 call 未提;<strong>FAQ:錄取可為 Main 或 Findings</strong></td>
+<td>✅ 已查證</td>
+</tr>
+<tr>
+<td>2b</td>
+<td>COLING 2027 是否有 Findings</td>
+<td><strong>沒有</strong>:FAQ「Acceptances at COLING are in the Main Conference proceedings」</td>
+<td>✅ 已查證</td>
+</tr>
+<tr>
+<td>2c</td>
+<td>NAACL / COLING 2027 註冊費</td>
+<td><strong>官方尚未公布</strong>(NAACL「Coming soon!」、COLING「announced soon」);改附 EMNLP 2026 實際費率 + ACL 會費作參考</td>
+<td>✅ 已結案(官方未公布)</td>
+</tr>
+<tr>
+<td>2d</td>
+<td>COLING 2027 camera-ready 日</td>
+<td><strong>官方未公布</strong>(主 call 與首頁皆無;industry 軌標 TBD)</td>
+<td>✅ 已結案(官方未公布)</td>
+</tr>
+<tr>
+<td>2e</td>
+<td>COLING 2027 是否雙盲</td>
+<td>主 call 未另述(論文經 ARR,ARR 為雙盲);COLING Industry 軌 2027 起改雙盲</td>
+<td>✅ 已結案</td>
+</tr>
+<tr>
+<td>3</td>
+<td>EMNLP 2027 cycle/日期</td>
+<td>暫定 <strong>2027 年 11 月初,墨西哥或中美洲</strong>,混合制;對應 ARR cycle 與 ARR 2027 日期<strong>官方未公布</strong>。順帶發現 <strong>ACL 2027 已公布</strong>(京都 8/17–22,ARR 2027-01-04)</td>
+<td>✅ 已結案</td>
+</tr>
+<tr>
+<td>4a</td>
+<td>PeerJ CS APC 與減免</td>
+<td><strong>US$2,155</strong>($695/$1,395 皆過時);低所得國家免審減免、大學部學生、機構會員;一般困難減免官方未載明</td>
+<td>✅ 已查證</td>
+</tr>
+<tr>
+<td>4b</td>
+<td>Cambridge NLP 時程</td>
+<td><strong>官方未公布</strong>審稿時程;APC £2,610/$3,655;COEI 與錄取後申請減免</td>
+<td>✅ 已結案(官方未公布)</td>
+</tr>
+<tr>
+<td>5a</td>
+<td>ICBINB @ ICLR 2027 截止與典藏</td>
+<td><strong>ICLR 2027 版尚未宣布</strong>(workshop 名單 11/29 放榜;建議論文截止 ≈2027-02-01);典藏:<strong>永遠有非典藏選項</strong></td>
+<td>✅ 已結案</td>
+</tr>
+<tr>
+<td>5b</td>
+<td>SustaiNLP / ENLSP / NLP4ConvAI / Eval4NLP 是否復辦</td>
+<td>四者 <strong>2026–2027 皆無新版</strong>;EACL/NAACL 2027 workshop 清單尚未公布(提案 10/2 放榜)</td>
+<td>✅ 已查證</td>
+</tr>
+<tr>
+<td>6</td>
+<td>註冊費為 2025 基準估值</td>
+<td>已換成 <strong>EMNLP 2026 官方實際費率</strong>(含報告費與 ACL 會費)</td>
+<td>✅ 已查證</td>
+</tr>
+<tr>
+<td>+</td>
+<td>查證時發現的前版錯誤</td>
+<td>① <strong>ReScience C 不收自己研究的重現 → 改為不適用</strong>;② TMLR Reproducibility Cert. 多半不適用;③ Demo 與主論文並行<strong>須內容區隔</strong>(NAACL Demo 禁大幅重疊、TACL 禁任何材料同時審查);④ arXiv 2026-01-21 endorsement 新規;⑤ PeerJ 舊價格過時</td>
+<td>✅ 已修正</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>官方未公布的項目無法再查證</strong>,只能等主辦方公布:NAACL/COLING 2027 註冊費、COLING 2027 camera-ready、EMNLP 2027 對應 cycle、ARR 2027 日期、2027 各 workshop 清單、Cambridge NLP 審稿時程。投稿前請再看一次官方頁。</p>
+</blockquote>
+<hr />
+<h2>一頁總結:值得投的所有管道 · One-page shortlist of everything worth submitting to</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>優先</th>
+<th>Venue</th>
+<th>現在能投?</th>
+<th>費用</th>
+<th>契合</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>★★★</td>
+<td><strong>arXiv cs.CL</strong></td>
+<td>✅ 隨時(先找 endorser)</td>
+<td>免費</td>
+<td>5/5</td>
+<td>preprint,<strong>先做</strong></td>
+</tr>
+<tr>
+<td>★★★</td>
+<td><strong>ARR Oct → NAACL 2027 主/Findings</strong></td>
+<td>✅ 10/12</td>
+<td>免費投稿</td>
+<td>5/5</td>
+<td>典藏主家(路線 A)</td>
+</tr>
+<tr>
+<td>★★★</td>
+<td><strong>TMLR</strong></td>
+<td>✅ 隨時</td>
+<td>免費</td>
+<td>5/5</td>
+<td>典藏主家(路線 B,期刊)</td>
+</tr>
+<tr>
+<td>★★★</td>
+<td><strong>TACL</strong></td>
+<td>✅ 11/1 起每月 1 號</td>
+<td>免費</td>
+<td>5/5</td>
+<td>典藏主家(路線 B,NLP 原生)</td>
+</tr>
+<tr>
+<td>★★★</td>
+<td><strong>NAACL 2027 System Demo</strong></td>
+<td>✅ 11/1 開放、12/4 截止</td>
+<td>免費投稿</td>
+<td>5/5</td>
+<td>條件式並行(內容須與主論文區隔)</td>
+</tr>
+<tr>
+<td>★★☆</td>
+<td><strong>ARR Jan 2027 → ACL 2027</strong></td>
+<td>⏳ 2027-01-04</td>
+<td>免費投稿</td>
+<td>5/5</td>
+<td>錯過 10/12 時的路線 A</td>
+</tr>
+<tr>
+<td>★★☆</td>
+<td><strong>NAACL 2027 Industry Track</strong></td>
+<td>✅ 10/31</td>
+<td>免費投稿</td>
+<td>5/5</td>
+<td>落地框架(與主會議擇一)</td>
+</tr>
+<tr>
+<td>★★☆</td>
+<td><strong>COLING 2027 主</strong></td>
+<td>✅ 同 ARR 10/12</td>
+<td>免費投稿</td>
+<td>4/5</td>
+<td>與 NAACL commit 擇一(無 Findings)</td>
+</tr>
+<tr>
+<td>★★☆</td>
+<td><strong>Computational Linguistics</strong></td>
+<td>✅ 隨時</td>
+<td>免費</td>
+<td>4/5</td>
+<td>免費期刊備案(歡迎負面結果、首次決定快)</td>
+</tr>
+<tr>
+<td>★★☆</td>
+<td><strong>EACL / ICLR / NAACL 2027 workshops</strong></td>
+<td>⏳ ≈12/15、≈2/1、≈2/5</td>
+<td>註冊費</td>
+<td>4–5/5(視清單)</td>
+<td>負面結果/效率/評估(非典藏可並行)</td>
+</tr>
+<tr>
+<td>★☆☆</td>
+<td>JAIR</td>
+<td>✅ 隨時</td>
+<td>免費</td>
+<td>3/5</td>
+<td>期刊備案</td>
+</tr>
+<tr>
+<td>★☆☆</td>
+<td>PeerJ CS / Cambridge NLP</td>
+<td>✅ 隨時</td>
+<td><strong>$2,155 / $3,655</strong></td>
+<td>3–4/5</td>
+<td>僅在有經費或符合減免時考慮</td>
+</tr>
+<tr>
+<td>✗</td>
+<td>ReScience C / MLRC</td>
+<td>—</td>
+<td>—</td>
+<td>1/5</td>
+<td><strong>不適用</strong>(只收重現他人已發表研究)</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<p><em>本頁由三個背景研究 session 的結果彙整、去重、交叉校正而成,並於同日對原「待查證清單」逐項對照官方頁面二次查證(2026-10-04)。發現過時請回報,我會更新。</em>
+<em>Compiled from three background research runs and re-verified item by item against official pages on 2026-10-04. Re-check each official CFP before submitting.</em></p>
+</div>
+</body>
+</html>
