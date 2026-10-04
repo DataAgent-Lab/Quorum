@@ -38,8 +38,11 @@
 - [ ] T2.3 G3 `paper/scripts/mcnemar_vs_jev.py`: fetch the reproduction's `results/predictions.csv` @ `5cac4ff`
       (no redistribution), row-index join + case-folded labels, `quorum.metrics.mcnemar` for 0.932 and 0.938.
 - [ ] T2.4 G1 24-shot calibration vs the reproduction's Jev ECE/Brier/log loss (same definitions).
-- [ ] T2.5 G11 gate: evaluate the provenance; if test-selected → request held-out re-selection + single test run;
-      record outcome (AC-14); demotion → must-ask.
+- [x] T2.5 G11 gate: R1 delivered (research branch 8bea0c0) and verified (exact p 0.001428; Bonferroni crossover
+      m=35/36); outcome recorded in spec; user chose the clean re-selection protocol (D3 revised).
+- [ ] T2.5b G11b: review the clean protocol committed by the research session BEFORE it runs (pre-registration
+      evidence = its commit timestamp); go/changes; then validate the single test-run dump (R2 schema) + McNemar.
+- [ ] T2.5c Disclosure paragraph for the 0.938 exploratory history (R1 §8 list) in the main text.
 - [ ] T2.6 G4 parity table; G12 ablation table (from delivered runs); disclose the 25 overlaps.
 - [ ] T2.7 G5 Holm across the declared family; bootstrap CIs; 24-shot variance.
 - [ ] T2.8 G6 contamination table; Qwen3 probe decision [unproven — measure first].
@@ -94,6 +97,8 @@
 - [ ] 🔲 blocked: T8.2 Adapter access: reviewers cannot get it during review (no links allowed); ungate at/after acceptance? (BLOCKED #2).
 - [ ] 🔲 blocked: T8.3 System name in the review version (keep "Quorum" vs neutral name) + disclosure of the public repo/Space/HF pages as prior non-archival versions (BLOCKED #4).
 - [ ] 🔲 blocked: T8.4 Employer publication / IP clearance before choosing the affiliation line (BLOCKED #5).
-- [ ] T8.5 README corrections ("Jev's own protocol", "on CPU in ~120 ms", "calibrated") once evidence is in — push is must-ask.
+- [ ] T8.5 README corrections once evidence is in — push is must-ask: "Jev's own protocol", "on CPU in ~120 ms",
+      "calibrated", "survives Bonferroni", "trained only on public intent data … Banking77 excluded" (CLINC/HWU/SNIPS
+      + non-intent tasks are in the mixture), "full training pool" (9,079 for the study runs), 0.938 framing.
 - [ ] T8.6 arXiv endorser — user action; posting is must-ask.
 - [ ] T8.7 Submission to TACL — must-ask, after AC-1…AC-16 pass.

@@ -261,3 +261,24 @@ AI:
     prompt and date (paper must disclose LLM-authored label text — feeds AC-16 / G8).
 
 ===
+AI:
+
+[DECISION #7 | user-decided — G11 outcome]
+Input: R1 provenance (research branch research/phase2.0-paper-evidence @ 8bea0c0,
+provenance/banking77_24shot_selection.md). Verified here: exact McNemar b=109/c=66 → p=0.001428; Bonferroni
+m=35 → 0.0500, m=36 → 0.0514, m=40 → 0.0571; implied accuracy (2846+109−66)/3080 = 0.938.
+Findings: selected on a 924-row cal split (not test-best: prob_mean 0.9396 not adopted) — but ~40 configs scored
+on test; 3-order averaging + answer scoring chosen on the first 200 test items; descriptions adopted after
+zero-shot test results; "survives Bonferroni" had no defined family; "pre-registered anchor" named ~21 h after its
+test score; temperatures act as a ~3:1 fitted mixing weight; pool 9,079 rows. Adapter mixture excluded only
+Banking77 (CLINC/HWU/SNIPS + non-intent tasks inside); base revision unpinned; public adapter identity unverified.
+Question put to the user: how to treat the 24-shot main result.
+User chose: run the CLEAN protocol; its single test number is the headline whatever it is; 0.938 = exploratory,
+fully disclosed. Sent to the research session: two steps — (1) commit the protocol before any run (fresh stratified
+split disjoint from the old 924, pinned HF dataset / base / public-adapter revisions, pre-declared grid + selection
+rule + tie-break, orders/scoring chosen on train-side data, no test scoring of non-selected candidates), I review
+and reply go/changes; (2) one test run with the R2 dump schema. R2-best/R5/R6/R9 then refer to the clean config.
+Spec D3/C3/G11/G6 and tasks T2.5/T2.5b/T2.5c/T8.5 updated.
+Note: the research branch is not merged into main yet — merge once the evidence set is complete and validated.
+
+===
