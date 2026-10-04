@@ -1,0 +1,6 @@
+# Test dependencies for serve/ (the service itself needs only `pip install -e ".[serve]"`).
+#   pip install -r serve/requirements-dev.txt
+#   pytest serve/tests                              # fast suite (stub models)
+#   QUORUM_REAL_MODEL_TEST=1 pytest serve/tests     # + real-model end-to-end test (~1-2 min on CPU)
+pytest>=8
+httpx>=0.27
