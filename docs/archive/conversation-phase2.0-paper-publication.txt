@@ -302,3 +302,25 @@ reproduction's Jev values, McNemar vs repo default as descriptive); A3 provenanc
 candidate (examples/banking77_descriptions.py). Then run-script commit → my review → go → smoke on pool rows → run.
 
 ===
+AI:
+
+[DECISION #9 | log-and-proceed — G11b run-script review]
+Input: addendum f8f0476 (A1 truncate=False + hard 4,096 bound raising before the forward pass, prompt lengths in
+selection_scores.json/meta; A2 secondary analyses with the reproduction's definitions — bootstrap 10k seed
+20261007, Wilson, macro-F1, log loss clipped 1e-15, Brier summed over classes, ece_10_bins, on the final-temperature
+distribution + uncalibrated; A3 descriptions = examples/banking77_descriptions.py, identical 77/77 to the study's
+only set, single commit 2026-09-22, hand-authored from HF label names, likely by an LLM coding-agent session (model
+not recorded), bare-name zero-shot test accuracies already existed, no per-class confusion analysis precedes it,
+whether test errors were looked at is unknown → disclosed) and run script 9363066 (scripts/clean_24shot.py +
+quorum/fewshot.py hooks). Zero-shot member NLI in fp32.
+Verified: fewshot refactor behaviour-preserving for the default path; guard measures the scored tokenisation;
+train-only loading until selection exists; selection rows retrieve from P = T\S; first-k-of-7 orders consistent;
+tie-break key = declared order; no test field in selection output; ECE binning identical to the reproduction's
+frozen-v1/src/score.py. Cleared by checking data: 'Refund_not_showing_up' casing matches in the pinned dataset,
+the reproduction CSV and BANKING77_DESCRIPTIONS.
+GO after code-only fixes: F1 prediction from unrounded scores (argmax was taken on 7-sig-digit rounded values);
+F2 single-run guard (refuse if the clean dump/meta exists unless --rerun-after-crash, recorded in meta); F3 assert
+protocol commit + code sha256 identical between select and test, record selection-file sha256. Logit caches not
+committed. Research session reports the selected configuration before running test.
+
+===
