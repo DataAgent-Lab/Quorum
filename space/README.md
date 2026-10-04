@@ -19,8 +19,8 @@ doesn't. You can also type your own sentence and labels.
   answered instantly from the API's cache; your own sentences are computed live (the first one after a quiet spell
   takes a minute or two while the models wake up). Sentences you type are kept on the demo server so repeats answer
   instantly.
-- Run your own API: see [`serve/`](https://github.com/DataAgent-Lab/Quorum/tree/main/serve) and open the page with
-  `?api=https://your-api.example`.
+- Run your own API: see [`serve/`](https://github.com/DataAgent-Lab/Quorum/tree/main/serve) and set `DEFAULT_API` in
+  your copy of `index.html` (when the page is served from localhost, `?api=https://your-api.example` also works).
 - `samples.json` is generated from the per-item benchmark predictions: `python -m serve.export_demo_samples`.
 - Code + study: https://github.com/DataAgent-Lab/Quorum ·
   Collection: https://huggingface.co/collections/DataAgent/quorum-6abb3255e0fab20d66add39b

@@ -63,3 +63,21 @@ space/README.md, seed list + drift test follow the new page. AC-8 35/35 live hit
 Not published: the Space needs the user's go-live approval and an HF write token (none on this host).
 
 ===
+Human:
+
+[GO-LIVE APPROVED] User approves publishing the redesigned demo (main @ 80d9cc0) to the HF Space; jev-research
+publishes it with its existing HF write token (no token on the demo host). After publishing: verify the live Space.
+
+===
+AI:
+
+[DECISION #3 | log-and-proceed — security hardening before publish]
+Topic: `?api=` on the public page (raised by the research session while reviewing the files to publish).
+Risk: a crafted link to the public Space could send what a visitor types to an arbitrary server (rendering is
+  escaped, so no XSS — but the "kept on the demo server" note would be false for that visitor).
+Chose: honour ?api= only when the page is served from localhost / 127.0.0.1 / ::1 / file://; the public page always
+  uses the official API. Self-hosters set DEFAULT_API in their copy (README). Publishing held until fixed.
+Verified (docs/phases/1.0b/e2e/check_api_override.py): local page -> override used; same page on a non-local host
+  -> only the official API is contacted. The full E2E (localhost) path is unchanged.
+
+===

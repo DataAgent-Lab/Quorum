@@ -287,7 +287,11 @@
 <style>.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}</style>
 <script>
 let DATA = null;                        // space/samples.json — real benchmark test sentences + description labels
-const API_BASE = (new URLSearchParams(location.search).get("api") || "https://quorum-api.idataagent.com").replace(/\/$/, "");
+const DEFAULT_API = "https://quorum-api.idataagent.com";
+// ?api= is honoured only when the page itself runs locally (testing / self-hosting). On the public page a crafted
+// link must never redirect what visitors type to another server.
+const LOCAL_PAGE = ["localhost", "127.0.0.1", "[::1]", ""].includes(location.hostname);
+const API_BASE = ((LOCAL_PAGE && new URLSearchParams(location.search).get("api")) || DEFAULT_API).replace(/\/$/, "");
 const HIT_TIMEOUT = 30000, LIVE_TIMEOUT = 180000;   // a cold start (models load on demand) takes ~30-90 s
 const LIVE_LIMIT = 50;                  // labels the server computes live; larger sets are cache-only
 const MEMBERS = [["PrismNLI-0.4B", "NLI reader"], ["bge-large", "Embedder · large"], ["bge-base", "Embedder · base"]];
