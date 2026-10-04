@@ -1,0 +1,248 @@
+Human:
+
+[TASK INITIATED]
+Goal: Open a phase for publishing Quorum as a paper. Put the "where can we submit" and "what format each needs"
+      tables into the phase folder, citing docs/references/quorum-paper-venues/quorum-paper-venues.md. Aim for a
+      formal, submission-compliant paper and start planning the writing. Quality and completeness first — time is
+      sufficient; do not cut corners to meet a deadline.
+Decision Authority: default (delegated-dev-cycle), plus:
+  - must-ask: anything outward-facing (public push, README/Space, adapter access, anonymous hosting, contacting
+    third parties, arXiv posting, submission), author names/affiliation, thesis/primary-venue changes.
+  - Model runs are delegated to the research session (user note), delivered via a git branch and validated here.
+Constraints:
+  - Public repo stays de-identified (refer to "the research session"; no internal names/hosts).
+  - Commit locally; push only with the user's OK. No AI attribution lines in commits.
+  - Shared box, disk 96% full (5.8 GB free) — no heavy model runs or large installs here.
+Started: 2026-10-04
+Conversation File: conversation-phase2.0-paper-publication.txt
+
+===
+AI:
+
+[UNDERSTANDING]
+
+Deliverable of the phase: a TACL-compliant manuscript (anonymised PDF + LaTeX + anonymous supplement) and a
+de-anonymised arXiv build, with every number traceable to a reproducible artifact and the draft hardened by
+independent reviews. This session plans it (spec, tasks, venue tables) and then executes the plan.
+
+Step-0 discovery: no AGENTS.md / CLAUDE.md / docs/plan.md / changelog.md exist; phases 1.0, 1.0a, 1.0b, 1.1, 1.2;
+no paper-related phase or conversation file → New mode, version confirmed by the user (2.0).
+
+Findings that shape the plan (details in spec_details.md "Evidence gaps"):
+  - The paper's "calibrated" claim has never been measured (G1). The per-item dumps (results/predictions/*) carry
+    full ensemble distributions → ECE/Brier possible on CPU; per-member probabilities were not stored.
+  - The zero-shot Jev ≈ 0.801 reference has no traced source; the public reproduction
+    (github.com/simonmesmith/jev-banking77-experiment, results/REPORT.md) lists "definitions" 79.22% on a 154-item
+    screen only (G2).
+  - The public reproduction publishes per-item predictions (results/predictions.csv) → the 24-shot McNemar is
+    re-computable by anyone. The repo has NO license → fetch at a pinned commit, never redistribute (G3).
+  - Protocol differences vs that reproduction (BM25 word+bigram, training-data-derived definitions with corrected
+    label names, 770-message dev selection) must be tabulated (G4). A related project "Open-Jev" must be cited.
+  - No TeX toolchain on this box; pdfinfo/pdftotext exist.
+
+===
+AI:
+
+[DECISION #1 | user-decided]
+Topic: Phase number, primary venue, 24-shot scope, Phase 1.2 inclusion, pace.
+Chose (user, 2026-10-04):
+  D1 Phase 2.0.
+  D2 Primary venue TACL — chosen after the prestige evidence below; fallbacks ARR → ACL 2027 / EMNLP 2027; TMLR backup.
+  D3 24-shot is a MAIN result incl. 0.938 + McNemar p = 0.0014 (subject to evidence gates G3/G4).
+  D4 Phase 1.2 in parallel; decision gate before the final draft; include either outcome.
+  D5 Quality first; ARR 2026-10-12 and Industry 2026-10-31 are not targets.
+
+===
+AI:
+
+[DECISION #2 | log-and-proceed]
+Topic: Prestige ranking used for D2 (the user asked whether venues were ranked by recognition).
+Evidence (collected 2026-10-04; raw snapshots kept in the session scratchpad, not committed):
+  - Google Scholar Metrics 2025 (Computational Linguistics; via Wayback snapshots, Scholar blocks direct fetch):
+    ACL #1 h5 236/387; EMNLP #2 218/323; NAACL #3 126/202; TACL #4 96/204; COLING #5 81/122; EACL #6 77/128;
+    CL journal #10 41/109; NLE #18 30/54. TMLR / PeerJ CS: not found.
+  - CORE (ICORE2026 = CORE2023): ACL A*, EMNLP A*, NAACL A, EACL A, COLING B, IJCNLP B, AACL not listed.
+  - Acceptance (official front matter): ACL 2026 18.9% main / 17.8% Findings; ACL 2025 20.3% / 16.7%;
+    EMNLP 2025 22.16% / 17.34%; EACL 2026 20.2% / 16.1%; COLING 2025 30.1%. TACL 2024 ≈12.6% (lower bound,
+    ACL admin wiki). TMLR ≈46–72% (unofficial).
+  - Official wording: "As is customary, TACL and CL papers are presented at the conference" (ACL 2025/2026);
+    Findings = "not accepted at the Main Conference" (EMNLP 2025).
+Tiers: 1 = ACL, EMNLP, TACL · 1.5 = NAACL, EACL, CL · 2 = Findings, COLING, JAIR, TMLR · 3 = Cambridge NLP, PeerJ CS.
+Effect: my earlier fit-based TMLR recommendation was demoted to backup; TACL recommended and chosen.
+Reversible: yes (venue switch = template/length change; content is venue-agnostic until T5).
+
+===
+AI:
+
+[DECISION #3 | log-and-proceed]
+Topic: Demo paper timing.
+Context: NAACL 2027 Demo CFP rejects submissions that "overlap substantially in content or results with papers
+being reviewed"; TACL forbids any material under review elsewhere.
+Chose: no parallel Demo submission while the paper is at TACL; Demo becomes a later phase.
+Reversible: yes.
+
+===
+AI:
+
+[DECISION #4 | log-and-proceed]
+Topic: Claims ledger as the fact-first gate.
+Chose: mirror Phase 1.0a's verified-facts pattern — docs/phases/2.0/claims-ledger.md; no number enters the
+manuscript without a VERIFIED row; tex numbers are machine-checked against it (AC-3).
+Reversible: yes.
+
+===
+AI:
+
+[BLOCKED #1 | must-ask]
+Question: Author name(s) and affiliation for the de-anonymised (arXiv / camera-ready) version?
+Context: not needed for the anonymised TACL submission; needed for AC-12 and the arXiv endorsement request.
+Options: A) real name + "Independent Researcher"; B) real name + an organisation name; C) other.
+Impact: blocks T8.1, T7.13 (arXiv build). Workaround: everything else proceeds anonymised.
+
+===
+AI:
+
+[BLOCKED #2 | must-ask]
+Question: How should anonymous reviewers access the gated 24-shot adapter?
+Context: D3 makes 24-shot a main result; TACL reviewers are anonymous and cannot request gated access without
+revealing themselves, and the HF org name identifies the authors.
+Options: A) ungate the adapter (public); B) an anonymous mirror for review; C) provide the per-item outputs only and
+state that weights are available on request (weakest).
+My recommendation: B during review, A at publication.
+Impact: blocks T8.2 and part of T7.5. Workaround: proceed; decide before T7.14.
+
+===
+AI:
+
+[BLOCKED #3 | must-ask]
+Question: May an anonymous supplementary package be hosted publicly (e.g. an anonymous-repo service) for review?
+Impact: blocks T8.3. Workaround: build the package locally first (it is needed regardless).
+
+===
+AI:
+
+[NOTE] arXiv endorsement (for the user — action item T8.4)
+Verified on info.arxiv.org (2026-10-04): endorsement is per endorsement domain (all of cs); an endorser must have
+authored a minimum number of papers in that domain submitted between 3 months and 5 years ago; the endorsement
+request email carries a 6-character code/link to send to one prospective endorser; every abstract page has a
+"Which authors of this paper are endorsers?" link; endorsers should know the person or see the paper; do not
+email many endorsers at once or repeatedly. Since 2026-01-21 an institutional email alone no longer suffices.
+Plan: no urgency — arXiv is not a prerequisite for TACL. Approach one author at a time from work we cite and build
+on, with a near-final draft attached (see the session summary for the full approach).
+
+===
+AI:
+
+[STATUS SUMMARY]
+
+## Completed
+- ✅ Phase 2.0 created: spec_details.md, tasks.md, venues.md (two tables + prestige tiers, SSoT-linked).
+- ✅ Decisions D1–D5 recorded; prestige evidence logged (DECISION #2).
+
+## Decisions Made (review recommended)
+- DECISION #2: prestige tiers → TACL primary, TMLR demoted to backup.
+- DECISION #3: no Demo submission in parallel with TACL.
+- DECISION #4: claims ledger as the fact-first gate.
+
+## Blocked — Awaiting Your Input
+- BLOCKED #1: author name/affiliation → blocks the arXiv build only.
+- BLOCKED #2: reviewer access to the gated adapter.
+- BLOCKED #3: hosting the anonymous supplement.
+
+## Next Steps
+1. Self-review gate (spec-task-self-review) on spec + tasks.
+2. T0.2–T0.4 toolchain; T1 claims ledger; request research-session runs (T2.2, T2.3, T2.5, T2.6).
+
+===
+AI:
+
+[DECISION #5 | log-and-proceed]
+Topic: Self-review gate (spec-task-self-review, role-isolated reviewer) → verdict REVISE (2 Critical, 15 Warning,
+7 Note). Spec + tasks rewritten to v2; every root fix applied (table "Self-review record" in spec_details.md).
+Re-verified by me against the deciding sources before applying:
+  - C1 CONFIRMED on transacl.org/about/submissions: "we do not allow submission of supplementary material.
+    (Furthermore, we disallow links to such supplementary material, anonymized or not ...)" and announcement 105:
+    "Appendices will not be reviewed." → anonymous supplement removed; AC-15 release statement; load-bearing
+    protocol moved to the main text.
+  - C2 CONFIRMED as a plan gap: no gate on how 0.938 was selected → G11 + AC-14; R1 requested first.
+  - W10 CONFIRMED: TACL "requires complete, required information on *all* primary and co-authors, that include
+    email, country, and affiliation" at submission → BLOCKED #1 now blocks submission.
+  - W14 CONFIRMED: README L23 "on CPU in ~120 ms" vs L98 "≈120 ms/item on GPU".
+  - W2 CONFIRMED: scripts/eval_24shot.py uses pool = d["train"] (full 10,003) → "24-shot" reworded as
+    retrieval over the full training set with 24 in-context examples.
+  - Own check: quorum/metrics.py:12 already has an exact McNemar → reused (no second implementation); it rounds p
+    to 6 dp (Banking77 prints 0.0) → paper scripts report unrounded p.
+Also fixed the venue reference (SSoT): TACL submits through its own system (not OpenReview); TACL rules on
+supplements/appendix review/author info added; the prestige tier table + sources moved into the reference and
+venues.md now cites it. Artifact republished (version 3).
+
+===
+AI:
+
+[DECISION #6 | log-and-proceed]
+Topic: Research-session requests (T0.5).
+Chose: docs/phases/2.0/research-requests.md (R1 selection provenance — blocking; R2 24-shot per-item dumps for
+0.932/0.938; R3 per-member probs; R4 adapter training record; R5 ablations; R6 parity runs; R7 description
+authoring log; R8 GPU latency; R9 variance). Sent the full text to the research session (Remote Control route:
+delivery not confirmed as read). Delivery branch: research/phase2.0-paper-evidence.
+
+===
+AI:
+
+[BLOCKED #1 — updated] Author names, email, country, affiliation are REQUIRED at TACL submission (not only for
+arXiv). Blocks T8.1 and T8.7 (submission), T7.13 (arXiv). Drafting continues anonymised.
+
+[BLOCKED #2 — restated] TACL forbids links to supplementary material, so reviewers cannot obtain the adapter during
+review. Question: ungate the adapter at acceptance (recommended) or at submission? The paper states the release
+plan anonymously either way.
+
+[BLOCKED #3 — superseded] Hosting an anonymous supplement is not allowed at TACL; question withdrawn (re-opens only
+if we fall back to ARR/TMLR).
+
+===
+AI:
+
+[BLOCKED #4 | must-ask]
+Question: In the anonymised review version, keep the system name "Quorum" or use a neutral name?
+Context: the public repo, HF collection and Space already state the same thesis under "Quorum"; TACL cautions
+against overpublicising and requires prior non-archival versions to be disclosed to the editor.
+Options: A) neutral name in the review version, real name restored at camera-ready (recommended — reviewers who
+search the name land on the identifying org immediately); B) keep "Quorum" and rely on the editor disclosure.
+Impact: blocks T8.3 and the final anonymity scan list (AC-2). Workaround: draft with a macro \sysname.
+
+===
+AI:
+
+[BLOCKED #5 | must-ask]
+Question: Is publication cleared with your employer (IP / outside-work policy) before the affiliation line is
+chosen?
+Context: the public repo's commit history uses a corporate-domain author email for many commits, and the LICENSE
+carries a personal name; an "Independent Researcher" affiliation should be consistent with that.
+Impact: blocks T8.4 and the affiliation part of BLOCKED #1. Workaround: none needed until submission.
+
+===
+AI:
+
+[STATUS SUMMARY]
+
+## Completed
+- ✅ Phase 2.0 spec + tasks v2 (after independent review), venues.md (SSoT-linked), research-requests.md.
+- ✅ Venue reference fixed (TACL system, supplements/appendix/author-info rules) + prestige tiers moved there;
+  HTML rebuilt; artifact republished.
+- ✅ Day-1 request R1–R9 sent to the research session.
+
+## Decisions Made (review recommended)
+- DECISION #5: REVISE → v2 (supplement removed; G11 selection-provenance gate; 24-shot reworded; dumps = single
+  number source; novelty memo before drafting; Phase 1.2 three-outcome gate).
+- DECISION #6: research-session request R1–R9 (R1 blocking).
+
+## Blocked — Awaiting Your Input
+- BLOCKED #1: author identity (required at submission).
+- BLOCKED #2: when to ungate the adapter.
+- BLOCKED #4: system name in the review version.
+- BLOCKED #5: employer clearance.
+
+## Not Started (unblocked)
+- T0.2–T0.4 toolchain + scaffold; T1 ledger + zero-shot tables from dumps; T2.1 calibration; T3.0 novelty memo.
+
+===

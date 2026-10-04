@@ -1,0 +1,99 @@
+# Phase 2.0 — Tasks (TACL paper) · v2 after self-review
+
+> Spec: [`spec_details.md`](./spec_details.md) · Venues: [`venues.md`](./venues.md) (SSoT:
+> [`docs/references/quorum-paper-venues/quorum-paper-venues.md`](../../references/quorum-paper-venues/quorum-paper-venues.md))
+> Conversation: `docs/archive/conversation-phase2.0-paper-publication.txt`
+> Model runs → the research session (git branch, validated here). Nothing outward-facing without the user's OK.
+> Order rule: **no section is drafted before its ledger rows are VERIFIED** (T5 depends on T1/T2 rows).
+
+## T0 — Venue, toolchain, day-1 requests
+- [x] T0.1 Venue decision + format table → `venues.md` (TACL primary; D2).
+- [x] T0.1b Self-review (independent reviewer) → spec/tasks v2 (spec "Self-review record").
+- [ ] T0.2 Vendor the current TACL style + formatting PDF; record exact rules (A4, pages, appendix policy incl.
+      "will not be reviewed", desk-reject items, header, line numbers, no supplements/links, author info at
+      submission; 2024 announcement supersedes the PDF's appendix sentence).
+- [ ] T0.3 Pin a TeX engine fitting the 5.8 GB-free disk (log-and-proceed) and compile the unmodified TACL sample.
+- [ ] T0.4 Scaffold `paper/` (style, `main.tex`, `sections/`, `figures/`, `tables/`, `refs.bib`, `numbers.tex`
+      (generated), `scripts/`, `tools/`).
+- [ ] T0.5 **Day-1 research-session request** → `research-requests.md` + message: (1) G11 selection provenance
+      for 0.938 (dev split, configs tried, rule, Bonferroni family, constants' origin); (2) per-item 24-shot dumps
+      for 0.932 and 0.938 (same schema as `results/predictions/*` + member scores); (3) per-member probability
+      dumps, 7 datasets × names/descriptions; (4) adapter training code + data list + held-out list; (5) G12
+      ablations; (6) G4 matched-retrieval / matched-label-text runs; (7) G8 description authoring log; (8) GPU
+      latency; (9) 24-shot permutation/seed variance. Branch name + schemas + acceptance checks specified.
+- [ ] T0.6 Fix the venue reference (SSoT): TACL uses its own submission system (not OpenReview); move the prestige
+      tier table + sources into the reference; venues.md cites it (no second copy of the evidence).
+
+## T1 — Claims ledger (fact-first gate)
+- [ ] T1.1 `claims-ledger.md`: claim → macro name → dump/URL@commit → command → VERIFIED / GAP / DROPPED.
+- [ ] T1.2 `paper/scripts/zero_shot_tables.py` (reuses `quorum.metrics`): accuracies, member accuracies from
+      `member_picks`, exact McNemar ensemble-vs-best-member and names-vs-descriptions, **unrounded p** → macros.
+- [ ] T1.3 G2: trace the zero-shot Jev 0.801 or DROP.
+- [ ] T1.4 G7 split audit: our splits (CLINC plus/OOS, Bitext 20% stratified, SNIPS 1400) vs each cited baseline's split.
+- [ ] T1.5 C5 evidence: before/after numbers for each "trap" (or the section shrinks to a paragraph).
+
+## T2 — Evidence-gap closure
+- [ ] T2.1 G1 zero-shot calibration from dumps (ECE-10 as the reproduction, adaptive ECE, Brier, log loss, reliability).
+- [ ] T2.2 G1/G3 validate research-session dumps (schema, accuracies match, row alignment) when delivered.
+- [ ] T2.3 G3 `paper/scripts/mcnemar_vs_jev.py`: fetch the reproduction's `results/predictions.csv` @ `5cac4ff`
+      (no redistribution), row-index join + case-folded labels, `quorum.metrics.mcnemar` for 0.932 and 0.938.
+- [ ] T2.4 G1 24-shot calibration vs the reproduction's Jev ECE/Brier/log loss (same definitions).
+- [ ] T2.5 G11 gate: evaluate the provenance; if test-selected → request held-out re-selection + single test run;
+      record outcome (AC-14); demotion → must-ask.
+- [ ] T2.6 G4 parity table; G12 ablation table (from delivered runs); disclose the 25 overlaps.
+- [ ] T2.7 G5 Holm across the declared family; bootstrap CIs; 24-shot variance.
+- [ ] T2.8 G6 contamination table; Qwen3 probe decision [unproven — measure first].
+- [ ] T2.9 G8 descriptions: review the authoring log; blind re-author + re-evaluate if iteration cannot be excluded.
+- [ ] T2.10 G9 CPU latency (time 1 item first; fp32 serve path) + GPU numbers from the research session.
+- [ ] T2.11 G10 license table.
+
+## T3 — Novelty, literature, bibliography
+- [ ] T3.0 **G13 novelty memo** (before T4): positioning of C1/C2 vs PIE, dataless, NLI zero-shot, log-linear
+      pooling/PoE; Jev-replication landscape (disambiguate the 2026-09 open "Jev" clones). Venue still right? (must-ask if not).
+- [ ] T3.1 Related-work map. T3.2 `refs.bib` (resolvable entries only; baseline numbers with budget **and** split).
+
+## T4 — Outline
+- [ ] T4.1 Title candidates; section outline with ledger rows per paragraph; **page budget per section**; figure/table list with generators (colour-blind-safe palette).
+- [ ] T4.2 Outline review by a role-isolated TACL-persona reviewer; revise.
+
+## T5 — Drafting (each section only after its rows are VERIFIED)
+- [ ] T5.1 Method + setup (incl. description authoring protocol, splits, selection protocol).
+- [ ] T5.2 Results (macros only; parity + ablation tables).
+- [ ] T5.3 What did not work + evaluation lessons.
+- [ ] T5.4 Related work.
+- [ ] T5.5 Introduction + abstract + title (last).
+- [ ] T5.6 Limitations, ethics, release statement (AC-15), AI-assistance disclosure (AC-16); Appendices A/B.
+- [ ] T5.7 Copy-edit pass (English, consistency, terminology); self-overlap check vs the README text.
+
+## T6 — Phase 1.2 decision gate
+- [ ] T6.1 At the cut-off set in T4.1: passed → section; failed → negative result; not run → omitted (future work). Record (AC-11).
+
+## T7 — Tests / verification (one per AC)
+- [ ] T7.0 Tool fixtures: each of `check_layout` / `check_anonymity` / `check_numbers` / `check_bib` run on a
+      planted-violation sample (must flag) and a clean sample (must not flag).
+- [ ] T7.1 AC-1 `check_layout` on the built PDF.
+- [ ] T7.2 AC-2 `check_anonymity` + manual pass.
+- [ ] T7.3 AC-3 `check_numbers`.
+- [ ] T7.4 AC-4 statistics checklist.
+- [ ] T7.5 AC-5 REAL: CPU zero-shot subset (SNIPS or Banking77 subset via `serve/spot_check.py`); McNemar vs pinned
+      public predictions; research-session reproduction of 0.932/0.938 dumps.
+- [ ] T7.6 AC-6 `check_bib`.
+- [ ] T7.7 AC-7 calibration section backed by T2.1/T2.4 or removed; README correction proposal.
+- [ ] T7.8 AC-8 parity table vs the reproduction's PROTOCOL.md/README.
+- [ ] T7.9 AC-9 contamination table vs sources.
+- [ ] T7.10 AC-10 review round 1 (2 TACL personas + claims auditor) → `reviews/round1.md` + responses.
+- [ ] T7.11 AC-10 review round 2 + ≥1 human reader → `reviews/round2.md`; no open Critical/Major.
+- [ ] T7.12 AC-11 Phase 1.2 gate recorded.
+- [ ] T7.13 AC-12 arXiv build + license + endorsement status.
+- [ ] T7.14 AC-13 submission packet + checklist.
+- [ ] T7.15 AC-14 G11 outcome reflected in C3 wording.
+- [ ] T7.16 AC-15 / AC-16 release statement + AI disclosure present and anonymous.
+
+## T8 — Must-ask items (BLOCKED in the conversation file; never done silently)
+- [ ] 🔲 blocked: T8.1 Author name(s), email, country, affiliation — **required at TACL submission** (BLOCKED #1).
+- [ ] 🔲 blocked: T8.2 Adapter access: reviewers cannot get it during review (no links allowed); ungate at/after acceptance? (BLOCKED #2).
+- [ ] 🔲 blocked: T8.3 System name in the review version (keep "Quorum" vs neutral name) + disclosure of the public repo/Space/HF pages as prior non-archival versions (BLOCKED #4).
+- [ ] 🔲 blocked: T8.4 Employer publication / IP clearance before choosing the affiliation line (BLOCKED #5).
+- [ ] T8.5 README corrections ("Jev's own protocol", "on CPU in ~120 ms", "calibrated") once evidence is in — push is must-ask.
+- [ ] T8.6 arXiv endorser — user action; posting is must-ask.
+- [ ] T8.7 Submission to TACL — must-ask, after AC-1…AC-16 pass.
