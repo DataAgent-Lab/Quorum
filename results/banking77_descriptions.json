@@ -13,6 +13,7 @@
   ],
   "nli_dtype": "fp32",
   "template": "This message is about {label}.",
-  "note": "Same 3-model ensemble, only label text differs (names vs generic descriptions). Descriptions are plain rephrasings of the label names, not derived from the dataset. fp32 NLI (CPU serve path). Reproduce: python scripts/eval_zeroshot.py --dataset banking77 --descriptions",
-  "full_test": true
+  "note": "Same 3-model ensemble, only label text differs (names vs generic descriptions). Descriptions are plain rephrasings of the label names, not derived from the dataset. fp32 NLI (CPU serve path). Reproduce: python scripts/eval_zeroshot.py --dataset banking77 --descriptions Honest comparison: Jev (an independent reproduction of the closed API, ~0.801) still leads zero-shot; the open stack overtakes Jev only at the 24-shot budget.",
+  "full_test": true,
+  "jev_reproduction_reference": 0.801
 }
