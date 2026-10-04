@@ -282,3 +282,23 @@ Spec D3/C3/G11/G6 and tasks T2.5/T2.5b/T2.5c/T8.5 updated.
 Note: the research branch is not merged into main yet — merge once the evidence set is complete and validated.
 
 ===
+AI:
+
+[DECISION #8 | log-and-proceed — G11b protocol review]
+Input: clean protocol pre-registered at research/phase2.0-paper-evidence @ 8455e7e (2026-10-05T04:01:41+08:00),
+provenance/banking77_24shot_clean_protocol.md. Pins: dataset legacy-datasets/banking77 @ f541215; base
+Qwen/Qwen3-4B @ 1cfa9a7; adapter DataAgent/Quorum-Reader-Qwen3-4B-Adapter @ e0765b7 — byte-identical to the study
+checkpoint (safetensors sha256 6ef3f783…c381; adapter_config identical) → closes the R1 "unverified" item.
+Design: new split 12/class (924, seed 20261005) disjoint from the old 924, removed from the pool (pool 9,079 at
+selection and test); 48 candidates (M2/M3 × 4 rules × names/descriptions × 1/3/7 orders); answer scoring fixed to
+the trained marker method; 5-fold stratified cross-fitting (seed 20261006), selection by out-of-fold correct count;
+total tie-break; single test run; McNemar vs predictions.csv @ 5cac4ff read at run time.
+My measurement: Qwen3 tokenizer truncation_side='right' and fewshot.py truncates at 2048 → an over-long prompt
+would lose the query + answer slot. 300 random train queries, BM25 top-24, real prompt: names max 1741, descriptions
+max 1935 (0/300 over 2048; 113-token headroom). Instrument control: a forced 2,100-word prompt is detected as >2048.
+Verdict: GO conditional on an addendum committed before any run — A1 no truncation (assert) + prompt-length
+distribution in meta; A2 pre-declared secondary analyses (bootstrap CI, macro-F1, ECE-10/Brier/log loss vs the
+reproduction's Jev values, McNemar vs repo default as descriptive); A3 provenance statement for the descriptions
+candidate (examples/banking77_descriptions.py). Then run-script commit → my review → go → smoke on pool rows → run.
+
+===
