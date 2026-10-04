@@ -35,5 +35,9 @@
 - Unit tests: 46 passed (drift test now guards the page's own-labels default).
 
 ## T3 — Go-live (must-ask)
-- [ ] T3.1 User approval + an HF write token (not on the demo host) → publish `space/` to the Space.
-- [ ] T3.2 Verify the live Space end to end.
+- [x] T3.1 User approved go-live (2026-10-04). Published by the research session (it holds the HF token) from main
+      c013b4e: Space commit dc580a2 (index.html, samples.json, README.md; sha256 matched), then 771efb1 removed the
+      template's unused style.css. Space repo now: .gitattributes, README.md, index.html, samples.json.
+- [x] T3.2 Live Space verified in real Chrome against the production API (`e2e/verify_live.py`): 9/9 — new page
+      live on desktop + mobile; default Banking, CLINC150, SNIPS, Bitext and the own-labels default answered from
+      the cache in 0.03–0.28 s; no console errors.

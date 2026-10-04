@@ -1,6 +1,6 @@
 # Phase 1.0b — Demo page: real benchmark examples, the verdict reveal, and cold-start handling
 
-> **Status**: built + tested (AC-1…AC-9 PASS); awaiting go-live approval · **Projected-date**: 2026-10-06 · **Predecessor**: Phase 1.0a (cache + lazy worker)
+> **Status**: ✅ live (2026-10-04) — AC-1…AC-9 PASS; published (Space dc580a2/771efb1) and verified live · **Projected-date**: 2026-10-06 · **Predecessor**: Phase 1.0a (cache + lazy worker)
 > **Conversation**: `docs/archive/conversation-phase1.0b-demo-real-datasets.txt` · **Prototype**: `prototype/`
 > **Go-live**: publishing the Space needs the user's approval in this session (and an HF write token — not on the
 > demo host).

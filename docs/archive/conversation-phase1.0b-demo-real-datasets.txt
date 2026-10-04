@@ -81,3 +81,36 @@ Verified (docs/phases/1.0b/e2e/check_api_override.py): local page -> override us
   -> only the official API is contacted. The full E2E (localhost) path is unchanged.
 
 ===
+AI:
+
+[MILESTONE] Published + verified. The research session published main c013b4e to the Space (commit dc580a2; sha256
+of all three files matched) and removed the HF template's unused style.css (771efb1). Live verification in real
+Chrome against the production API: 9/9 (desktop + mobile, 4 domains + own-labels default from the cache in
+0.03–0.28 s, no console errors).
+Process boundary agreed with the research session: a push to main is not a go-live; the Space is published only on
+an explicit publish request carrying the user's go-live approval.
+
+===
+AI:
+
+[STATUS SUMMARY]
+
+## Completed
+- ✅ "The Verdict" redesign: 7 real benchmark domains + your own labels; description labels shown as name +
+  description; jury reveal; dataset-answer check; confidence gate; dark mode; mobile; reduced motion
+- ✅ Real API wiring with cold-start handling (awake probe, waking message + clock, 30 s / 180 s timeouts, one
+  automatic retry, calm error + Try again); footnote reports the real response time
+- ✅ ?api= restricted to locally served pages (security hardening before publish)
+- ✅ Tests: unit 46; browser E2E 19/19 (incl. a real cold start); override check 2/2; live Space 9/9
+- ✅ Live on the Space; verified
+
+## Decisions Made (review recommended)
+- DECISION #1: cold-start handling design
+- DECISION #2: ?api= override (testing / self-hosting)
+- DECISION #3: ?api= honoured only on locally served pages
+
+## Open / next
+- Domain titles and copy ("Smart assistant", "Everyday tasks", "Ask the jury", "Hear the verdict") are the
+  prototype's; change any time.
+
+===
