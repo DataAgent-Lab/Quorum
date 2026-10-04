@@ -246,3 +246,18 @@ AI:
 - T0.2–T0.4 toolchain + scaffold; T1 ledger + zero-shot tables from dumps; T2.1 calibration; T3.0 novelty memo.
 
 ===
+AI:
+
+[NOTE] Research session acknowledged R1–R9 (2026-10-04).
+  - Delivery: branch research/phase2.0-paper-evidence (never main), de-identified.
+  - Order: R1 first (traced from original experiment records, cited); R2-default and R3 start now (independent of
+    R1); R2-best, R5, R6, R9-best wait for R1. If R1 shows test-set selection, a held-out re-selection protocol is
+    proposed before running (→ must-ask to the user under D3).
+  - R4: adapter training code is in a private codebase → training record delivered; code only via a clean-room port.
+  - R6: the unlicensed reproduction repo is read at run time only, never copied.
+  - R7 (preliminary, first-hand): SNIPS, CLINC, HWU64, MASSIVE, MTOP, Bitext descriptions were written by the
+    research session (an LLM agent) from label names only, one pass each, measured once on the full test, no
+    revision. Banking77's set comes from an earlier verbalizer and is traced with R1. Asked for model/version,
+    prompt and date (paper must disclose LLM-authored label text — feeds AC-16 / G8).
+
+===
