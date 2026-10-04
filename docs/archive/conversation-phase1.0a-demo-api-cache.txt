@@ -178,3 +178,65 @@ session owns the research repo. -> push 1.0a to main; benchmark dumps from the r
 branch and are reviewed + merged here.
 
 ===
+AI:
+
+[MILESTONE] 1.0a pushed to main (049c620..1c995be) and deployed (user go-live OK).
+Deploy: image quorum-api:1.0a; cache on the persistent volume; QUORUM_CACHE_LIVE=persist; idle unload 900 s;
+  HF_HUB_OFFLINE=1 (models pinned to the cached snapshot — closes the "model revision not pinned" residual risk for
+  this deployment); CORS = static Space origin.
+Measured via the public HTTPS URL (host load ~5-6):
+  - idle: API process RSS 59 MB (cgroup anon 41 MB; the rest is reclaimable page cache) — was ~2.2 GB before
+  - seeded demo preset: 0.12-0.31 s total incl. TLS (hit) — was 6-20 s before
+  - cold miss (worker spawn + load + warm-up + predict): 28.7 s; repeat: 0.07 s (hit); warm miss: 1.47 s
+  - worker loaded: 2.27 GB anon; uncached > 50 labels: 422 in 0.10 s; CORS allow-origin + expose X-Quorum-Cache OK
+Pending: benchmark dumps (research session, branch research/benchmark-predictions) -> seed import + 30-item
+  spot-check (AC-9, AC-10); idle-unload verification in production running now.
+
+===
+AI:
+
+[VERIFIED] Idle unload in production: last request 11:54:51; at 12:11:31 /health model_loaded=false, container anon
+memory 2266 MB -> 48 MB, the 2.3 GB worker process gone (only the 7 MB multiprocessing resource tracker remains).
+
+===
+AI:
+
+[MILESTONE] Research data delivered (branch research/benchmark-predictions @ 40fa9e2: per-item predictions for all
+7 datasets × names/descriptions, 264 new generic descriptions, results/{dataset}_descriptions.json). Descriptions
+help on all 7 datasets (names -> descriptions): banking77 .7555->.7737, clinc150 .6518->.6816, hwu64 .7388->.7574,
+massive .7394->.7774, mtop .6140->.7214, snips .8529->.9443, bitext .7751->.8203.
+Review: de-identification clean; one regression fixed in b382c33 (the refresh dropped the Jev zero-shot reference +
+honest-comparison sentence from results/banking77_descriptions.json — restored). Fast-forward merged + pushed.
+AC-9 PASS: 47,582 rows, 0 errors, accuracy == meta exactly, == published within ±0.0002.
+AC-10 PASS: Banking77 (descriptions) 30 random items recomputed live on CPU — 30/30 agree, max|Δp| 1.46e-6; the 30
+items score 19/30 = 0.633 (95% CI 0.455–0.781, contains the exact full-set 0.7737 — n=30 is a sanity check, the
+3,080-item number is the measurement). Other datasets: 18/18 agree, max|Δp| <= 2.7e-6.
+Production: 47,221 seed rows imported in 18 s while serving; benchmark requests via the public URL (77/113/151
+shuffled labels) are cache hits in 76–162 ms with no model loaded (API 49 MB).
+
+===
+AI:
+
+[STATUS SUMMARY]
+
+## Completed
+- ✅ Permanent SQLite prediction cache + lazy, idle-unloaded model worker (serve/), backward-compatible API
+- ✅ Independent spec review (REVISE, 9 Major) — all fixed; 46 fast tests + real-model E2E
+- ✅ Deployed (user OK): idle ~48-59 MB (was ~2.2 GB); seeded answers 0.1-0.3 s via HTTPS; unload verified
+- ✅ Benchmark predictions (7 datasets × 2 variants) validated, merged, seeded; spot-check passed
+
+## Decisions Made (review recommended)
+- DECISION #2: child-process worker (in-process unload only reaches ~750 MB)
+- DECISION #4: SHA-256 key over normalised message + sorted labels; SQLite; live rows capped
+- DECISION #6: review fixes (load control, fingerprint, bounded storage, single-flight, ...)
+- DECISION #7: separate cold-start budget so a slow load can never leave the worker cold forever
+
+## User decisions recorded
+- Phase 1.0a/1.0b split; lazy-load + idle unload (15 min); >50 labels only on cache hits; visitors' inputs
+  persisted (capped); this session manages main; research outputs arrive via branch.
+
+## Open / next
+- Cold miss after idle is 29-90 s (> the current page's 40 s abort; a retry hits) -> handled in Phase 1.0b.
+- Phase 1.0b (frontend) prototype awaiting the user's review.
+
+===

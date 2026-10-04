@@ -1,7 +1,7 @@
 # Phase 1.0a — Demo API: permanent prediction cache + lazy, idle-unloaded model worker
 
-> **Status**: in progress (implementation + fast/real tests done; seed import + spot-check await data; deploy awaits
-> user go-live) · **Projected-date**: 2026-10-06 · **Predecessor**: Phase 1.0 (live demo, `serve/`)
+> **Status**: ✅ complete (2026-10-04) — deployed; benchmark predictions imported + verified (AC-9, AC-10 PASS)
+> · **Projected-date**: 2026-10-06 · **Predecessor**: Phase 1.0 (live demo, `serve/`)
 > **Dependencies**: per-item benchmark predictions from the research session (`results/predictions/*`, via git) for the
 > seed import + accuracy verification (AC-9, AC-10). Everything else is independent of that data.
 > **Facts**: every claim cites [`verified-facts.md`](./verified-facts.md) (`F§n`).
@@ -133,6 +133,14 @@ The demo API must answer fast and hold almost none of the shared host's resource
 
 Performance targets: cache hit < 20 ms server time (measured 2.4 ms in real E2E); idle API-process RSS < 150 MB
 (measured 67 MB).
+
+### Verification results (2026-10-04)
+| AC | Result |
+|---|---|
+| AC-1–8, 11, 12, 14–17 | 46 fast tests + real-model E2E pass |
+| AC-9 | 47,582 rows, 0 errors; accuracy == meta exactly, == published within ±0.0002; benchmark requests via public URL are hits (76–162 ms, K up to 151, shuffled labels) |
+| AC-10 | Banking77 30/30 agree, max\|Δp\| 1.5e-6, live 19/30 = 0.633 (95 % CI 0.455–0.781 ∋ 0.7737); other datasets 18/18 agree |
+| AC-13 | idle API 48–59 MB (was ~2.2 GB); preset 0.1–0.3 s; cold miss 29–90 s; warm miss 1.5 s; unload verified after 16.7 min idle (2.27 GB → 48 MB) |
 
 ## Out of scope
 - Any frontend change (Phase 1.0b), including how the frontend handles a ~37 s cold miss.

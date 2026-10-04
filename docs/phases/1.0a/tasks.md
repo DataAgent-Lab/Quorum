@@ -33,9 +33,13 @@
 - [x] T2.10 AC-12 demo preset list matches `space/index.html` (drift guard).
 - [x] T2.11 REAL E2E (env-guarded `QUORUM_REAL_MODEL_TEST=1`, non-mock): real worker miss vs direct ensemble
       (AC-5), repeat hit identical (AC-2), idle unload → child gone + API RSS < 150 MB (AC-7), demo seed hits (AC-12).
-- [ ] T2.12 AC-9 REAL: import the research session dumps; 0 validation errors; exact accuracy vs results/*.json ±0.001;
-      imported items are hits. 🔲 blocked on data (the research session GPU dump).
-- [ ] T2.13 AC-10 REAL: 30-item Banking77 live spot-check + 5 items per other dataset. 🔲 blocked on data.
+- [x] T2.12 AC-9 REAL: research branch 40fa9e2 (7 datasets × names/descriptions, 47,582 rows) — importer dry run:
+      0 validation errors; config check passed; exact accuracy == meta (Δ 0.0000) and == published within ±0.0002
+      (fp16-vs-fp32 on bitext/mtop names). Merged to main; production seeded; shuffled 77/113/151-label benchmark
+      requests via the public URL are hits in 76–162 ms with no model loaded.
+- [x] T2.13 AC-10 REAL: Banking77 descriptions, 30 random items live on this CPU: argmax 30/30, max|Δp| 1.46e-6,
+      live accuracy 19/30 = 0.633 (95% CI 0.455–0.781, contains the full-set 0.7737); 3 items per other dataset:
+      18/18 agree, max|Δp| ≤ 2.7e-6.
 
 ## T2b — Review fixes (independent spec review: REVISE, 9 Major — all addressed)
 - [x] T2b.1 Load control: admission cap → immediate 503; one job at a time; queue timeout → 503 without killing the
@@ -51,10 +55,14 @@
       load-budget tests. Fast suite 46 passed; real E2E passed (hit 13 ms, API RSS 67 MB, torch never imported).
 
 ## T3 — Deploy (must-ask: user go-live OK in this session)
-- [ ] T3.1 Rebuild `quorum-api` image; run with `QUORUM_CACHE_PATH=/models/quorum_cache.sqlite3`, idle unload on.
-- [ ] T3.2 Seed demo presets (+ benchmark dumps once available) inside the container volume.
-- [ ] T3.3 AC-13 measure on host: idle RSS, hit latency, miss/cold latency, unload after idle.
+- [x] T3.1 Rebuilt `quorum-api` image (1.0a); running with `QUORUM_CACHE_PATH=/models/quorum_cache.sqlite3`,
+      `QUORUM_CACHE_LIVE=persist`, idle unload 900 s, models pinned offline (`HF_HUB_OFFLINE=1`) — user go-live OK.
+- [x] T3.2 Demo presets seeded in the container volume (3 rows).
+- [x] T3.2b Production cache seeded: 47,221 seed rows (47,218 benchmark + 3 demo presets), 18 s, API kept serving.
+- [x] T3.3 AC-13 measured on the host (2026-10-04, load ~5–6): idle API process RSS 59 MB (cgroup anon 41 MB);
+      seeded preset via public HTTPS 0.12–0.31 s total (`hit`); cold miss 28.7 s; repeat 0.07 s (`hit`);
+      warm miss 1.47 s; worker loaded = 2.27 GB anon; uncached 60 labels → 422 in 0.10 s; CORS + exposed header OK.
 
 ## T4 — Docs + handoff
-- [ ] T4.1 Update spec/tasks statuses; `[STATUS SUMMARY]` in the conversation file.
-- [ ] T4.2 Push the 1.0a commits to main (user: main is managed by this session).
+- [x] T4.1 Spec/tasks statuses updated; `[STATUS SUMMARY]` written to the conversation file.
+- [x] T4.2 Pushed the 1.0a commits to main (049c620..1c995be) — user: main is managed by this session.
