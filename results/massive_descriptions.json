@@ -1,0 +1,18 @@
+{
+  "dataset": "massive",
+  "n_labels": 60,
+  "n_test": 2974,
+  "label_text": "generic one-line per-class descriptions (examples/massive_descriptions.py)",
+  "ensemble_accuracy_names": 0.7394,
+  "ensemble_accuracy_descriptions": 0.7774,
+  "delta": 0.038,
+  "members": [
+    "Jaehun/PrismNLI-0.4B",
+    "BAAI/bge-large-en-v1.5",
+    "BAAI/bge-base-en-v1.5"
+  ],
+  "nli_dtype": "fp32",
+  "template": "This message is about {label}.",
+  "note": "Same 3-model ensemble, only label text differs (names vs generic descriptions). Descriptions are plain rephrasings of the label names, not derived from the dataset. fp32 NLI (CPU serve path). Reproduce: python scripts/eval_zeroshot.py --dataset massive --descriptions",
+  "full_test": true
+}

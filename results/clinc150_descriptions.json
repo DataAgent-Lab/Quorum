@@ -1,0 +1,18 @@
+{
+  "dataset": "clinc150",
+  "n_labels": 151,
+  "n_test": 5500,
+  "label_text": "generic one-line per-class descriptions (examples/clinc_descriptions.py)",
+  "ensemble_accuracy_names": 0.6518,
+  "ensemble_accuracy_descriptions": 0.6816,
+  "delta": 0.0298,
+  "members": [
+    "Jaehun/PrismNLI-0.4B",
+    "BAAI/bge-large-en-v1.5",
+    "BAAI/bge-base-en-v1.5"
+  ],
+  "nli_dtype": "fp32",
+  "template": "This message is about {label}.",
+  "note": "Same 3-model ensemble, only label text differs (names vs generic descriptions). Descriptions are plain rephrasings of the label names, not derived from the dataset. fp32 NLI (CPU serve path). Reproduce: python scripts/eval_zeroshot.py --dataset clinc150 --descriptions",
+  "full_test": true
+}

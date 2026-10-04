@@ -1,0 +1,48 @@
+{
+  "dataset": "snips",
+  "n_labels": 7,
+  "n_test": 1400,
+  "raw_labels": [
+    "add to playlist",
+    "book restaurant",
+    "get weather",
+    "play music",
+    "rate book",
+    "search creative work",
+    "search screening event"
+  ],
+  "labels_names": [
+    "add to playlist",
+    "book restaurant",
+    "get weather",
+    "play music",
+    "rate book",
+    "search creative work",
+    "search screening event"
+  ],
+  "labels_descriptions": [
+    "adding a song or artist to a music playlist",
+    "booking or reserving a table at a restaurant",
+    "the weather or the forecast for a place or time",
+    "playing a song, album, or artist",
+    "giving a book a rating or review score",
+    "finding a creative work such as a movie, book, song, or TV show",
+    "finding movie showtimes or a cinema screening"
+  ],
+  "accuracy_names": 0.8529,
+  "accuracy_descriptions": 0.9443,
+  "generated_at": "2026-10-04T14:48:18Z",
+  "members": [
+    "Jaehun/PrismNLI-0.4B",
+    "BAAI/bge-large-en-v1.5",
+    "BAAI/bge-base-en-v1.5"
+  ],
+  "template": "This message is about {label}.",
+  "cosine_scale": 20.0,
+  "combine": "per-member softmax(T=1) -> geometric mean (logprob-mean) -> renormalise",
+  "quorum_git_commit": "04e6709",
+  "torch_version": "2.9.0+cu129",
+  "transformers_version": "5.17.0",
+  "device": "cuda (fp32 NLI == cpu fp32)",
+  "nli_dtype": "fp32"
+}
