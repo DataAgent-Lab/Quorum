@@ -95,9 +95,9 @@ def test_published_accuracy_lookup_uses_repo_results():
 
 def test_demo_presets_match_the_frontend():
     html = (REPO / "space" / "index.html").read_text()
-    block = re.search(r"const EXAMPLES = \{(.*?)\n\s*\};", html, re.S).group(1)
-    found = [(m, json.loads(f"[{l}]")) for m, l in re.findall(r'msg:\s*"([^"]*)",\s*labels:\s*\[([^\]]*)\]', block)]
-    assert found == [(m, list(l)) for m, l in DEMO_EXAMPLES]
+    own = re.search(r'const OWN = \{.*?msg:\s*"([^"]*)",\s*labels:\s*\[([^\]]*)\]', html, re.S)
+    assert own, "the page's own-labels default (const OWN) was not found"
+    assert [(own.group(1), json.loads(f"[{own.group(2)}]"))] == [(m, list(l)) for m, l in DEMO_EXAMPLES]
 
 
 def test_dumps_from_a_different_configuration_are_refused(tmp_path, cache):

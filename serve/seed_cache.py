@@ -34,18 +34,13 @@ from serve.cache import (MEMBER_DISPLAY_NAMES, PredictionCache, build_response, 
 REPO = Path(__file__).resolve().parent.parent
 VARIANTS = ("names", "descriptions")
 
-# Must match EXAMPLES in space/index.html (guarded by serve/tests/test_seed.py).
+# The demo page's own typed example (the "Your own labels" default — must match OWN in space/index.html; guarded by
+# serve/tests/test_seed.py). Every other example on the page is a benchmark sentence seeded via --predictions.
 DEMO_EXAMPLES = [
-    ("when will my new card arrive?",
-     ["card arrival", "card delivery estimate", "lost or stolen card", "change pin", "top up by card",
-      "exchange rate"]),
     ("I was charged twice for the same order and want my money back",
      ["billing / double charge", "refund request", "order status", "cancel subscription", "technical bug",
       "general question"]),
-    ("the new dashboard is gorgeous but it loads really slowly",
-     ["praise", "performance complaint", "bug report", "feature request", "pricing concern", "churn risk"]),
 ]
-
 
 class DumpError(ValueError):
     pass
