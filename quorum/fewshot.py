@@ -63,7 +63,13 @@ def _lp_mean(prob_list):
 
 class RetrievalEnsemble:
     def __init__(self, options, task_desc, base="Qwen/Qwen3-4B", adapter=None,
-                 embedder="BAAI/bge-large-en-v1.5", shots=24, perms=3, device="cuda"):
+                 embedder="BAAI/bge-large-en-v1.5", shots=24, perms=3, device="cuda",
+                 base_revision=None, adapter_revision=None, embedder_revision=None,
+                 max_length=2048, truncate=True):
+        # truncate=True keeps the original behaviour (right-truncation at max_length, which would cut the query
+        # and the answer slot off an over-long prompt). truncate=False never truncates and raises if any prompt
+        # exceeds max_length, so a truncated row is impossible rather than merely unlikely.
+        self.max_length, self.truncate = max_length, truncate
         if adapter is None:
             raise ValueError("pass `adapter` — the gated 24-shot LoRA (a Hugging Face id or local path)")
         import torch
@@ -73,13 +79,13 @@ class RetrievalEnsemble:
         self.torch = torch
         self.options = list(options); self.K = len(self.options); self.task_desc = task_desc
         self.shots, self.perms, self.device = shots, perms, device
-        self.tok = AutoTokenizer.from_pretrained(base, padding_side="left")
+        self.tok = AutoTokenizer.from_pretrained(base, revision=base_revision, padding_side="left")
         self.markers = P.verify_markers(self.tok); self.marker_ids = P.marker_token_ids(self.tok, self.markers)
         if len(self.markers) < self.K:
             raise ValueError(f"K={self.K} > {len(self.markers)} single-token markers")
-        m = AutoModelForCausalLM.from_pretrained(base, torch_dtype=torch.bfloat16).to(device)
-        self.model = PeftModel.from_pretrained(m, adapter).eval()
-        self.embedder = SentenceTransformer(embedder, device=device)
+        m = AutoModelForCausalLM.from_pretrained(base, revision=base_revision, torch_dtype=torch.bfloat16).to(device)
+        self.model = PeftModel.from_pretrained(m, adapter, revision=adapter_revision).eval()
+        self.embedder = SentenceTransformer(embedder, revision=embedder_revision, device=device)
 
     def index(self, pool):
         """pool = [{'text', 'label': int}] — the retrieval set (Jev conditions on 24 of these per query)."""
@@ -93,25 +99,51 @@ class RetrievalEnsemble:
     def _shots(self, text):
         return self.bm.top(text, self.shots)
 
-    def _incontext_logits(self, rows, perms, bs=8):
+    def shots_idx(self, text):
+        """Indices (into the indexed pool) of the examples retrieved for `text` — shared by both members."""
+        return list(self._shots(text))
+
+    def _prompts_for_order(self, rows, order_idx):
+        """[(prompt, order)] for every row under seeded option order `order_idx` (rng consumed in row order)."""
+        rng = random.Random(1000 + order_idx); out = []
+        for r in rows:
+            shots = [(self.pool[j]["text"], self.pool[j]["label"]) for j in self._shots(r["text"])]
+            ex = P.Example(self.task_desc, self.options, r["text"], None, shots=shots)
+            out.append(P.build_prompt(ex, self.markers, shuffle=True, rng=rng))
+        return out
+
+    def prompt_lengths(self, rows, perms, perm_offset=0):
+        """(perms, N) untruncated token lengths of exactly the prompts the reader is given."""
+        return np.array([[len(self.tok(p).input_ids) for p, _ in self._prompts_for_order(rows, perm_offset + pi)]
+                         for pi in range(perms)])
+
+    def incontext_logits_per_perm(self, rows, perms, bs=8, perm_offset=0):
+        """(perms, N, K) un-permuted marker logits, one slice per seeded option order. Order i always uses
+        `random.Random(1000 + i)`, so the first k orders of a 7-order run are exactly a k-order run."""
         torch = self.torch
-        N = len(rows); avg = np.zeros((N, self.K))
+        N = len(rows); out = np.zeros((perms, N, self.K))
         with torch.no_grad():
             for pi in range(perms):
-                rng = random.Random(1000 + pi)
+                po = self._prompts_for_order(rows, perm_offset + pi)
+                if not self.truncate:
+                    longest = max(len(self.tok(p).input_ids) for p, _ in po)
+                    if longest > self.max_length:
+                        raise ValueError(f"prompt of {longest} tokens exceeds max_length={self.max_length}")
                 for i in range(0, N, bs):
-                    chunk = rows[i:i + bs]; prompts, orders = [], []
-                    for r in chunk:
-                        shots = [(self.pool[j]["text"], self.pool[j]["label"]) for j in self._shots(r["text"])]
-                        ex = P.Example(self.task_desc, self.options, r["text"], None, shots=shots)
-                        p, order = P.build_prompt(ex, self.markers, shuffle=True, rng=rng)
-                        prompts.append(p); orders.append(order)
-                    enc = self.tok(prompts, return_tensors="pt", padding=True, truncation=True,
-                                   max_length=2048).to(self.device)
+                    prompts = [p for p, _ in po[i:i + bs]]; orders = [o for _, o in po[i:i + bs]]
+                    if self.truncate:
+                        enc = self.tok(prompts, return_tensors="pt", padding=True, truncation=True,
+                                       max_length=self.max_length)
+                    else:
+                        enc = self.tok(prompts, return_tensors="pt", padding=True, truncation=False)
+                    enc = enc.to(self.device)
                     last = self.model(**enc).logits[:, -1, :].float()
                     for b, order in enumerate(orders):
-                        avg[i + b] += P.unpermute(last[b, self.marker_ids[:self.K]].cpu(), order).numpy() / perms
-        return avg
+                        out[pi, i + b] = P.unpermute(last[b, self.marker_ids[:self.K]].cpu(), order).numpy()
+        return out
+
+    def _incontext_logits(self, rows, perms, bs=8):
+        return self.incontext_logits_per_perm(rows, perms, bs).mean(0)
 
     def _knn_logits(self, rows):
         out = np.full((len(rows), self.K), KNN_FLOOR, float)
