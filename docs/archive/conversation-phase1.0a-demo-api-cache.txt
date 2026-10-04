@@ -1,0 +1,180 @@
+Human:
+
+[TASK INITIATED]
+Goal: During the demo period, add a permanent (never-expiring) cache to the Quorum demo API (serve/), seeded with
+      (a) Quorum's predictions on the benchmark set and (b) the demo's example inputs, so the API answers fast and
+      does not hold much of the shared machine's resources. Also: confirm whether the earlier benchmark per-item
+      predictions were kept, and spot-check 30 items against the reported ~0.78 accuracy. Any data needed is to be
+      requested from the the research session session, delivered via git.
+Decision Authority: default, plus user decisions made at start:
+  - Phase = 1.0a (extension of Phase 1.0 live demo).
+  - Resource strategy = lazy model load + idle unload (cache hits never load models).
+  - must-ask (default): public API contract changes, live Space changes, redeploy of the public demo, any push.
+Constraints:
+  - Clean-room / de-identified: nothing internal in public-repo files.
+  - Public repo: commit locally; push only with the user's OK (user later confirmed this session manages
+    main; research outputs arrive from the research session via git).
+  - Do not hog the shared box (no 3080x77 CPU benchmark run here; that comes from the research session's GPU box).
+Started: 2026-10-04
+Conversation File: conversation-phase1.0a-demo-api-cache.txt
+
+===
+AI:
+
+[UNDERSTANDING]
+
+The demo API (serve/app.py, Docker container `quorum-api`, currently STOPPED to free RAM) loads the 3-model
+ensemble (~2.2 GB RSS) at import and computes every request. Goal: make it cheap + fast for the demo:
+  1. A permanent SQLite cache keyed on (message, label set). Hits return the stored response without touching
+     the models. Misses compute, then store (no TTL).
+  2. Lazy model load on first miss + unload after idle, so idle RAM is ~100-200 MB instead of ~2.2 GB.
+  3. Seed the cache with the demo presets (computed locally, 3 small requests) and the Banking77 benchmark
+     predictions (names + descriptions variants, 3080 each) once the research session commits per-item dumps.
+  4. Verify the dumps: exact full-set accuracy vs the published 0.7555 (names) / 0.7737 (descriptions), plus a
+     30-item live CPU spot-check that the served model reproduces the dumped predictions.
+
+Findings so far (Step 0 discovery):
+  - Per-item benchmark predictions were NOT kept anywhere: this box has only aggregate results/*.json, and
+    scripts/eval_zeroshot.py writes aggregates only. the research session confirmed their GPU runs did not persist
+    per-item outputs either -> must be regenerated (the research session, GPU, ~30 min) -> requested via git.
+  - The "~0.78" the user recalls is the study's figure; this repo's verified numbers are 0.7555 (label names)
+    and 0.7737 (generic descriptions). The spot-check will be judged against these.
+  - The demo frontend (space/index.html) offers 3 presets (6 labels each) + free text; it has no 77-label mode.
+  - serve/app.py caps labels at MAX_LABELS=50, so a 77-label Banking77 request is rejected (422) today ->
+    benchmark seed entries could never be served without an API change (must-ask, logged below).
+
+Proceeding with the fact sheet (measure RAM release on unload, cold load time, label-order invariance).
+
+===
+AI:
+
+[DECISION #1 | user-decided]
+Topic: Phase placement.  Chose: 1.0a (backend) — extension of Phase 1.0; frontend redesign = 1.0b (user).
+
+===
+AI:
+
+[DECISION #2 | log-and-proceed]
+Topic: How to release model RAM when idle.
+Context: user chose "lazy-load + idle unload, idle RAM ~100-200 MB".
+Measured: in-process del+gc+malloc_trim only gets to ~750 MB (F§12); a process that never builds a member stays
+  at 52 MB (F§9).
+Options:
+  A) in-process unload — simple, idle ~750 MB (misses the target).
+  B) single child-process worker (spawn), terminated when idle — idle API process ~52 MB; small IPC cost.
+Chose: B.  Reversible: yes (worker class is self-contained).
+
+===
+AI:
+
+[DECISION #3 | user-decided]
+Topic: 50-label cap vs 77/151-label benchmark entries (public API behaviour).
+Chose: allow > 50 labels ONLY when the request is a cache hit; misses with > 50 labels -> 422 (no model work).
+Request schema cap raised to 200 (CLINC150 = 151). No previously accepted request changes behaviour.
+
+===
+AI:
+
+[DECISION #4 | log-and-proceed]
+Topic: Cache key + storage.
+Chose: SHA-256 of {v, stripped message, sorted normalised labels}; exact message text (no case folding); SQLite
+  (stdlib, WAL) on the persistent volume; no TTL; live rows capped at 50k (oldest live evicted), seed rows never
+  evicted. Label sorting justified by measured order invariance (F§11).
+
+===
+AI:
+
+[DECISION #5 | user-decided]
+Topic: Demo frontend direction (Phase 1.0b, not built here).
+User rejected a separate "Real Banking77 sentence" chip next to "Banking" (duplicate entry point + jargon).
+Agreed direction: chips = the 7 benchmark domains (all 7), each fills the SAME message/labels boxes with a random
+  real test sentence (random only, no picker); default = Banking + random sentence; labels fed to the model = the
+  DESCRIPTION variant, displayed as name (normal size) + description (small); a "Your own labels" chip keeps the
+  custom-labels promise; results panel + animation get a polish pass. Licences OK (user). Go-live approval comes
+  from the user in this session.
+
+===
+AI:
+
+[INFO] the research session confirmed the dump config = served code at 04e6709 (PrismNLI-0.4B fp32 + bge-large + bge-base,
+  template "This message is about {label}.", cosine scale 20, per-member softmax T=1 -> geometric mean). Banking77
+  names+descriptions dump finishing; extension to the other 6 datasets and any push await the research session's owner.
+
+===
+AI:
+
+[BLOCKED #1 | must-ask]
+Question: Only banking77, clinc150 and snips have description files. For hwu64, massive, mtop, bitext the user's
+  "description variant" choice cannot be honoured without new descriptions.
+Options:
+  A) the research session authors generic one-line descriptions for those 4 (264 labels; same method as banking77 —
+     rephrasings of names, not derived from data), measures full-test accuracy, dumps. Consistent UI; new published
+     numbers; extra research time.
+  B) Use descriptions where they exist, names for the other 4 (those chips show names only).
+Impact: blocks the 1.0b label-display design and the research session's dump plan for those 4. 1.0a backend not blocked
+  (the importer handles either variant).
+
+===
+Human:
+
+[RESUME] BLOCKED #1 answer: A — the research session authors generic descriptions for hwu64/massive/mtop/bitext, measures
+full-test accuracy, dumps the descriptions variant (relayed to the research session 2026-10-04).
+
+===
+AI:
+
+[DECISION #6 | log-and-proceed]
+Topic: Independent spec review (role-isolated reviewer) returned REVISE — 0 Critical, 9 Major, 10 Minor.
+Accepted and fixed (all Major): queue-time-inclusive job timeout that could kill another request's job; misses able
+  to exhaust the request thread pool (hits stall, cheap DoS); permanent cache without a model-config fingerprint;
+  unbounded live storage in bytes; dump schema + published-number mapping unpinned; seeding concurrently with the
+  API turning answers into 500s; single-flight; F§5/F§13 citations; order invariance unmeasured for K>32 (now F§15).
+Minor accepted: surrogates, ASCII key, crash backoff, bounded label-vector memo, Docker data paths, 504 test.
+Accepted as-is (documented): brief two-child overlap during unload; reliance on ProcessPoolExecutor._processes;
+  model revisions not pinned by quorum (fingerprint covers ids/template/scale/combine/dtype only).
+
+===
+AI:
+
+[DECISION #7 | log-and-proceed]
+Topic: Cold start vs job timeout.
+Measured: spawned cold miss 36.7 s (F§14) and 81.7 s on a later run (host load ~5, page cache evicted).
+Risk: if the cold start counts against the 120 s job timeout, a slow load is killed and every retry starts cold
+  again -> the worker may never become warm.
+Chose: warm-up job right after spawn under a separate QUORUM_LOAD_TIMEOUT_SECONDS (300 s); job timeout = prediction
+  only; load over budget -> 504 + 30 s backoff. Tests added.
+
+===
+AI:
+
+[BLOCKED #2 | must-ask]
+Question: Should results computed for public visitors' own inputs be stored permanently in the cache?
+Context: the user asked for a permanent cache seeded with benchmark + demo examples. Persisting LIVE results too makes
+  repeated custom inputs instant, but keeps visitors' message + label text in the cache file indefinitely (capped at
+  20k rows / 16 KB each). Implemented as a switch QUORUM_CACHE_LIVE=persist|off.
+Options: A) persist (faster repeats; retention/privacy note needed on the demo page in 1.0b)  B) off (only seeded
+  rows are cached; visitors' inputs are never written to disk).
+My recommendation: B for a public demo — the demo's speed comes from the seeded rows; custom inputs are rare.
+Impact: blocks the deploy configuration (T3.1), not the code.
+
+===
+AI:
+
+[INFO for user] Idle window trade-off (QUORUM_IDLE_UNLOAD_SECONDS, default 900):
+  unloaded -> API process ~67 MB, but the first miss afterwards takes ~37-82 s (spawn + load); loaded -> ~2.4-3.9 GB
+  RAM, misses ~2-10 s. Seeded demo requests are instant either way.
+
+===
+Human:
+
+[RESUME] BLOCKED #2 answer: A — persist live results (permanent, capped: 20k rows, 16 KB each). Idle unload window:
+15 min (default). Consequence for 1.0b: the demo page must state that inputs are stored to speed up repeats.
+
+===
+Human:
+
+[RESUME] Go-live: deploy 1.0a now. Ownership: the public repo's main is managed by this session; the research
+session owns the research repo. -> push 1.0a to main; benchmark dumps from the research session arrive via a git
+branch and are reviewed + merged here.
+
+===
