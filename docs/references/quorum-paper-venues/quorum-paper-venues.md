@@ -74,7 +74,7 @@ You _can_ pursue several venues in parallel, but within hard rules (violating th
 | **隨時** / rolling | **Computational Linguistics / JAIR** | 各自平台 | 期刊,免費,無死線 |
 | **2026-10-12**(AoE)【已查證】 | **ARR 2026 Oct cycle** | ARR/OpenReview | → commit NAACL/COLING 2027 |
 | **2026-10-31**(AoE)【已查證】 | **NAACL 2027 Industry Track** | 直投 OpenReview | 不走 ARR |
-| **2026-11-01** 23:59 HST【已查證】 | **TACL**(之後每月 1 號) | OpenReview | 期刊,免費,雙盲 |
+| **2026-11-01** 23:59 HST【已查證】 | **TACL**(之後每月 1 號) | TACL 自有投稿系統(非 OpenReview) | 期刊,免費,雙盲 |
 | 2026-11-01 開放 → **2026-12-04**【已查證】 | **NAACL 2027 System Demonstrations** | 直投 OpenReview | 單盲;內容須與主論文區隔 |
 | **≈2026-12-15**(建議時程) | **EACL 2027 workshops**(清單未公布;ARR commit ≈12/22) | 各 workshop | 2027 第一批 workshop |
 | **2026-12-23**【已查證】 | ARR commitment → **NAACL 2027 / COLING 2027 主會議** | ARR | 須先在 10/12 cycle 內 |
@@ -171,7 +171,7 @@ NAACL 2027(「Coming soon!」)與 COLING 2027(「will be announced soon」)**註
 | # | Venue | 截止 / Model | 費用 / Fee | 格式 / Format | 審稿速度 | 契合 | 來源 |
 |---|---|---|---|---|---|---|---|
 | 1 | **TMLR** ⭐ | **滾動、無死線** | **免費**:「imposes no fees or payments to authors」【已查證】 | 無硬頁數上限;OpenReview;**雙盲**;不收會議論文擴充版 | 無單一官方總目標;各階段目標:AE 指派 1 週內、審稿 2 週(≤12 頁)/4 週(>12 頁)、AE 於討論開始後 5 週內提決定 → **加總約 2–3 個月**(此為推算) | **5/5** — 收錄只看兩條(證據充分 + 有人感興趣),**novelty 非必要**。⚠️ **Reproducibility Certification 多半不適用**:它頒給「primary purpose is reproduction of other published work」的論文,Quorum 主體是原創集成方法 | https://jmlr.org/tmlr/editorial-policies.html 、 https://jmlr.org/tmlr/acceptance-criteria.html |
-| 2 | **TACL** ⭐ | **每月 1 號 23:59 夏威夷時間**;下個 **2026-11-01**【已查證】 | **免費**:「imposes neither author processing charges nor submission charges」【已查證】 | **正文 10 頁**(refs 不計);2024-03 起 appendix 不計入,重現細節 ≤5 頁、補充結果 ≤3 頁;TACL 模板(A4);**雙盲**,禁止洩漏身分的自我引用 | ~6 週目標(歷年約 46–60 天,為社群數據) | **5/5** — correctness 導向 NLP 期刊;錄取後可選在 ACL/NAACL/EACL/EMNLP/AACL 口頭報告(非必要) | https://transacl.org/index.php/tacl/about/submissions 、 https://transacl.org/index.php/tacl/announcement/view/105 |
+| 2 | **TACL** ⭐ | **每月 1 號 23:59 夏威夷時間**;下個 **2026-11-01**【已查證】 | **免費**:「imposes neither author processing charges nor submission charges」【已查證】 | **正文 10 頁**(refs 不計);2024-03 起 appendix 不計入,重現細節 ≤5 頁、補充結果 ≤3 頁,且**「Appendices will not be reviewed」**;TACL 模板(A4);**雙盲**,禁止洩漏身分的自我引用;**不收補充材料,也不得放補充材料連結(「anonymized or not」)**,改以匿名文字說明程式/資料是否釋出;**投稿時即須填所有作者的 email、國家、單位**;經 TACL 自有系統投稿 | ~6 週目標(歷年約 46–60 天,為社群數據) | **5/5** — correctness 導向 NLP 期刊;錄取後可選在 ACL/NAACL/EACL/EMNLP/AACL 口頭報告(非必要) | https://transacl.org/index.php/tacl/about/submissions 、 https://transacl.org/index.php/tacl/announcement/view/105 |
 | 3 | **Computational Linguistics (CL)** | **滾動**(「accepted on a rolling basis」)【已查證】 | **免費**:「does not charge any submission, processing or publication fees」【已查證】 | Long ≤40pp / Short ≤20pp / Squib ≤8pp;**單盲** | 目標審稿:≤20 頁 3 週、≤40 頁 4 週、≤45 頁 5 週、更長 6 週(不保證);**實際平均首次決定 16.5 天(排除 desk reject 為 55 天)**;2025 IF 13.4【已查證】 | **4/5** — Short 軌明文「Well-analyzed negative results … are also suitable」 | https://submissions.cljournal.org/index.php/cljournal/about 、 https://submissions.cljournal.org/index.php/cljournal |
 | 4 | **JAIR** | 滾動 | **免費**(CC BY) | 無硬頁數;**須 LaTeX**(不符即退);單盲 | ~8–12 週 | 3/5 — 免費/可敬,但無 novelty-agnostic 專軌 | https://www.jair.org/index.php/jair/about/submissions |
 | 5 | **PeerJ Computer Science** | 滾動 | **貴:APC US$2,155**(未稅)【已查證】;先前提到的 $695 / $1,395 **皆為過時資訊**。另有終身會員方案(Basic $755 起,但**所有作者都須是會員**) | 無硬字數(>35 頁加收);單盲 | 首次決定 30–35 天;接受到出版 32 天;接受率 33%【已查證】 | 4/5 範圍/速度;**費用是主要障礙** | https://peerj.com/pricing/ 、 https://peerj.com/journals/computer-science/ |
@@ -218,6 +218,31 @@ NAACL 2027(「Coming soon!」)與 COLING 2027(「will be announced soon」)**註
 | + | 查證時發現的前版錯誤 | ① **ReScience C 不收自己研究的重現 → 改為不適用**;② TMLR Reproducibility Cert. 多半不適用;③ Demo 與主論文並行**須內容區隔**(NAACL Demo 禁大幅重疊、TACL 禁任何材料同時審查);④ arXiv 2026-01-21 endorsement 新規;⑤ PeerJ 舊價格過時 | ✅ 已修正 |
 
 > **官方未公布的項目無法再查證**,只能等主辦方公布:NAACL/COLING 2027 註冊費、COLING 2027 camera-ready、EMNLP 2027 對應 cycle、ARR 2027 日期、2027 各 workshop 清單、Cambridge NLP 審稿時程。投稿前請再看一次官方頁。
+
+---
+
+## 認可度排序(錄取帶來的認可程度)· Prestige tiers — how much recognition an acceptance brings
+
+上面各表的「契合」欄是**對這篇論文的適配度**;這一節回答另一個問題:**被收錄的認可度**。只用可查證的客觀指標(2026-10-04 查證)。
+The "fit" columns above rate fit to this paper; this section rates recognition, from objective metrics only.
+
+| Tier | Venue | 證據 / Evidence |
+|---|---|---|
+| **1** | **ACL、EMNLP** 主會議 | CORE **A***(ICORE2026 與 CORE2023 相同);Google Scholar Metrics 2025 計算語言學 **#1 / #2**(h5 236 / 218,h5-median 387 / 323);main 錄取率 ACL 2026 18.9%、ACL 2025 20.3%、EMNLP 2025 22.16% |
+| **1** | **TACL** | Scholar 計算語言學 **#4**(h5 96,**h5-median 204 ≈ NAACL 202**);錄取率 2024 ≈12.6%(下限,決定未全出);官方:「As is customary, TACL and CL papers are presented at the conference」(ACL 2025 / 2026);SJR 2023 **Q1** |
+| 1.5 | NAACL、EACL | CORE A;Scholar #3 / #6(h5 126 / 77);main 錄取率 ≈22% / 20.2% |
+| 1.5 | Computational Linguistics(期刊) | 2025 JIF **13.4**(Wikipedia 引 Clarivate JCR);Scholar #10(h5 41,h5-median 109——期刊量小,h5 偏低);同樣在 ACL 會議報告 |
+| 2 | Findings of ACL / EMNLP | 官方定義為「not accepted at the Main Conference」,另成一冊;額外錄取 16–18%;無獨立 h5、未被 CORE 排名 |
+| 2 | COLING | CORE **B**;Scholar #5(h5 81);錄取率 30.1%(2025) |
+| 2 | AACL-IJCNLP | IJCNLP CORE B、AACL 未列;Scholar(IJCNLP 項)h5 41;main 19% |
+| 2 | JAIR | h5 62;SJR Q1、JIF ≈4(經 Wikipedia,次級來源) |
+| 2(證據弱) | TMLR | 查無 h5 / SJR / JIF;錄取率 ≈46–72%(非官方);以「technical correctness over subjective significance」審稿;僅 J2C/Featured/Outstanding 認證者可在 NeurIPS/ICLR/ICML 報告(不入 proceedings) |
+| 3 | Natural Language Processing(Cambridge,前 NLE) | 2025 JIF **1.6**,CS-AI 163/210(**Q4**);Scholar #18(h5 30) |
+| 3(證據弱) | PeerJ Computer Science | 查無可查證的 h5 / JIF / SJR |
+| 另冊 | Industry / Demo tracks | ACL proceedings 中各自獨立成冊;EMNLP Demos 另列 Scholar h5 35 |
+
+> **對 Quorum 的結論:** 認可度 × 契合 × 可行性綜合,**TACL 是最佳主投稿目標**(Tier 1、滾動截止不壓品質、10 頁 + appendix);失利再走 ARR → ACL / EMNLP 2027。TMLR 契合度最高但認可度證據弱,列為備案。
+> **來源 / Sources:** Google Scholar Metrics 2025(scholar.google.com 擋直連,改用 Wayback 快照:[計算語言學](http://web.archive.org/web/20260826104312/https://scholar.google.com/citations?view_op=top_venues&hl=en&vq=eng_computationallinguistics)、[AI](http://web.archive.org/web/20260527230735/https://scholar.google.com/citations?view_op=top_venues&hl=en&vq=eng_artificialintelligence));[CORE portal](https://portal.core.edu.au/conf-ranks/);錄取率取自 ACL Anthology 各屆 front matter([ACL 2026](https://aclanthology.org/2026.acl-long.0.pdf)、[ACL 2025](https://aclanthology.org/2025.acl-long.0.pdf)、[EMNLP 2025](https://aclanthology.org/2025.emnlp-main.0.pdf)、[EACL 2026](https://aclanthology.org/2026.eacl-long.0.pdf)、[COLING 2025](https://aclanthology.org/2025.coling-main.0.pdf));TACL 錄取率見 [ACL admin wiki 2025Q1](https://www.aclweb.org/adminwiki/index.php/2025Q1_Reports:_TACL_Journal);Cambridge NLP JIF 見其[期刊首頁](https://www.cambridge.org/core/journals/natural-language-processing);TMLR J2C 見 [TMLR news](https://jmlr.org/tmlr/news/)。
 
 ---
 

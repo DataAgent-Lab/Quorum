@@ -82,6 +82,15 @@
   h1 + h2{border-top:none; margin-top:.2em; padding-top:0; color:var(--muted); font-size:1.05rem}
   hr{border:none; border-top:1px solid var(--line); margin:2em 0}
   td a, li a, p a{word-break:break-all}
+
+  blockquote{color:var(--fg); border-left:3px solid var(--accent); background:var(--card);
+             margin:1.2em 0; padding:10px 16px; border-radius:0 8px 8px 0}
+  blockquote p{margin:.4em 0}
+  .tw{overflow-x:auto; margin:1em 0}
+  .tw table{display:table; margin:0}
+  h1 + h2{border-top:none; margin-top:.2em; padding-top:0; color:var(--muted); font-size:1.05rem}
+  hr{border:none; border-top:1px solid var(--line); margin:2em 0}
+  td a, li a, p a{word-break:break-all}
 </style>
 </head>
 <body>
@@ -218,7 +227,7 @@ Re-verified on 2026-10-04: every item from the former "to-verify" list was check
 <tr>
 <td><strong>2026-11-01</strong> 23:59 HST【已查證】</td>
 <td><strong>TACL</strong>(之後每月 1 號)</td>
-<td>OpenReview</td>
+<td>TACL 自有投稿系統(非 OpenReview)</td>
 <td>期刊,免費,雙盲</td>
 </tr>
 <tr>
@@ -634,7 +643,7 @@ All ACL-family main tracks go through <strong>ARR</strong>. <strong>No submissio
 <td><strong>TACL</strong> ⭐</td>
 <td><strong>每月 1 號 23:59 夏威夷時間</strong>;下個 <strong>2026-11-01</strong>【已查證】</td>
 <td><strong>免費</strong>:「imposes neither author processing charges nor submission charges」【已查證】</td>
-<td><strong>正文 10 頁</strong>(refs 不計);2024-03 起 appendix 不計入,重現細節 ≤5 頁、補充結果 ≤3 頁;TACL 模板(A4);<strong>雙盲</strong>,禁止洩漏身分的自我引用</td>
+<td><strong>正文 10 頁</strong>(refs 不計);2024-03 起 appendix 不計入,重現細節 ≤5 頁、補充結果 ≤3 頁,且<strong>「Appendices will not be reviewed」</strong>;TACL 模板(A4);<strong>雙盲</strong>,禁止洩漏身分的自我引用;<strong>不收補充材料,也不得放補充材料連結(「anonymized or not」)</strong>,改以匿名文字說明程式/資料是否釋出;<strong>投稿時即須填所有作者的 email、國家、單位</strong>;經 TACL 自有系統投稿</td>
 <td>~6 週目標(歷年約 46–60 天,為社群數據)</td>
 <td><strong>5/5</strong> — correctness 導向 NLP 期刊;錄取後可選在 ACL/NAACL/EACL/EMNLP/AACL 口頭報告(非必要)</td>
 <td><a href="https://transacl.org/index.php/tacl/about/submissions">https://transacl.org/index.php/tacl/about/submissions</a> 、 <a href="https://transacl.org/index.php/tacl/announcement/view/105">https://transacl.org/index.php/tacl/announcement/view/105</a></td>
@@ -803,6 +812,85 @@ All ACL-family main tracks go through <strong>ARR</strong>. <strong>No submissio
 </table></div>
 <blockquote>
 <p><strong>官方未公布的項目無法再查證</strong>,只能等主辦方公布:NAACL/COLING 2027 註冊費、COLING 2027 camera-ready、EMNLP 2027 對應 cycle、ARR 2027 日期、2027 各 workshop 清單、Cambridge NLP 審稿時程。投稿前請再看一次官方頁。</p>
+</blockquote>
+<hr />
+<h2>認可度排序(錄取帶來的認可程度)· Prestige tiers — how much recognition an acceptance brings</h2>
+<p>上面各表的「契合」欄是<strong>對這篇論文的適配度</strong>;這一節回答另一個問題:<strong>被收錄的認可度</strong>。只用可查證的客觀指標(2026-10-04 查證)。
+The "fit" columns above rate fit to this paper; this section rates recognition, from objective metrics only.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Venue</th>
+<th>證據 / Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td><strong>ACL、EMNLP</strong> 主會議</td>
+<td>CORE <strong>A</strong><em>(ICORE2026 與 CORE2023 相同);Google Scholar Metrics 2025 計算語言學 </em><em>#1 / #2</em>*(h5 236 / 218,h5-median 387 / 323);main 錄取率 ACL 2026 18.9%、ACL 2025 20.3%、EMNLP 2025 22.16%</td>
+</tr>
+<tr>
+<td><strong>1</strong></td>
+<td><strong>TACL</strong></td>
+<td>Scholar 計算語言學 <strong>#4</strong>(h5 96,<strong>h5-median 204 ≈ NAACL 202</strong>);錄取率 2024 ≈12.6%(下限,決定未全出);官方:「As is customary, TACL and CL papers are presented at the conference」(ACL 2025 / 2026);SJR 2023 <strong>Q1</strong></td>
+</tr>
+<tr>
+<td>1.5</td>
+<td>NAACL、EACL</td>
+<td>CORE A;Scholar #3 / #6(h5 126 / 77);main 錄取率 ≈22% / 20.2%</td>
+</tr>
+<tr>
+<td>1.5</td>
+<td>Computational Linguistics(期刊)</td>
+<td>2025 JIF <strong>13.4</strong>(Wikipedia 引 Clarivate JCR);Scholar #10(h5 41,h5-median 109——期刊量小,h5 偏低);同樣在 ACL 會議報告</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Findings of ACL / EMNLP</td>
+<td>官方定義為「not accepted at the Main Conference」,另成一冊;額外錄取 16–18%;無獨立 h5、未被 CORE 排名</td>
+</tr>
+<tr>
+<td>2</td>
+<td>COLING</td>
+<td>CORE <strong>B</strong>;Scholar #5(h5 81);錄取率 30.1%(2025)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>AACL-IJCNLP</td>
+<td>IJCNLP CORE B、AACL 未列;Scholar(IJCNLP 項)h5 41;main 19%</td>
+</tr>
+<tr>
+<td>2</td>
+<td>JAIR</td>
+<td>h5 62;SJR Q1、JIF ≈4(經 Wikipedia,次級來源)</td>
+</tr>
+<tr>
+<td>2(證據弱)</td>
+<td>TMLR</td>
+<td>查無 h5 / SJR / JIF;錄取率 ≈46–72%(非官方);以「technical correctness over subjective significance」審稿;僅 J2C/Featured/Outstanding 認證者可在 NeurIPS/ICLR/ICML 報告(不入 proceedings)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Natural Language Processing(Cambridge,前 NLE)</td>
+<td>2025 JIF <strong>1.6</strong>,CS-AI 163/210(<strong>Q4</strong>);Scholar #18(h5 30)</td>
+</tr>
+<tr>
+<td>3(證據弱)</td>
+<td>PeerJ Computer Science</td>
+<td>查無可查證的 h5 / JIF / SJR</td>
+</tr>
+<tr>
+<td>另冊</td>
+<td>Industry / Demo tracks</td>
+<td>ACL proceedings 中各自獨立成冊;EMNLP Demos 另列 Scholar h5 35</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>對 Quorum 的結論:</strong> 認可度 × 契合 × 可行性綜合,<strong>TACL 是最佳主投稿目標</strong>(Tier 1、滾動截止不壓品質、10 頁 + appendix);失利再走 ARR → ACL / EMNLP 2027。TMLR 契合度最高但認可度證據弱,列為備案。
+<strong>來源 / Sources:</strong> Google Scholar Metrics 2025(scholar.google.com 擋直連,改用 Wayback 快照:<a href="http://web.archive.org/web/20260826104312/&lt;https://scholar.google.com/citations?view_op=top_venues&amp;hl=en&amp;vq=eng_computationallinguistics&gt;">計算語言學</a>、<a href="http://web.archive.org/web/20260527230735/&lt;https://scholar.google.com/citations?view_op=top_venues&amp;hl=en&amp;vq=eng_artificialintelligence&gt;">AI</a>);<a href="https://portal.core.edu.au/conf-ranks/">CORE portal</a>;錄取率取自 ACL Anthology 各屆 front matter(<a href="https://aclanthology.org/2026.acl-long.0.pdf">ACL 2026</a>、<a href="https://aclanthology.org/2025.acl-long.0.pdf">ACL 2025</a>、<a href="https://aclanthology.org/2025.emnlp-main.0.pdf">EMNLP 2025</a>、<a href="https://aclanthology.org/2026.eacl-long.0.pdf">EACL 2026</a>、<a href="https://aclanthology.org/2025.coling-main.0.pdf">COLING 2025</a>);TACL 錄取率見 <a href="https://www.aclweb.org/adminwiki/index.php/2025Q1_Reports:_TACL_Journal">ACL admin wiki 2025Q1</a>;Cambridge NLP JIF 見其<a href="https://www.cambridge.org/core/journals/natural-language-processing">期刊首頁</a>;TMLR J2C 見 <a href="https://jmlr.org/tmlr/news/">TMLR news</a>。</p>
 </blockquote>
 <hr />
 <h2>一頁總結:值得投的所有管道 · One-page shortlist of everything worth submitting to</h2>
