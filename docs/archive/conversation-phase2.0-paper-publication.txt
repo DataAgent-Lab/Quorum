@@ -414,3 +414,17 @@ AI:
   - Not pushed: main is ahead of origin with the merge (push = user's call).
 
 ===
+AI:
+
+[DECISION #14 | log-and-proceed — clean calibration confirmation]
+  - R12 (a416f0f) verified (train_idx == pre-registered ids 3ee8fee; geo-mean identity; pred == argmax) and merged
+    (0834412).
+  - Analysis declared and committed BEFORE its first run (b93b37d): one global temperature on the pooled 14,000
+    train-side rows; applied once to all 14 test conditions; success = ECE-10 down on all 14.
+  - Result: T* = 0.508 (names-only 0.505, descriptions-only 0.511); ECE-10 down on 14/14 with non-overlapping
+    bootstrap CIs; Brier and log loss down 14/14 → criterion MET. Claim Z4b upgraded from exploratory to confirmatory.
+  - Paper consequence: the zero-shot ensemble is not calibrated out of the box (inherits the bi-encoders'
+    flatness), but a single task-agnostic temperature learned once, from no test data and no per-task labels,
+    makes it well calibrated — consistent with the "no per-task calibration" framing.
+
+===
