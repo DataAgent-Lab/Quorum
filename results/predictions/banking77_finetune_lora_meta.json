@@ -1,0 +1,101 @@
+{
+ "description": "Qwen3-4B + LoRA fine-tuned on Banking77 train minus the clean selection split; marker-scoring prompt, class names, no in-context examples",
+ "hyper_parameters": {
+  "lora_r": 16,
+  "lora_alpha": 32,
+  "lora_dropout": 0.05,
+  "target_modules": [
+   "q_proj",
+   "k_proj",
+   "v_proj",
+   "o_proj",
+   "gate_proj",
+   "up_proj",
+   "down_proj"
+  ],
+  "lr": 0.0002,
+  "warmup_frac": 0.03,
+  "epochs": 2,
+  "micro_batch": 4,
+  "grad_accum": 2,
+  "seed": 0,
+  "eval_points_per_epoch": 2,
+  "eval_order_seed": 1000,
+  "max_tokens": 4096,
+  "precision": "bf16"
+ },
+ "train_rows": 9079,
+ "selection_rows_for_early_stopping": 924,
+ "steps_per_epoch": 1135,
+ "total_steps": 2270,
+ "early_stopping_curve": [
+  {
+   "step": 567,
+   "epoch": 0.5,
+   "S_accuracy": 0.8658,
+   "S_nll": 0.5133,
+   "elapsed_s": 4279
+  },
+  {
+   "step": 1134,
+   "epoch": 1.0,
+   "S_accuracy": 0.8799,
+   "S_nll": 0.4361,
+   "elapsed_s": 8570
+  },
+  {
+   "step": 1701,
+   "epoch": 1.5,
+   "S_accuracy": 0.9037,
+   "S_nll": 0.3445,
+   "elapsed_s": 12855
+  },
+  {
+   "step": 2268,
+   "epoch": 2.0,
+   "S_accuracy": 0.9188,
+   "S_nll": 0.3056,
+   "elapsed_s": 17146
+  },
+  {
+   "step": 2270,
+   "epoch": 2.0,
+   "S_accuracy": 0.9199,
+   "S_nll": 0.3057,
+   "elapsed_s": 17377
+  }
+ ],
+ "chosen_checkpoint": {
+  "step": 2270,
+  "epoch": 2.0,
+  "S_accuracy": 0.9199,
+  "S_nll": 0.3057,
+  "elapsed_s": 17377
+ },
+ "result": {
+  "accuracy": 0.9341,
+  "correct": 2877,
+  "mcnemar_vs_reproduction": {
+   "b": 107,
+   "c": 76,
+   "p_two_sided_exact": 0.02630666387461037
+  }
+ },
+ "base": "Qwen/Qwen3-4B",
+ "base_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+ "dataset": "legacy-datasets/banking77",
+ "dataset_revision": "f54121560de48f2852f90be299010d1d6dc612ec",
+ "gpu_hours": {
+  "train": 4.83,
+  "test_scoring": 0.202
+ },
+ "code_sha256": "997bbdff65845baa4107e285f5556486af69802a02bff4e4851c280e96e7fd92",
+ "git_head": "44c8413ac7ac15b8b5bbaeeb337fe7f04112de58",
+ "versions": {
+  "torch": "2.9.0+cu129",
+  "transformers": "5.17.0",
+  "peft": "0.21.0"
+ },
+ "device": "NVIDIA GB10",
+ "written_at": "2026-10-05T21:52:46Z"
+}
