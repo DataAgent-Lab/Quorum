@@ -538,3 +538,15 @@ AI:
   - BLOCKED #2 (adapter) → keep it public; explanation given to the user.
 
 ===
+AI:
+
+[NOTE] History rewrite announced by the research session (2026-10-05): it reports the user approved, in that
+session, rewriting all branches of the public repo to replace the employer email with the personal address
+(git filter-repo mailmap; force-push; provenance/commit_hash_map.md old→new so evidence files citing old hashes stay
+resolvable; evidence files not edited). This session: confirmed no pushes until the rewrite is done; 7 local-only
+commits (personal email, none with the employer address) are NOT pushed on a peer's request — plan: replay the
+identical mailmap locally (deterministic → identical new SHAs for shared history), verify ancestry and zero
+employer-address occurrences, then push only with this session's user OK. Hashes cited in this phase's docs before
+the rewrite are OLD hashes — resolve them via provenance/commit_hash_map.md.
+
+===
