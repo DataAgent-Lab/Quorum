@@ -366,3 +366,17 @@ upper reference), R11 (sub-1B cross-encoder reranker zero-shot baseline), R12 (p
 a clean global-temperature calibration confirmation). Priority after R3/R5/R6/R8/R9: R3 → R12 → R11 → R10.
 
 ===
+AI:
+
+[NOTE] R10–R12 accepted by the research session (2026-10-05).
+  - R12 pre-registered at 3ee8fee (14:13:40+08:00): results/r12/sample_ids.json, 1,000 train ids per dataset,
+    np.random.default_rng(20261008 + k) without replacement, sorted; verified here (sorted/unique/in range); script
+    7c0bed1 refuses without the ids file and asserts train sizes. Wording nit sent: data.load() materialises the test
+    split, so "no test data used or scored" (not "not loaded").
+  - R11 approved: BAAI/bge-reranker-v2-m3 (pinned at run time) as a zero-shot classifier, 7 datasets × 2 label texts,
+    + optional 4-member geometric mean from R3 member_probs.
+  - R10 approved: LoRA on Qwen3-4B @ 1cfa9a7, marker-scoring prompt with class names, trained on Banking77 train
+    minus the clean selection split (9,079), S for early stopping only, test once; early-stopping curve in meta.
+  - GPU queue: R3 → R12 → R5 → R6 → R9 → R8 → R11 → R10.
+
+===
