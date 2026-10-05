@@ -134,5 +134,13 @@
   "c_ours_wrong_theirs_right": 116,
   "p_two_sided_exact": 0.9474462046254563,
   "description": "clean config; the reproduction's retrieval rule over P (post hoc)"
+ },
+ "r6c_stable_tiebreak": {
+  "accuracy": 0.9357,
+  "correct": 2882,
+  "b_ours_right_theirs_wrong": 118,
+  "c_ours_wrong_theirs_right": 82,
+  "p_two_sided_exact": 0.013130355940531583,
+  "description": "clean config with platform-independent BM25 tie-breaking (post hoc sensitivity)"
  }
 }
