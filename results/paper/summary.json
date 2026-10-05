@@ -46,5 +46,37 @@
   "c_ours_wrong_theirs_right": 599,
   "p_two_sided_exact": 3.5768810266733614e-99,
   "description": "base model (LoRA disabled) reader alone, best-config prompt"
+ },
+ "r6_default_parityret": {
+  "accuracy": 0.9208,
+  "correct": 2836,
+  "b_ours_right_theirs_wrong": 93,
+  "c_ours_wrong_theirs_right": 103,
+  "p_two_sided_exact": 0.5204221958817009,
+  "description": "default config with the reproduction's retrieval rule (word+bigram BM25, <=4 per class, 24) over all 10,003 train rows; option text: names"
+ },
+ "r6_best_parityret": {
+  "accuracy": 0.9234,
+  "correct": 2844,
+  "b_ours_right_theirs_wrong": 109,
+  "c_ours_wrong_theirs_right": 111,
+  "p_two_sided_exact": 0.9462677277802586,
+  "description": "best config with the reproduction's retrieval rule (word+bigram BM25, <=4 per class, 24) over all 10,003 train rows; option text: descriptions"
+ },
+ "r6_default_parityret_reprodefs": {
+  "accuracy": 0.9172,
+  "correct": 2825,
+  "b_ours_right_theirs_wrong": 87,
+  "c_ours_wrong_theirs_right": 108,
+  "p_two_sided_exact": 0.15189443947043016,
+  "description": "default config with the reproduction's retrieval rule (word+bigram BM25, <=4 per class, 24) over all 10,003 train rows; option text: reproduction definitions"
+ },
+ "r6_best_parityret_reprodefs": {
+  "accuracy": 0.9221,
+  "correct": 2840,
+  "b_ours_right_theirs_wrong": 113,
+  "c_ours_wrong_theirs_right": 119,
+  "p_two_sided_exact": 0.7427905821012403,
+  "description": "best config with the reproduction's retrieval rule (word+bigram BM25, <=4 per class, 24) over all 10,003 train rows; option text: reproduction definitions"
  }
 }
