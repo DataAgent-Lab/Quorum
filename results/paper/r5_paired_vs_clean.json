@@ -1,0 +1,42 @@
+{
+ "note": "Paired exact two-sided McNemar of the clean pre-registered run (banking77_24shot_clean) against each R5 ablation on the same 3,080 test items. Post hoc, secondary, NOT corrected for multiple comparisons; not part of the pre-registered primary test.",
+ "clean_accuracy": 0.9357,
+ "comparisons": {
+  "r5_reader_alone": {
+   "accuracy": 0.9156,
+   "b_clean_right_other_wrong": 113,
+   "c_clean_wrong_other_right": 51,
+   "p_two_sided_exact": 1.4455361416996012e-06
+  },
+  "r5_knn_alone": {
+   "accuracy": 0.9302,
+   "b_clean_right_other_wrong": 29,
+   "c_clean_wrong_other_right": 12,
+   "p_two_sided_exact": 0.011507789735333063
+  },
+  "r5_bm25vote_majority": {
+   "accuracy": 0.8078,
+   "b_clean_right_other_wrong": 442,
+   "c_clean_wrong_other_right": 48,
+   "p_two_sided_exact": 7.043088518662414e-81
+  },
+  "r5_bm25vote_weighted": {
+   "accuracy": 0.8195,
+   "b_clean_right_other_wrong": 405,
+   "c_clean_wrong_other_right": 47,
+   "p_two_sided_exact": 3.902482588088531e-72
+  },
+  "r5_base_nolora": {
+   "accuracy": 0.9315,
+   "b_clean_right_other_wrong": 26,
+   "c_clean_wrong_other_right": 13,
+   "p_two_sided_exact": 0.05325191409792751
+  },
+  "r5_base_nolora_reader_alone": {
+   "accuracy": 0.7555,
+   "b_clean_right_other_wrong": 600,
+   "c_clean_wrong_other_right": 45,
+   "p_two_sided_exact": 6.923363334796563e-125
+  }
+ }
+}
