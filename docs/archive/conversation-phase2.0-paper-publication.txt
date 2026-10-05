@@ -550,3 +550,14 @@ employer-address occurrences, then push only with this session's user OK. Hashes
 the rewrite are OLD hashes — resolve them via provenance/commit_hash_map.md.
 
 ===
+AI:
+
+[NOTE] History rewrite replayed and verified (2026-10-05). In a scratch clone, git-filter-repo a40bce548d2c (same version
+as the research session) with the one-line mailmap reproduced the research session's mapping exactly: old origin/main
+e5b27c6→8679044 and 8455e7e→0c8602f, d513aa9→fcfc351, 09217ba→66f5768, 3ee8fee→ffc298e, 04e6709→03a520b,
+44c8413→b457b51. Rewritten local main 4a420ec descends from the new origin/main with an identical tree; this
+working copy was switched to it, reflog expired, gc'd: 0 objects contain the old employer address (control: personal address found
+183×). Scratch clone deleted. Merged provenance/commit_hash_map.md; claims ledger + spec point to it. Hashes earlier
+in THIS log are pre-rewrite and are left as written. Local commits remain unpushed pending the user's OK.
+
+===

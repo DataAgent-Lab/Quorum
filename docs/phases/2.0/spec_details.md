@@ -7,6 +7,8 @@
 > [`docs/references/quorum-paper-venues/quorum-paper-venues.md`](../../references/quorum-paper-venues/quorum-paper-venues.md))
 > **Conversation**: `docs/archive/conversation-phase2.0-paper-publication.txt`
 
+> **Commit hashes:** the public history was rewritten on 2026-10-05 (author identity only; trees, dates and order unchanged). Hashes cited in this phase's documents before that date are pre-rewrite — resolve them with [`provenance/commit_hash_map.md`](../../../provenance/commit_hash_map.md) (e.g. protocol 8455e7e→0c8602f, selection d513aa9→fcfc351, single test run 09217ba→66f5768). The paper cites post-rewrite hashes.
+
 ## Goal
 
 Produce a **formal, venue-compliant paper** about Quorum, ready for the user to submit to **TACL**: an anonymised
