@@ -473,3 +473,15 @@ accuracy comparison is system-level and the gain is retrieval-driven.
 Impact: blocks nothing now; strengthens or bounds C3.
 
 ===
+AI:
+
+[DECISION #17 | log-and-proceed — retrieval tie-breaking is platform-dependent]
+  - Research session reported a PYTHONHASHSEED dependence in BM25.top (order of ≤2 items). Independently checked on
+    x86_64 / numpy 2.4.6 against the clean dump (produced on GB10 / aarch64): 427 set and ~1,760 order differences,
+    all pure ties (verified score-by-score); hash seed changes ±1 only. Root cause: unstable np.argsort tie order is
+    platform-dependent. Ledger F10.
+  - Requested R6c: the clean configuration with deterministic tie-breaking (stable sort, pool-index tie-break, sorted
+    terms), post hoc, to measure the headline's sensitivity. Library root fix deferred until the evidence is frozen
+    (the protocol code path must stay as run). T2.16 added.
+
+===
