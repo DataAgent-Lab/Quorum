@@ -443,3 +443,33 @@ AI:
     the research session's own framing note.)
 
 ===
+AI:
+
+[DECISION #16 | log-and-proceed — R6 parity verified; paired calibration vs Jev]
+  - R6 (c9b7fbf) merged (fdf3535) and recomputed: under the reproduction's retrieval rule all four configs tie Jev
+    (p 0.15–0.95); clean vs best-parity p=0.00048 → the accuracy gain is due to the retrieval rule. Retrieval facts
+    verified from retrieved_idx (≤4/class; 12.1 vs 6.8 classes; gold-class recall 98.4% vs 98.7%).
+  - Approved R6b (post hoc): cap-only retrieval ablation (+ converse) to separate cap vs tokenisation.
+  - Paired calibration vs Jev (declared c447934, then run once): Jev's per-item probabilities from the
+    reproduction's runs/test-v1 (fetched at run time, scratchpad only); control reproduces Jev's reported metrics
+    exactly. Clean run better on log loss, Brier and ECE (CIs exclude 0); under parity retrieval log loss still
+    better, Brier/ECE n.s. Disclosed deviation: the floor sensitivity favours Jev only for log loss (my declaration
+    was too broad); floor rows for Brier/ECE are not used as evidence.
+  - Framing (ledger F8/F9, spec C3): accuracy win = retrieval rule; calibration (log-loss) win = model-level
+    (holds at equal retrieval).
+
+===
+AI:
+
+[BLOCKED #6 | must-ask]
+Question: Run Jev itself with OUR retrieval rule (the clean run's 24 retrieved examples per query)?
+Context: F8 shows our accuracy gain comes from the retrieval rule. The obvious reviewer question is whether Jev would
+gain equally from that rule; only running Jev answers it (model-level accuracy comparison at equal retrieval).
+Cost/route: the reproduction reports ~US$0.44 for the full test (≈$0.8 incl. development); needs a TypeSafe API key,
+sends public Banking77 data to a third-party API (terms of service apply); the served model version may differ from
+jev-1.13.0 (record it). Outward-facing → user decision.
+Options: A) run it (recommended — cheap, decisive, either outcome is publishable); B) don't; the paper states the
+accuracy comparison is system-level and the gain is retrieval-driven.
+Impact: blocks nothing now; strengthens or bounds C3.
+
+===
