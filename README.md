@@ -20,7 +20,7 @@ calibrated-decision model. On the standard **Banking77** intent benchmark (77 cl
    scores **0.774** when each class is given a one-line plain-language *description* (generic — a rephrasing of
    the label name that anyone can write; nothing is taken from the dataset), versus a reproduction of Jev at
    **~0.801**. With bare class names and *zero* authoring it still scores **0.756**. Both are **no training, no
-   calibration**, on CPU in ~120 ms. *(We do not claim to beat Jev zero-shot — Jev is ahead here, and Jev's own
+   calibration**, and run on a CPU (≈120 ms/item on a GPU; ~1.5–2 s for a handful of labels on a CPU). *(We do not claim to beat Jev zero-shot — Jev is ahead here, and Jev's own
    input spec is undisclosed; the 24-shot result below is where the open stack overtakes it.)*
 2. **24-shot — *beats* the reproduced Jev, at Jev's own protocol.** Given the same 24 retrieved examples per
    query and **no weight update**, an open ensemble (a 4B in-context reader + a nearest-neighbour over the same
