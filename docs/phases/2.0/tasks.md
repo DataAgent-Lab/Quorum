@@ -54,7 +54,7 @@
 - [x] T2.12 Combiner ablation (done 2026-10-05 → claims Z6/Z7) (CPU, needs R3 member probs): geometric mean vs true product of experts vs arithmetic
       mean vs majority vote, 7 datasets × 2 label texts; per-member entropy / effective weight. (Note: true product
       and geometric mean share the argmax — they differ only in sharpness, i.e. calibration.)
-- [ ] T2.13 Baselines a reviewer will ask for (research session R10/R11): a sub-1B cross-encoder reranker as a
+- [~] T2.13 Baselines a reviewer will ask for (R11 reranker done → ledger B1; R10 fine-tune upper reference running) (research session R10/R11): a sub-1B cross-encoder reranker as a
       zero-shot classifier; BTZSC intent subsets if comparable; Qwen3-4B fine-tuned on Banking77 train as an upper
       reference for the 24-shot result. (bge-large + descriptions alone = Hu et al. 2024-style baseline — already in
       the member columns.)

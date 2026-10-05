@@ -503,3 +503,10 @@ script, rerun: 12 / 10 changed, paired p = 1.0, matching exactly. Ledger F11, E1
 still to measure, T2.10).
 
 ===
+AI:
+
+[NOTE] R11 (e2c39d1) merged (0a682b9) and verified: 4-member ensemble rebuilt from R3 member_probs + reranker
+probs (0 argmax flips). With Holm over 14: adding the reranker is worse on 3, better on 2 (Bitext), n.s. on 9; the
+reranker alone is below our best single member on 12/14. Ledger B1. R10 running, then R6b, R6c.
+
+===
