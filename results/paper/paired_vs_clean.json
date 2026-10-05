@@ -62,5 +62,52 @@
    "c_clean_wrong_other_right": 42,
    "p_two_sided_exact": 0.0002299776454741523
   }
+ },
+ "r6b_factorial_paired": {
+  "note": "post hoc, uncorrected exact McNemar between R6b cells (and R6 for the pool contrast)",
+  "pairs": {
+   "clean vs r6b_cap4_unigram_P": {
+    "label": "cap effect (unigram)",
+    "b_first_only": 32,
+    "c_second_only": 9,
+    "p_two_sided_exact": 0.000430857042374555
+   },
+   "clean vs r6b_nocap_bigram_P": {
+    "label": "bigram effect (no cap)",
+    "b_first_only": 51,
+    "c_second_only": 28,
+    "p_two_sided_exact": 0.012812402175831366
+   },
+   "clean vs r6b_cap4_bigram_P": {
+    "label": "both",
+    "b_first_only": 68,
+    "c_second_only": 30,
+    "p_two_sided_exact": 0.00015615831700632916
+   },
+   "r6b_cap4_unigram_P vs r6b_cap4_bigram_P": {
+    "label": "bigram effect (with cap)",
+    "b_first_only": 55,
+    "c_second_only": 40,
+    "p_two_sided_exact": 0.1505180638902296
+   },
+   "r6b_nocap_bigram_P vs r6b_cap4_bigram_P": {
+    "label": "cap effect (bigram)",
+    "b_first_only": 31,
+    "c_second_only": 16,
+    "p_two_sided_exact": 0.03998605682605216
+   },
+   "r6b_cap4_unigram_P vs r6b_nocap_bigram_P": {
+    "label": "cap-only vs bigram-only",
+    "b_first_only": 47,
+    "c_second_only": 47,
+    "p_two_sided_exact": 1.0
+   },
+   "r6b_cap4_bigram_P vs r6_best_parityret": {
+    "label": "pool effect (P vs all rows)",
+    "b_first_only": 19,
+    "c_second_only": 19,
+    "p_two_sided_exact": 1.0
+   }
+  }
  }
 }
