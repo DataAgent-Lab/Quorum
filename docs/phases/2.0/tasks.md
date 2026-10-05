@@ -28,9 +28,9 @@
 - [x] T1.1 `claims-ledger.md`: claim → macro name → dump/URL@commit → command → VERIFIED / GAP / DROPPED.
 - [x] T1.2 `paper/scripts/zero_shot_tables.py` (reuses `quorum.metrics`): accuracies, member accuracies from
       `member_picks`, exact McNemar ensemble-vs-best-member and names-vs-descriptions, **unrounded p** → macros.
-- [ ] T1.3 G2: trace the zero-shot Jev 0.801 or DROP.
+- [x] T1.3 G2: zero-shot Jev 0.801 → DROPPED (sole source a blog with no n/protocol; ledger Z5).
 - [ ] T1.4 G7 split audit: our splits (CLINC plus/OOS, Bitext 20% stratified, SNIPS 1400) vs each cited baseline's split.
-- [ ] T1.5 C5 evidence: before/after numbers for each "trap" (or the section shrinks to a paragraph).
+- [~] T1.5 C5 evidence (traps 1, 3, 4, 5 measured → ledger M1–M4; trap 2 citation pending): before/after numbers for each "trap" (or the section shrinks to a paragraph).
 
 ## T2 — Evidence-gap closure
 - [x] T2.1 G1 zero-shot calibration from dumps (ECE-10 as the reproduction, adaptive ECE, Brier, log loss, reliability).
