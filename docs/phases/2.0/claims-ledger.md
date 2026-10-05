@@ -33,7 +33,7 @@
 | F4 | Clean vs repo default | b=57, c=46, p=0.32 — not significant (descriptive) | **VERIFIED** |
 | F5 | Exploratory history (0.938) | cal-selected, not test-best, but ~40 configs scored on test; p=0.001428 survives Bonferroni only for m ≤ 35 | **VERIFIED** (R1 provenance + recomputation) — appears only as disclosed history |
 | F6 | Prompt lengths / no truncation | clean test max 1,996 tokens; default max 1,802 (< 2,048) | **REPORTED** (meta) |
-| F7 | Ablations (reader/kNN alone, base without LoRA, BM25 vote), parity retrieval, seed variance, latency | R5/R6/R8/R9 running (script `cce33f4`) | pending |
+| F7 | 24-shot ablations (R5 `d02cd68`, merged; recomputed here — every accuracy, b/c and p reproduces; reader/kNN-alone preds == argmax of the clean dump's member probs) | vs Jev 92.40%: reader alone **91.56%** (b/c 90/116, p=0.081 — *below* Jev, n.s.); **kNN alone 93.02%** (121/102, p=0.23, n.s.); base Qwen3-4B without LoRA + kNN (refit on S, reader weight 0.066) 93.15% (p=0.14); BM25 label vote 80.78% / 81.95% (weighted); base reader alone 75.55%. Clean vs each (post-hoc family of 6, Holm): vs kNN alone **+0.55 pt, b/c 29/12, p=0.0115 → p_Holm 0.023**; vs base-no-LoRA **+0.42 pt, 26/13, p=0.053 → n.s.**; vs reader alone p_Holm 4e-6. **Framing (binding for the draft):** the calibrated combination beats Jev (pre-registered); retrieval + bge-large kNN carries most of the accuracy and alone matches Jev; the reader adds a small, significant increment; the adapter's own contribution is not significant (it matters mainly for the reader in isolation: 75.55% → 91.56%). Do NOT write that the fine-tuned reader is what beats Jev. | **VERIFIED** |
 
 ## Provenance facts the paper must state
 

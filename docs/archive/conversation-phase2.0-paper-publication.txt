@@ -428,3 +428,18 @@ AI:
     makes it well calibrated — consistent with the "no per-task calibration" framing.
 
 ===
+AI:
+
+[DECISION #15 | log-and-proceed — R5 ablations verified; attribution framing fixed]
+  - R5 (d02cd68) merged (995efe6) and recomputed here from the per-item dumps: all accuracies, b/c and p reproduce;
+    texts/gold identical to the clean dump; reader/kNN-alone preds == argmax of the clean dump's member probs.
+  - kNN alone 93.02% (n.s. vs Jev, p=0.23); reader alone 91.56% (below Jev, n.s.); base-no-LoRA + kNN 93.15%
+    (reader weight 0.066 → nearly pure kNN); BM25 vote ~81%; base reader alone 75.55%.
+  - Clean vs ablations (post-hoc family of 6, Holm): +0.55 pt over kNN alone p_Holm 0.023 (significant);
+    +0.42 pt over base-no-LoRA p_Holm 0.053 (n.s.).
+  - Binding framing for the draft (spec C3, ledger F7): the calibrated combination beats Jev (pre-registered);
+    retrieval + bge-large kNN carries most of the accuracy and alone matches Jev; the reader adds a small significant
+    increment; the adapter's own share is not significant. Never credit the fine-tuned reader alone. (Agrees with
+    the research session's own framing note.)
+
+===
