@@ -1,0 +1,50 @@
+{
+ "r5_reader_alone": {
+  "accuracy": 0.9156,
+  "correct": 2820,
+  "b_ours_right_theirs_wrong": 90,
+  "c_ours_wrong_theirs_right": 116,
+  "p_two_sided_exact": 0.08128651294164677,
+  "description": "best config, reader member alone (derived from the clean dump)"
+ },
+ "r5_knn_alone": {
+  "accuracy": 0.9302,
+  "correct": 2865,
+  "b_ours_right_theirs_wrong": 121,
+  "c_ours_wrong_theirs_right": 102,
+  "p_two_sided_exact": 0.22798290157684806,
+  "description": "best config, kNN member alone (derived from the clean dump)"
+ },
+ "r5_bm25vote_majority": {
+  "accuracy": 0.8078,
+  "correct": 2488,
+  "b_ours_right_theirs_wrong": 88,
+  "c_ours_wrong_theirs_right": 446,
+  "p_two_sided_exact": 1.2659923400130268e-58,
+  "description": "majority label among the 24 BM25-retrieved examples (ties: earliest retrieved)"
+ },
+ "r5_bm25vote_weighted": {
+  "accuracy": 0.8195,
+  "correct": 2524,
+  "b_ours_right_theirs_wrong": 88,
+  "c_ours_wrong_theirs_right": 410,
+  "p_two_sided_exact": 1.0644214624893209e-50,
+  "description": "BM25-score-weighted label vote over the 24 retrieved examples"
+ },
+ "r5_base_nolora": {
+  "accuracy": 0.9315,
+  "correct": 2869,
+  "b_ours_right_theirs_wrong": 122,
+  "c_ours_wrong_theirs_right": 99,
+  "p_two_sided_exact": 0.13872821933557222,
+  "description": "best config with the base model (LoRA disabled); params refit on the selection split"
+ },
+ "r5_base_nolora_reader_alone": {
+  "accuracy": 0.7555,
+  "correct": 2327,
+  "b_ours_right_theirs_wrong": 80,
+  "c_ours_wrong_theirs_right": 599,
+  "p_two_sided_exact": 3.5768810266733614e-99,
+  "description": "base model (LoRA disabled) reader alone, best-config prompt"
+ }
+}
