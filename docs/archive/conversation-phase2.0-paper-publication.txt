@@ -568,3 +568,11 @@ the clean 24-shot run (p=0.78), slightly better calibrated; early-stopping curve
 fixed-budget reference, not a ceiling. Ledger F12. R6b running, then R6c.
 
 ===
+AI:
+
+[NOTE] R6b merged (c081e57) and recomputed with Holm over the 6 contrasts: only the cap effect under unigram tokens
+(p_Holm 0.002) and the combined change (0.0009) are significant; the bigram effect without a cap is borderline
+(0.051, n.s.); pool size has no effect (p=1.0). Ledger F13; spec C3 wording narrowed to "mainly the absent per-class
+cap (post hoc)". R6c running.
+
+===
