@@ -561,3 +561,10 @@ working copy was switched to it, reflog expired, gc'd: 0 objects contain the old
 in THIS log are pre-rewrite and are left as written. Local commits remain unpushed pending the user's OK.
 
 ===
+AI:
+
+[NOTE] R10 (a070a6b) merged (64f641f) and recomputed: fixed-budget LoRA fine-tune 93.41%, beats Jev (p=0.026), ties
+the clean 24-shot run (p=0.78), slightly better calibrated; early-stopping curve still rising → reported as a
+fixed-budget reference, not a ceiling. Ledger F12. R6b running, then R6c.
+
+===
