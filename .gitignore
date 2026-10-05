@@ -16,3 +16,6 @@ paper/build/
 # logit caches of the clean 24-shot run (large, regenerable)
 results/clean/cache/
 results/default/cache/
+
+# Jev run: node deps; raw reproduction cache lives outside the repo
+scripts/jev/node_modules/
