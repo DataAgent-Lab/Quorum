@@ -493,3 +493,13 @@ independent retrieval verified byte-identical across x86_64/aarch64 and hash see
 GPU queue: R9 (running) → R8 → R11 → R10 → R6b → R6c.
 
 ===
+AI:
+
+[NOTE] R9 + R8 (9b60b9e) merged (70ddc32) and R9 recomputed here: the clean configuration is significant vs Jev
+under all three option-order seeds (p 0.0136 / 0.0127 / 0.0105); the default is n.s. under all three. My first
+recomputation compared the clean-config seeds against the DEFAULT main run (my filename test missed the "best_"
+prefix) and showed 128 changed predictions — caught as a mismatch with the research session's report, traced to my
+script, rerun: 12 / 10 changed, paired p = 1.0, matching exactly. Ledger F11, E1 (GPU latency reported; CPU latency
+still to measure, T2.10).
+
+===
