@@ -510,3 +510,31 @@ probs (0 argmax flips). With Holm over 14: adding the reranker is worse on 3, be
 reranker alone is below our best single member on 12/14. Ledger B1. R10 running, then R6b, R6c.
 
 ===
+Human:
+
+[RESUME — user answers, 2026-10-05]
+  - Jev with our retrieval rule: YES; API key placed in service/.env (Vercel AI Gateway; example https://vercel.com/ai-gateway/models/jev).
+  - Employer: the work used the user's own AI credit and only public data; asks whether the 23 employer-email commits can be changed to the personal address.
+  - GeoJury for the review version: yes, unless there are side effects not yet considered.
+  - HF adapter: asks why removal would break reproducibility, and whether keeping it public conflicts with anonymity.
+
+===
+AI:
+
+[DECISION #18 | user-decided + log-and-proceed]
+  - BLOCKED #6 (run Jev) → approved. Interface: Vercel AI SDK experimental_evaluate, gateway.evaluationModel("typesafe-ai/jev").
+    Smoke test on ONE train-split item returned HTTP 403 "Free tier users do not have access to this model" → needs paid
+    gateway credit (user action). No charge, no Jev output. service/.env is gitignored; key never printed.
+  - Protocol + runner pre-registered before any successful call: 747a393 (provenance/jev_retrieval_swap_protocol.md,
+    scripts/jev/run.mjs). Arm A = the reproduction's exact per-item requests (version-drift check); Arm B = same requests with
+    the clean run's 24 retrieved examples. Primary: McNemar clean vs Arm B (equal retrieval). Follow-up 2c653a0 fixed the
+    pinned train file (the pre-registration commit had a truncated file from a failed write; protocol/runner unchanged).
+  - BLOCKED #5 (employer clearance) → user states: own AI credit, public data only. Email history: NOT rewritten
+    (recommendation pending user confirmation) — 43 commits on main carry the employer email, including the research
+    session's pre-registration commits; 85 of 86 commits descend from the first such commit, so any rewrite changes every
+    hash, including those recorded inside the result metas and the paper's evidence chain, and the old commits would remain
+    reachable by SHA on GitHub/forks anyway. Forward fix: research session asked to commit with the personal address.
+  - BLOCKED #4 (system name) → GeoJury for the review version (side effects assessed in the session reply; none blocking).
+  - BLOCKED #2 (adapter) → keep it public; explanation given to the user.
+
+===
