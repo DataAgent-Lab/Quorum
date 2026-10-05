@@ -350,3 +350,19 @@ Resumed the novelty/related-work agent.
   - claims-ledger.md created; spec C3 + status updated; tasks ticked.
 
 ===
+AI:
+
+[DECISION #11 | log-and-proceed — novelty review outcome]
+Novelty memo (docs/phases/2.0/novelty-memo.md) + candidate bibliography (paper/refs-candidates.bib, 152 entries;
+12/12 sampled arXiv + ACL Anthology ids resolve to the right papers; de-id scan clean — two surname substrings were
+false positives). Verdict: an empirical/methodological paper, not a new method — the geometric mean is a log-linear
+pool (product rule); closest prior: Hu et al. 2024 (bge-large + descriptions), BTZSC (ICLR 2026, no ensembles/tests),
+Milios et al. 2023 (retrieval ICL on Banking77). Genuinely new: the pre-registered, paired accuracy + calibration
+comparison with the closed system (no peer-reviewed evaluation of it exists; none of the 5 open clones reports a
+77-way Banking77 result ≥ 92.40%). Framing: lead with "how far small open models get on accuracy and calibration,
+and how to show it rigorously"; Jev as a case study; cite PoLL (Verga et al. 2024) for "jury".
+Reviewer-risk closures added as T2.12–T2.15; new research-session requests R10 (Banking77 fine-tuned Qwen3-4B
+upper reference), R11 (sub-1B cross-encoder reranker zero-shot baseline), R12 (pre-registered train-side sample for
+a clean global-temperature calibration confirmation). Priority after R3/R5/R6/R8/R9: R3 → R12 → R11 → R10.
+
+===

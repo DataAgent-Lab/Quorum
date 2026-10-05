@@ -50,10 +50,25 @@
 - [ ] T2.10 G9 CPU latency (time 1 item first; fp32 serve path) + GPU numbers from the research session.
 - [ ] T2.11 G10 license table.
 
+## T2b — Reviewer-risk closures from the novelty memo (added 2026-10-05)
+- [ ] T2.12 Combiner ablation (CPU, needs R3 member probs): geometric mean vs true product of experts vs arithmetic
+      mean vs majority vote, 7 datasets × 2 label texts; per-member entropy / effective weight. (Note: true product
+      and geometric mean share the argmax — they differ only in sharpness, i.e. calibration.)
+- [ ] T2.13 Baselines a reviewer will ask for (research session R10/R11): a sub-1B cross-encoder reranker as a
+      zero-shot classifier; BTZSC intent subsets if comparable; Qwen3-4B fine-tuned on Banking77 train as an upper
+      reference for the 24-shot result. (bge-large + descriptions alone = Hu et al. 2024-style baseline — already in
+      the member columns.)
+- [ ] T2.14 Calibration confirmation (research session R12): global temperature fitted on zero-shot outputs for
+      TRAIN-split samples only (no test data in fitting), frozen, then applied once to all 14 test conditions —
+      turns the exploratory LODO result (Z4b) into a clean one. Bootstrap CI on the ECE gap vs Jev (24-shot).
+- [ ] T2.15 Contamination of the embedders: bge-v1.5 training/fine-tuning data vs our eval sets (MTEB includes
+      Banking77/MASSIVE/MTOP *evaluation* tasks — check whether any *training* data overlaps); split wording
+      (HWU64/Bitext have no official test split; CLINC150 variant = plus).
+
 ## T3 — Novelty, literature, bibliography
-- [ ] T3.0 **G13 novelty memo** (before T4): positioning of C1/C2 vs PIE, dataless, NLI zero-shot, log-linear
+- [x] T3.0 **G13 novelty memo** → `novelty-memo.md` (verdict: empirical/methodological paper; new = pre-registered paired accuracy+calibration comparison with the closed system; frame Jev as a case study) — (before T4): positioning of C1/C2 vs PIE, dataless, NLI zero-shot, log-linear
       pooling/PoE; Jev-replication landscape (disambiguate the 2026-09 open "Jev" clones). Venue still right? (must-ask if not).
-- [ ] T3.1 Related-work map. T3.2 `refs.bib` (resolvable entries only; baseline numbers with budget **and** split).
+- [~] T3.1 Related-work map (in the memo). T3.2 `refs.bib` (candidates: `paper/refs-candidates.bib`, 152 entries, 12/12 sampled ids resolve; full check in T7.6) (resolvable entries only; baseline numbers with budget **and** split).
 
 ## T4 — Outline
 - [ ] T4.1 Title candidates; section outline with ledger rows per paragraph; **page budget per section**; figure/table list with generators (colour-blind-safe palette).
