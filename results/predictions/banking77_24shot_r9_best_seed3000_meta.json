@@ -1,0 +1,70 @@
+{
+ "tag": "r9_best_seed3000",
+ "code": {
+  "git_head": "44c8413ac7ac15b8b5bbaeeb337fe7f04112de58",
+  "sha256": {
+   "scripts/paper_runs.py": "20fa46e7019554258ac975d1db7e0cbcda0ba8a4cf5c5befe23bf55592272238",
+   "scripts/clean_24shot.py": "27a7e97adf38a904a0a426ae017e873b2a9b57b63bcc15fc3d0030bbdb3c132a",
+   "quorum/fewshot.py": "c79778c1cba86ce815c449f5afc7994115d2f796a21e110190a8f9ccccc36f26",
+   "quorum/prompting.py": "fd38c3ca6209d1972a2e71233ad1792c0a662de756b20b9c9b9e77c9231480dd"
+  }
+ },
+ "dataset": "legacy-datasets/banking77",
+ "dataset_revision": "f54121560de48f2852f90be299010d1d6dc612ec",
+ "base": "Qwen/Qwen3-4B",
+ "base_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+ "adapter": "DataAgent/Quorum-Reader-Qwen3-4B-Adapter",
+ "adapter_revision": "e0765b768e04ff8dc83a8682963349bd6291ffa3",
+ "result": {
+  "accuracy": 0.936,
+  "correct": 2883,
+  "b_ours_right_theirs_wrong": 118,
+  "c_ours_wrong_theirs_right": 81,
+  "p_two_sided_exact": 0.010529721671611763
+ },
+ "revisions": {
+  "Qwen/Qwen3-4B": {
+   "refs_main": "1cfa9a7208912126459214e8b04321603b3df60c",
+   "cached_snapshots": [
+    "1cfa9a7208912126459214e8b04321603b3df60c"
+   ]
+  },
+  "DataAgent/Quorum-Reader-Qwen3-4B-Adapter": {
+   "refs_main": null,
+   "cached_snapshots": [
+    "e0765b768e04ff8dc83a8682963349bd6291ffa3"
+   ]
+  },
+  "BAAI/bge-large-en-v1.5": {
+   "refs_main": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+   "cached_snapshots": [
+    "d4aa6901d3a41ba39fb536a557fa166f842b0e09"
+   ]
+  },
+  "Jaehun/PrismNLI-0.4B": {
+   "refs_main": "02b9102b34d5dce1bf29c4e6903fea33e1a0ddeb",
+   "cached_snapshots": [
+    "02b9102b34d5dce1bf29c4e6903fea33e1a0ddeb"
+   ]
+  },
+  "BAAI/bge-base-en-v1.5": {
+   "refs_main": "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
+   "cached_snapshots": [
+    "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a"
+   ]
+  },
+  "legacy-datasets/banking77": {
+   "refs_main": "f54121560de48f2852f90be299010d1d6dc612ec",
+   "cached_snapshots": [
+    "f54121560de48f2852f90be299010d1d6dc612ec"
+   ]
+  }
+ },
+ "written_at": "2026-10-05T13:42:38Z",
+ "description": "best config, option orders seeded 3000+i (seed 1000 is the main run)",
+ "order_seed_base": 3000,
+ "params": {
+  "rule": "weighted_prob_mean",
+  "orders": 1
+ }
+}

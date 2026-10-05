@@ -78,5 +78,37 @@
   "c_ours_wrong_theirs_right": 119,
   "p_two_sided_exact": 0.7427905821012403,
   "description": "best config with the reproduction's retrieval rule (word+bigram BM25, <=4 per class, 24) over all 10,003 train rows; option text: reproduction definitions"
+ },
+ "r9_best_seed2000": {
+  "accuracy": 0.9357,
+  "correct": 2882,
+  "b_ours_right_theirs_wrong": 117,
+  "c_ours_wrong_theirs_right": 81,
+  "p_two_sided_exact": 0.012672957953535634,
+  "description": "best config, option orders seeded 2000+i (seed 1000 is the main run)"
+ },
+ "r9_best_seed3000": {
+  "accuracy": 0.936,
+  "correct": 2883,
+  "b_ours_right_theirs_wrong": 118,
+  "c_ours_wrong_theirs_right": 81,
+  "p_two_sided_exact": 0.010529721671611763,
+  "description": "best config, option orders seeded 3000+i (seed 1000 is the main run)"
+ },
+ "r9_default_seed2000": {
+  "accuracy": 0.9325,
+  "correct": 2872,
+  "b_ours_right_theirs_wrong": 98,
+  "c_ours_wrong_theirs_right": 72,
+  "p_two_sided_exact": 0.05486518238547418,
+  "description": "default config, option orders seeded 2000+i (seed 1000 is the main run)"
+ },
+ "r9_default_seed3000": {
+  "accuracy": 0.9318,
+  "correct": 2870,
+  "b_ours_right_theirs_wrong": 99,
+  "c_ours_wrong_theirs_right": 75,
+  "p_two_sided_exact": 0.08092659296355385,
+  "description": "default config, option orders seeded 3000+i (seed 1000 is the main run)"
  }
 }
