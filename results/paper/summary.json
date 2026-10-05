@@ -110,5 +110,29 @@
   "c_ours_wrong_theirs_right": 75,
   "p_two_sided_exact": 0.08092659296355385,
   "description": "default config, option orders seeded 3000+i (seed 1000 is the main run)"
+ },
+ "r6b_cap4_unigram_P": {
+  "accuracy": 0.9282,
+  "correct": 2859,
+  "b_ours_right_theirs_wrong": 116,
+  "c_ours_wrong_theirs_right": 103,
+  "p_two_sided_exact": 0.41749364374326636,
+  "description": "clean config; unigram BM25 over P with <=4 per class (post hoc)"
+ },
+ "r6b_nocap_bigram_P": {
+  "accuracy": 0.9282,
+  "correct": 2859,
+  "b_ours_right_theirs_wrong": 114,
+  "c_ours_wrong_theirs_right": 101,
+  "p_two_sided_exact": 0.4131936945188756,
+  "description": "clean config; word+bigram BM25 over P without a per-class cap (post hoc)"
+ },
+ "r6b_cap4_bigram_P": {
+  "accuracy": 0.9234,
+  "correct": 2844,
+  "b_ours_right_theirs_wrong": 114,
+  "c_ours_wrong_theirs_right": 116,
+  "p_two_sided_exact": 0.9474462046254563,
+  "description": "clean config; the reproduction's retrieval rule over P (post hoc)"
  }
 }
