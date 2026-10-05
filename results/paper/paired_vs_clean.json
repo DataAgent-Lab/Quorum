@@ -1,5 +1,5 @@
 {
- "note": "Paired exact two-sided McNemar of the clean pre-registered run (banking77_24shot_clean) against each R5 ablation on the same 3,080 test items. Post hoc, secondary, NOT corrected for multiple comparisons; not part of the pre-registered primary test.",
+ "note": "Paired exact two-sided McNemar of the clean pre-registered run (banking77_24shot_clean) against each R5 ablation and R6 parity run on the same 3,080 test items. Post hoc, secondary, NOT corrected for multiple comparisons; not part of the pre-registered primary test.",
  "clean_accuracy": 0.9357,
  "comparisons": {
   "r5_reader_alone": {
@@ -37,6 +37,30 @@
    "b_clean_right_other_wrong": 600,
    "c_clean_wrong_other_right": 45,
    "p_two_sided_exact": 6.923363334796563e-125
+  },
+  "r6_default_parityret": {
+   "accuracy": 0.9208,
+   "b_clean_right_other_wrong": 104,
+   "c_clean_wrong_other_right": 58,
+   "p_two_sided_exact": 0.0003750396788702643
+  },
+  "r6_best_parityret": {
+   "accuracy": 0.9234,
+   "b_clean_right_other_wrong": 76,
+   "c_clean_wrong_other_right": 38,
+   "p_two_sided_exact": 0.000475185325941909
+  },
+  "r6_default_parityret_reprodefs": {
+   "accuracy": 0.9172,
+   "b_clean_right_other_wrong": 123,
+   "c_clean_wrong_other_right": 66,
+   "p_two_sided_exact": 4.090026923466979e-05
+  },
+  "r6_best_parityret_reprodefs": {
+   "accuracy": 0.9221,
+   "b_clean_right_other_wrong": 84,
+   "c_clean_wrong_other_right": 42,
+   "p_two_sided_exact": 0.0002299776454741523
   }
  }
 }
