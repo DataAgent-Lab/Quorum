@@ -1,6 +1,6 @@
 # Phase 2.0 — Paper publication: a submission-ready TACL paper on Quorum
 
-> **Status**: PLANNING — spec + tasks v2 (2026-10-04) after independent self-review (REVISE: 2 Critical, 15
+> **Status**: IN PROGRESS — evidence phase (2026-10-05): toolchain ready, zero-shot numbers + calibration verified, 24-shot headline verified; numbers live in [`claims-ledger.md`](./claims-ledger.md). Spec + tasks v2 (2026-10-04) after independent self-review (REVISE: 2 Critical, 15
 > Warning, 7 Note — all applied or routed to must-ask; see "Self-review record") · **Predecessors**: Phases
 > 1.0–1.1 (results), 1.0a/1.0b (demo, per-item dumps) · **Runs in parallel with**: Phase 1.2 (not started)
 > **Venues & formats**: [`venues.md`](./venues.md) (summarised from the SSoT
@@ -77,7 +77,7 @@ cut.**
 |---|---|---|
 | C1 | Ensemble beats its best member on most intent datasets (paired exact McNemar) | Names: Banking77 + 5/6 significant, SNIPS n.s. loss; **descriptions: SNIPS also a significant win** (b=34, c=16, p=0.015, from dumps) |
 | C2 | Label descriptions as a free lever, and when it helps | Banking77 +0.018, SNIPS +0.091, CLINC +0.030 (Phase 1.1) — subject to G8 (authoring provenance) |
-| C3 | Retrieval-augmented 24-shot open stack vs the reproduced Jev under the **reproducer's** selected setup ("retrieved24", Jev `jev-1.13.0`) — not "Jev's own protocol" | **Headline = clean-protocol single test run (pending, G11b).** Exploratory: 0.938 (b=109/c=66, exact p=0.001428; Bonferroni-safe only for m ≤ 35 vs ~40 configs scored on test); repo default 0.932 (p ≈ 0.06–0.15 depending on discordance — to be computed from R2-default) |
+| C3 | Retrieval-augmented 24-shot open stack vs the reproduced Jev under the **reproducer's** selected setup ("retrieved24", Jev `jev-1.13.0`) — not "Jev's own protocol" | **VERIFIED headline (pre-registered, single test run): 93.57% vs 92.40%, exact McNemar b=119/c=83, p=0.0136**; repo default 93.21% is n.s. (p=0.066); 0.938 = disclosed exploratory history. See claims-ledger F1–F5. |
 | C4 | Measured negative results | data-scaling saturation, bigger embedder hurts, reranking fails, Dialog2Flow member hurts, (Phase 1.2 if negative) |
 | C5 | Evaluation lessons — reframed: practices are textbook, the contribution is **measured flips** (each trap's before/after numbers) | README "Five ways we caught ourselves" — needs the before/after numbers per trap, or it is cut to a short paragraph |
 | C6 | Cost/latency | GPU ≈122 ms/item (README L98); **CPU latency is not 120 ms** (README L23 conflates) → re-measure (G9) |

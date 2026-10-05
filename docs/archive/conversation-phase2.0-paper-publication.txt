@@ -324,3 +324,29 @@ protocol commit + code sha256 identical between select and test, record selectio
 committed. Research session reports the selected configuration before running test.
 
 ===
+AI:
+
+[SESSION RESUMED — 2026-10-05]
+Prior session ended mid-analysis; local work (metrics refactor, paper/ scaffold) was intact and is now committed.
+Resumed the novelty/related-work agent.
+
+[DECISION #10 | log-and-proceed — evidence verified]
+  - Toolchain: official TACL style vendored (paper/style, SHA256SUMS); tectonic 0.17.0 in ~/.local/bin compiles the
+    unmodified template to a 5-page A4 PDF.
+  - quorum/metrics.py: mcnemar_exact_p (unrounded; behaviour-preserving for mcnemar — 0/300 mismatches) and
+    calibration() with the reproduction's definitions (ECE-10 binning identical to its score.py; controls: calibrated
+    synthetic ECE 0.006, over-confident 0.398).
+  - Zero-shot (from dumps; Holm within declared families; controls passed; equals meta + README): ensemble beats its
+    best member 6/7 (names; SNIPS n.s.) and 6/7 (descriptions; HWU64 n.s.); descriptions help 6/7 (HWU64 n.s.),
+    largest MTOP +10.7. Banking77 exact p 1.97e-21 (old rounding printed 0.0).
+  - Calibration: raw ensemble under-confident on all 14 (ECE 0.09–0.37) → "calibrated" REFUTED as stated.
+    Exploratory: a leave-one-dataset-out global temperature (0.51–0.56) cuts held-out ECE 3–11×, accuracy unchanged.
+  - 24-shot headline VERIFIED independently: clean run 0.9357 (2882/3080) vs Jev repro 0.9240, b=119 c=83 p=0.0136;
+    pre-registration chain intact (selection d513aa9 → test 09217ba, each file touched by exactly one commit, no test
+    fields in selection); winner recomputed from the 48 candidates. Repo default 0.9321 n.s. (p=0.066); clean vs
+    default p=0.32.
+  - Research session R4/R7 recorded in claims-ledger P1–P4 (MASSIVE 10.7% exact overlap with the adapter mixture →
+    not clean for adapter results; descriptions LLM-authored → disclose).
+  - claims-ledger.md created; spec C3 + status updated; tasks ticked.
+
+===

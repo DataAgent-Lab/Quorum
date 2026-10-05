@@ -9,10 +9,10 @@
 ## T0 — Venue, toolchain, day-1 requests
 - [x] T0.1 Venue decision + format table → `venues.md` (TACL primary; D2).
 - [x] T0.1b Self-review (independent reviewer) → spec/tasks v2 (spec "Self-review record").
-- [ ] T0.2 Vendor the current TACL style + formatting PDF; record exact rules (A4, pages, appendix policy incl.
+- [x] T0.2 Vendor the current TACL style + formatting PDF; record exact rules (A4, pages, appendix policy incl.
       "will not be reviewed", desk-reject items, header, line numbers, no supplements/links, author info at
       submission; 2024 announcement supersedes the PDF's appendix sentence).
-- [ ] T0.3 Pin a TeX engine fitting the 5.8 GB-free disk (log-and-proceed) and compile the unmodified TACL sample.
+- [x] T0.3 Pin a TeX engine fitting the 5.8 GB-free disk (log-and-proceed) and compile the unmodified TACL sample.
 - [ ] T0.4 Scaffold `paper/` (style, `main.tex`, `sections/`, `figures/`, `tables/`, `refs.bib`, `numbers.tex`
       (generated), `scripts/`, `tools/`).
 - [ ] T0.5 **Day-1 research-session request** → `research-requests.md` + message: (1) G11 selection provenance
@@ -25,22 +25,22 @@
       tier table + sources into the reference; venues.md cites it (no second copy of the evidence).
 
 ## T1 — Claims ledger (fact-first gate)
-- [ ] T1.1 `claims-ledger.md`: claim → macro name → dump/URL@commit → command → VERIFIED / GAP / DROPPED.
-- [ ] T1.2 `paper/scripts/zero_shot_tables.py` (reuses `quorum.metrics`): accuracies, member accuracies from
+- [x] T1.1 `claims-ledger.md`: claim → macro name → dump/URL@commit → command → VERIFIED / GAP / DROPPED.
+- [x] T1.2 `paper/scripts/zero_shot_tables.py` (reuses `quorum.metrics`): accuracies, member accuracies from
       `member_picks`, exact McNemar ensemble-vs-best-member and names-vs-descriptions, **unrounded p** → macros.
 - [ ] T1.3 G2: trace the zero-shot Jev 0.801 or DROP.
 - [ ] T1.4 G7 split audit: our splits (CLINC plus/OOS, Bitext 20% stratified, SNIPS 1400) vs each cited baseline's split.
 - [ ] T1.5 C5 evidence: before/after numbers for each "trap" (or the section shrinks to a paragraph).
 
 ## T2 — Evidence-gap closure
-- [ ] T2.1 G1 zero-shot calibration from dumps (ECE-10 as the reproduction, adaptive ECE, Brier, log loss, reliability).
-- [ ] T2.2 G1/G3 validate research-session dumps (schema, accuracies match, row alignment) when delivered.
+- [x] T2.1 G1 zero-shot calibration from dumps (ECE-10 as the reproduction, adaptive ECE, Brier, log loss, reliability).
+- [~] T2.2 G1/G3 validate research-session dumps (clean + default VERIFIED 2026-10-05; R3 pending) (schema, accuracies match, row alignment) when delivered.
 - [ ] T2.3 G3 `paper/scripts/mcnemar_vs_jev.py`: fetch the reproduction's `results/predictions.csv` @ `5cac4ff`
       (no redistribution), row-index join + case-folded labels, `quorum.metrics.mcnemar` for 0.932 and 0.938.
 - [ ] T2.4 G1 24-shot calibration vs the reproduction's Jev ECE/Brier/log loss (same definitions).
 - [x] T2.5 G11 gate: R1 delivered (research branch 8bea0c0) and verified (exact p 0.001428; Bonferroni crossover
       m=35/36); outcome recorded in spec; user chose the clean re-selection protocol (D3 revised).
-- [ ] T2.5b G11b: review the clean protocol committed by the research session BEFORE it runs (pre-registration
+- [x] T2.5b G11b: review the clean protocol committed by the research session BEFORE it runs (pre-registration
       evidence = its commit timestamp); go/changes; then validate the single test-run dump (R2 schema) + McNemar.
 - [ ] T2.5c Disclosure paragraph for the 0.938 exploratory history (R1 §8 list) in the main text.
 - [ ] T2.6 G4 parity table; G12 ablation table (from delivered runs); disclose the 25 overlaps.
