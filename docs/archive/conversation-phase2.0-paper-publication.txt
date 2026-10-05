@@ -485,3 +485,11 @@ AI:
     (the protocol code path must stay as run). T2.16 added.
 
 ===
+AI:
+
+[NOTE] F10 confirmed by the research session on its x86_64 host (identical counts); clean run was produced on
+aarch64 / numpy 2.2.6; 984 items (32%) have a tie straddling the 24th cutoff. R6c queued (0069ab9), platform-
+independent retrieval verified byte-identical across x86_64/aarch64 and hash seeds before any GPU work.
+GPU queue: R9 (running) → R8 → R11 → R10 → R6b → R6c.
+
+===
