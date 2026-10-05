@@ -18,7 +18,8 @@
 | Z4 | "Calibrated" (README) | Raw ensemble ECE-10 **0.09–0.37**; **under-confident on all 14** (mean confidence < accuracy; Banking77 0.54 vs 0.76) | **REFUTED** as stated |
 | Z4b | One task-agnostic temperature restores calibration | Leave-one-dataset-out global T (fit on the other 6 datasets) = **0.51–0.56**; held-out ECE 0.015–0.097 (Banking77 names 0.217→0.079; CLINC desc 0.288→0.025); Brier and log loss improve on all 14; accuracy unchanged (`paper/generated/lodo_temperature_exploratory.json`) | **VERIFIED — exploratory** (selection on other datasets' test sets; label as cross-dataset CV, or confirm on held-out data before calling it a result) |
 | Z5 | Zero-shot Jev ≈ 0.801 | no citable source (the reproduction lists "definitions" 79.22% / "static" 81.82% on a 154-item screen only) | **GAP → DROP** unless sourced |
-| Z6 | Ensemble-vs-member calibration | needs per-member probabilities (R3, running) | pending |
+| Z6 | Where the under-confidence comes from (R3 member probabilities, verified: geo-mean identity ≤5.4e-7, member argmax == member_picks, other fields identical on 47,582 rows) | NLI member ECE-10 **0.01–0.14** and sharp (entropy 0.11–0.49 of uniform); the two bi-encoders are near-flat (entropy 0.48–0.82 of uniform) and under-confident (ECE **0.16–0.40**) → the geometric mean inherits their flatness; true product of experts (same argmax) ECE **0.04–0.16** | **VERIFIED** (`paper/scripts/combiner_ablation.py` → `paper/generated/combiners.json`) |
+| Z7 | Combiner ablation (family F3, 28 exact McNemar, Holm) | geometric mean vs arithmetic mean: geo higher on 10/14, **significant on 5** (Banking77 ×2, HWU64 desc, MTOP desc, Bitext desc), arithmetic never significantly better; vs majority vote: geo higher on 14/14, **significant on 9**; per-item most-confident-member is worse than geo everywhere | **VERIFIED** |
 
 ## Banking77 retrieval-augmented 24-shot (research branch)
 

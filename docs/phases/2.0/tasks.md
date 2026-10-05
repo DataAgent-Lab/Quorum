@@ -34,7 +34,7 @@
 
 ## T2 — Evidence-gap closure
 - [x] T2.1 G1 zero-shot calibration from dumps (ECE-10 as the reproduction, adaptive ECE, Brier, log loss, reliability).
-- [~] T2.2 G1/G3 validate research-session dumps (clean + default VERIFIED 2026-10-05; R3 pending) (schema, accuracies match, row alignment) when delivered.
+- [x] T2.2 G1/G3 validate research-session dumps (clean + default + R3 VERIFIED 2026-10-05; branch merged into main 4f32702) (schema, accuracies match, row alignment) when delivered.
 - [ ] T2.3 G3 `paper/scripts/mcnemar_vs_jev.py`: fetch the reproduction's `results/predictions.csv` @ `5cac4ff`
       (no redistribution), row-index join + case-folded labels, `quorum.metrics.mcnemar` for 0.932 and 0.938.
 - [ ] T2.4 G1 24-shot calibration vs the reproduction's Jev ECE/Brier/log loss (same definitions).
@@ -51,7 +51,7 @@
 - [ ] T2.11 G10 license table.
 
 ## T2b — Reviewer-risk closures from the novelty memo (added 2026-10-05)
-- [ ] T2.12 Combiner ablation (CPU, needs R3 member probs): geometric mean vs true product of experts vs arithmetic
+- [x] T2.12 Combiner ablation (done 2026-10-05 → claims Z6/Z7) (CPU, needs R3 member probs): geometric mean vs true product of experts vs arithmetic
       mean vs majority vote, 7 datasets × 2 label texts; per-member entropy / effective weight. (Note: true product
       and geometric mean share the argmax — they differ only in sharpness, i.e. calibration.)
 - [ ] T2.13 Baselines a reviewer will ask for (research session R10/R11): a sub-1B cross-encoder reranker as a

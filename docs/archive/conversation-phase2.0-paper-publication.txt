@@ -399,3 +399,18 @@ AI:
   - Candidate bibliography: 152/152 entries resolve (existence only; metadata gets a manual pass at drafting).
 
 ===
+AI:
+
+[DECISION #13 | log-and-proceed — R3 verified, branch merged, combiner ablation]
+  - R3 (20a6911/e9e5509) verified here: existing fields identical on all 47,582 rows; geometric mean of member_probs
+    reproduces probs within 5.4e-7; argmax(member_probs) == member_picks everywhere.
+  - Merged research/phase2.0-paper-evidence into local main (4f32702; only conflict .gitignore, both sides kept).
+    Regenerated outputs from main are identical (zero-shot macros byte-identical; combiner results equal).
+  - Combiner ablation (paper/scripts/combiner_ablation.py, family F3 = 28 exact McNemar, Holm): geo > arith on 10/14
+    (5 significant, arith never significantly better); geo > majority vote on 14/14 (9 significant).
+  - Mechanism: NLI member calibrated-ish (ECE 0.01–0.14) and sharp; bi-encoders near-flat and under-confident
+    (ECE 0.16–0.40) → geometric mean inherits the flatness; product of experts (same argmax) ECE 0.04–0.16 —
+    consistent with the ≈0.53 global temperature (Z4b). Ledger Z6/Z7.
+  - Not pushed: main is ahead of origin with the merge (push = user's call).
+
+===
