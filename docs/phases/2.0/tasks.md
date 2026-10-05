@@ -13,7 +13,7 @@
       "will not be reviewed", desk-reject items, header, line numbers, no supplements/links, author info at
       submission; 2024 announcement supersedes the PDF's appendix sentence).
 - [x] T0.3 Pin a TeX engine fitting the 5.8 GB-free disk (log-and-proceed) and compile the unmodified TACL sample.
-- [ ] T0.4 Scaffold `paper/` (style, `main.tex`, `sections/`, `figures/`, `tables/`, `refs.bib`, `numbers.tex`
+- [~] T0.4 Scaffold `paper/` (style, scripts, generated, tools, refs-candidates.bib done; main.tex/sections at T4) (style, `main.tex`, `sections/`, `figures/`, `tables/`, `refs.bib`, `numbers.tex`
       (generated), `scripts/`, `tools/`).
 - [ ] T0.5 **Day-1 research-session request** → `research-requests.md` + message: (1) G11 selection provenance
       for 0.938 (dev split, configs tried, rule, Bonferroni family, constants' origin); (2) per-item 24-shot dumps
@@ -87,7 +87,7 @@
 - [ ] T6.1 At the cut-off set in T4.1: passed → section; failed → negative result; not run → omitted (future work). Record (AC-11).
 
 ## T7 — Tests / verification (one per AC)
-- [ ] T7.0 Tool fixtures: each of `check_layout` / `check_anonymity` / `check_numbers` / `check_bib` run on a
+- [x] T7.0 Tool fixtures (paper/tools/test_checks.py, 8 passed — layout good/bad/over-limit/exact-limit, anonymity, numbers, bib real/fake): each of `check_layout` / `check_anonymity` / `check_numbers` / `check_bib` run on a
       planted-violation sample (must flag) and a clean sample (must not flag).
 - [ ] T7.1 AC-1 `check_layout` on the built PDF.
 - [ ] T7.2 AC-2 `check_anonymity` + manual pass.
@@ -95,7 +95,7 @@
 - [ ] T7.4 AC-4 statistics checklist.
 - [ ] T7.5 AC-5 REAL: CPU zero-shot subset (SNIPS or Banking77 subset via `serve/spot_check.py`); McNemar vs pinned
       public predictions; research-session reproduction of 0.932/0.938 dumps.
-- [ ] T7.6 AC-6 `check_bib`.
+- [~] T7.6 AC-6 `check_bib` — candidate bibliography resolves 152/152 (existence; titles/authors get a manual pass when refs.bib is finalised).
 - [ ] T7.7 AC-7 calibration section backed by T2.1/T2.4 or removed; README correction proposal.
 - [ ] T7.8 AC-8 parity table vs the reproduction's PROTOCOL.md/README.
 - [ ] T7.9 AC-9 contamination table vs sources.

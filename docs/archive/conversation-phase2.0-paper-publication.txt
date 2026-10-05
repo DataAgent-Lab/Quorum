@@ -380,3 +380,22 @@ AI:
   - GPU queue: R3 → R12 → R5 → R6 → R9 → R8 → R11 → R10.
 
 ===
+AI:
+
+[DECISION #12 | log-and-proceed — compliance tooling]
+  - One module paper/tools/checks.py with four commands (layout / anonymity / numbers / bib) instead of four
+    separate scripts (shared PDF-text normalisation; less code). Dependency added: pypdf (paper/requirements.txt) for
+    font-embedding and metadata checks; poppler pdftotext for page text (ligatures normalised — the header prints as
+    "Conﬁdential").
+  - Layout = A4 on every page, Author metadata empty, fonts embedded, submission header + margin line numbers,
+    content ≤ 10 pages before "References", Appendix A ≤ 5 / B ≤ 3 pages, official .sty untouched (sha256 vs
+    paper/style/SHA256SUMS).
+  - Anonymity: generic patterns in code; personal/employer terms in paper/tools/anonymity_terms.local (gitignored)
+    so the list never reaches the public repo.
+  - Numbers: literal decimals / thousands / percents outside generated macros are flagged unless the line carries
+    "% numbers-ok" (cited external values).
+  - Instrument controls (8 tests): each check flags a planted violation and passes a clean sample. The bib control
+    caught a real parser bug (the last field of each entry was missed → every entry would have read "unresolved").
+  - Candidate bibliography: 152/152 entries resolve (existence only; metadata gets a manual pass at drafting).
+
+===
