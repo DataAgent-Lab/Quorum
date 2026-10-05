@@ -8,7 +8,8 @@ Sample: for each of the 7 datasets, 1,000 indices drawn uniformly without replac
 side (for Bitext, the train part of this repo's deterministic 80/20 split), with
 np.random.default_rng(R12_SEED + k) for the k-th dataset in the fixed order below. Indices refer to
 `quorum.data.load(name)["train"]`. Configuration: the repo's ZeroShotEnsemble defaults (commit 04e6709) with the
-NLI member in fp32, both label texts (class names; examples/<dataset>_descriptions.py). No test data is loaded.
+NLI member in fp32, both label texts (class names; examples/<dataset>_descriptions.py). No test data is used or
+scored (quorum.data.load also materialises the test split in memory, but it is never read here).
 """
 import argparse, gzip, hashlib, importlib.util, json, sys, time
 from pathlib import Path
