@@ -8,3 +8,7 @@ venv/
 .ipynb_checkpoints/
 *.log
 serve/data/
+
+# paper: local-only identifying terms for the anonymity check; build outputs
+paper/tools/anonymity_terms.local
+paper/build/

@@ -1,0 +1,2 @@
+pypdf>=5
+# TeX engine: tectonic (single binary, https://tectonic-typesetting.github.io)
