@@ -576,3 +576,15 @@ AI:
 cap (post hoc)". R6c running.
 
 ===
+AI:
+
+[DECISION #19 | log-and-proceed — evidence base complete (except the Jev run)]
+R6c merged (c0632fd) and verified: platform-independent retrieval computed here on x86_64 (numpy 2.4.6, hash seed 7)
+equals the research session's aarch64 output for 3,080/3,080 items; accuracy unchanged (93.57%), vs Jev p=0.0131,
+2 predictions change. F10 closed (impact negligible), F14 added. All research-session GPU runs (R3, R12, R5, R6, R9,
+R8, R11, R10, R6b, R6c) are now delivered, merged and independently verified. Remaining evidence: the Jev
+retrieval-swap run (pre-registered 747a393; blocked on gateway credit). Next on this side: T1.3 (drop the unsourced
+0.801), T1.5 (trap before/after numbers), T2.10 (CPU latency), T2.11 (licences), T2.15 (embedder contamination),
+T4.1 (outline + page budget).
+
+===
