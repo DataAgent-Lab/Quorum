@@ -1,0 +1,117 @@
+{
+ "configuration": "repo default (scripts/eval_24shot.py)",
+ "code": {
+  "git_head": "d796121041cb9058d0fe3e29861878b96c3c8962",
+  "sha256": {
+   "scripts/dump_24shot_default.py": "9c1ea71cc3d40d30d7110327b77dfad1735919d5d35a736e8793bd60838cfcfb",
+   "scripts/clean_24shot.py": "27a7e97adf38a904a0a426ae017e873b2a9b57b63bcc15fc3d0030bbdb3c132a",
+   "quorum/fewshot.py": "c79778c1cba86ce815c449f5afc7994115d2f796a21e110190a8f9ccccc36f26",
+   "quorum/prompting.py": "fd38c3ca6209d1972a2e71233ad1792c0a662de756b20b9c9b9e77c9231480dd",
+   "quorum/data.py": "b2bfa9259d40e45a2aabf7bad7cfea77e8ed343de2d535f7adb731346ae029e4"
+  }
+ },
+ "dataset": "legacy-datasets/banking77",
+ "dataset_revision": "f54121560de48f2852f90be299010d1d6dc612ec",
+ "base": "Qwen/Qwen3-4B",
+ "base_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+ "adapter": "DataAgent/Quorum-Reader-Qwen3-4B-Adapter",
+ "adapter_revision": "e0765b768e04ff8dc83a8682963349bd6291ffa3",
+ "knn_embedder": "BAAI/bge-large-en-v1.5",
+ "option_text": "class names (humanized)",
+ "task_description": "Classify the customer's banking message into the intent it expresses.",
+ "retrieval": {
+  "method": "BM25 k1=1.5 b=0.75",
+  "shots": 24,
+  "pool": "full train (10,003 rows)"
+ },
+ "knn": {
+  "scale": 20,
+  "floor": -1,
+  "aggregation": "max similarity per class"
+ },
+ "orders": 3,
+ "order_seeds": [
+  1000,
+  1001,
+  1002
+ ],
+ "combination": "geometric mean, T=1",
+ "tokenisation": {
+  "truncate": true,
+  "max_length": 2048,
+  "side": "right"
+ },
+ "prompt_lengths_test": {
+  "n_prompts": 9240,
+  "mean": 1015.0,
+  "p50": 983,
+  "p95": 1271,
+  "max": 1802,
+  "over_2048_truncated_prompts": 0,
+  "rows_with_any_truncated_order": 0
+ },
+ "n_test": 3080,
+ "accuracy": 0.9321,
+ "correct": 2871,
+ "published_default_accuracy": 0.9321,
+ "mcnemar_vs_reproduction": {
+  "source": "https://raw.githubusercontent.com/simonmesmith/jev-banking77-experiment/5cac4ff/results/predictions.csv",
+  "b_ours_right_theirs_wrong": 98,
+  "c_ours_wrong_theirs_right": 73,
+  "p_two_sided_exact": 0.0661429101428119
+ },
+ "revisions": {
+  "Qwen/Qwen3-4B": {
+   "refs_main": "1cfa9a7208912126459214e8b04321603b3df60c",
+   "cached_snapshots": [
+    "1cfa9a7208912126459214e8b04321603b3df60c"
+   ]
+  },
+  "DataAgent/Quorum-Reader-Qwen3-4B-Adapter": {
+   "refs_main": null,
+   "cached_snapshots": [
+    "e0765b768e04ff8dc83a8682963349bd6291ffa3"
+   ]
+  },
+  "BAAI/bge-large-en-v1.5": {
+   "refs_main": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+   "cached_snapshots": [
+    "d4aa6901d3a41ba39fb536a557fa166f842b0e09"
+   ]
+  },
+  "Jaehun/PrismNLI-0.4B": {
+   "refs_main": "02b9102b34d5dce1bf29c4e6903fea33e1a0ddeb",
+   "cached_snapshots": [
+    "02b9102b34d5dce1bf29c4e6903fea33e1a0ddeb"
+   ]
+  },
+  "BAAI/bge-base-en-v1.5": {
+   "refs_main": "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
+   "cached_snapshots": [
+    "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a"
+   ]
+  },
+  "legacy-datasets/banking77": {
+   "refs_main": "f54121560de48f2852f90be299010d1d6dc612ec",
+   "cached_snapshots": [
+    "f54121560de48f2852f90be299010d1d6dc612ec"
+   ]
+  }
+ },
+ "fields": {
+  "probs": "normalised geometric mean of reader_probs and knn_probs",
+  "reader_probs": "softmax(mean over orders of reader logits), T=1",
+  "knn_probs": "softmax(kNN logits), T=1",
+  "perm_reader_probs": "softmax(per-order reader logits), T=1",
+  "retrieved_idx": "indices into the pinned train split"
+ },
+ "versions": {
+  "torch": "2.9.0+cu129",
+  "transformers": "5.17.0",
+  "peft": "0.21.0",
+  "sentence_transformers": "6.1.0"
+ },
+ "device": "NVIDIA GB10",
+ "wall_seconds": 4586.8,
+ "written_at": "2026-10-05T03:35:48Z"
+}

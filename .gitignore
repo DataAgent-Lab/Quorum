@@ -12,3 +12,7 @@ serve/data/
 # paper: local-only identifying terms for the anonymity check; build outputs
 paper/tools/anonymity_terms.local
 paper/build/
+
+# logit caches of the clean 24-shot run (large, regenerable)
+results/clean/cache/
+results/default/cache/

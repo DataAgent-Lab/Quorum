@@ -1,0 +1,8 @@
+{
+ "descriptive_only": true,
+ "clean_accuracy": 0.9357,
+ "default_accuracy": 0.9321,
+ "b_clean_right_default_wrong": 57,
+ "c_clean_wrong_default_right": 46,
+ "p_two_sided_exact": 0.32447878028806587
+}

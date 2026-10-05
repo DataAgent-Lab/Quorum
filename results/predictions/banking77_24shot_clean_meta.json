@@ -1,0 +1,185 @@
+{
+ "protocol_commit": "8455e7e2290d9ac96b014fc3767ad65303e5261e",
+ "code": {
+  "git_head": "8df80ae0b31556980c3b0cfdb2adef0900ea2aea",
+  "tracked_files_modified": "unknown (no git binary; rely on sha256)",
+  "sha256": {
+   "scripts/clean_24shot.py": "27a7e97adf38a904a0a426ae017e873b2a9b57b63bcc15fc3d0030bbdb3c132a",
+   "quorum/fewshot.py": "c79778c1cba86ce815c449f5afc7994115d2f796a21e110190a8f9ccccc36f26",
+   "quorum/prompting.py": "fd38c3ca6209d1972a2e71233ad1792c0a662de756b20b9c9b9e77c9231480dd",
+   "quorum/ensemble.py": "2b9d281e142d44f5c1e6748610bf46185d6988ec64aca98f5650d7139f45ec8c",
+   "quorum/data.py": "b2bfa9259d40e45a2aabf7bad7cfea77e8ed343de2d535f7adb731346ae029e4",
+   "examples/banking77_descriptions.py": "df0a1291f16c28394dad67ef4be7f83e2ba6109872c89a001673c4f35e700f55"
+  }
+ },
+ "selection_file_sha256": "303d337d5ae9c226904233524e266115cd04c6383cd90e542c27921e1cd6d133",
+ "rerun": false,
+ "rerun_reason": null,
+ "pred_rule": "argmax of the unrounded combined scores; stored probabilities are rounded to 7 significant digits",
+ "dataset": "legacy-datasets/banking77",
+ "dataset_revision": "f54121560de48f2852f90be299010d1d6dc612ec",
+ "base": "Qwen/Qwen3-4B",
+ "base_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+ "adapter": "DataAgent/Quorum-Reader-Qwen3-4B-Adapter",
+ "adapter_revision": "e0765b768e04ff8dc83a8682963349bd6291ffa3",
+ "knn_embedder": "BAAI/bge-large-en-v1.5",
+ "task_description": "Classify the customer's banking message into the intent it expresses.",
+ "selected": {
+  "member_set": "M2",
+  "members": [
+   "reader",
+   "knn"
+  ],
+  "rule": "weighted_prob_mean",
+  "option_text": "descriptions",
+  "orders": 1,
+  "oof_correct": 867,
+  "oof_accuracy": 0.9383,
+  "insample_correct": 866
+ },
+ "fitted": {
+  "temperatures": {
+   "reader": 1.28545509320324,
+   "knn": 0.41156310566085086
+  },
+  "weights": [
+   0.28082962645372206,
+   0.7191703735462779
+  ],
+  "final_temperature": 0.9519068083206159
+ },
+ "pool_size": 9079,
+ "n_test": 3080,
+ "accuracy": 0.9357,
+ "correct": 2882,
+ "mcnemar_vs_reproduction": {
+  "source": "https://raw.githubusercontent.com/simonmesmith/jev-banking77-experiment/5cac4ff/results/predictions.csv",
+  "join": "id test-NNNNN == official test index; truth labels verified for all 3,080 rows",
+  "reproduction_accuracy": 0.924,
+  "b_ours_right_theirs_wrong": 119,
+  "c_ours_wrong_theirs_right": 83,
+  "p_two_sided_exact": 0.01359503941721217
+ },
+ "secondary": {
+  "primary_distribution": "final-temperature ensemble distribution (temperature fit on the selection split)",
+  "calibrated_final": {
+   "accuracy": 0.9357,
+   "bootstrap_95": [
+    0.9269,
+    0.9442
+   ],
+   "bootstrap": {
+    "resamples": 10000,
+    "seed": 20261007,
+    "method": "percentile, rows resampled"
+   },
+   "wilson_95": [
+    0.9265,
+    0.9438
+   ],
+   "macro_f1": 0.9357,
+   "log_loss_clipped_1e_15": 0.2548,
+   "brier_score": 0.0995,
+   "ece_10_bins": 0.0105
+  },
+  "uncalibrated_combined": {
+   "accuracy": 0.9357,
+   "bootstrap_95": [
+    0.9269,
+    0.9442
+   ],
+   "bootstrap": {
+    "resamples": 10000,
+    "seed": 20261007,
+    "method": "percentile, rows resampled"
+   },
+   "wilson_95": [
+    0.9265,
+    0.9438
+   ],
+   "macro_f1": 0.9357,
+   "log_loss_clipped_1e_15": 0.255,
+   "brier_score": 0.0999,
+   "ece_10_bins": 0.0171
+  },
+  "reproduction_reported": {
+   "accuracy": 0.924025974025974,
+   "accuracy_wilson_95": [
+    0.9141312770279373,
+    0.9328642366197155
+   ],
+   "macro_f1": 0.9234799977256557,
+   "log_loss_clipped_1e_15": 0.7835362996905508,
+   "brier_score": 0.1192651948051948,
+   "ece_10_bins": 0.03413311688311685
+  }
+ },
+ "prompt_lengths_test": {
+  "option_text": "descriptions",
+  "orders": 1,
+  "n_prompts": 3080,
+  "mean": 1210.2,
+  "p50": 1178,
+  "p95": 1470,
+  "max": 1996,
+  "over_limit": 0,
+  "limit": 4096
+ },
+ "zero_shot_nli_dtype": "fp32",
+ "max_prompt_tokens": 4096,
+ "truncation": false,
+ "revisions": {
+  "Qwen/Qwen3-4B": {
+   "refs_main": "1cfa9a7208912126459214e8b04321603b3df60c",
+   "cached_snapshots": [
+    "1cfa9a7208912126459214e8b04321603b3df60c"
+   ]
+  },
+  "DataAgent/Quorum-Reader-Qwen3-4B-Adapter": {
+   "refs_main": null,
+   "cached_snapshots": [
+    "e0765b768e04ff8dc83a8682963349bd6291ffa3"
+   ]
+  },
+  "BAAI/bge-large-en-v1.5": {
+   "refs_main": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+   "cached_snapshots": [
+    "d4aa6901d3a41ba39fb536a557fa166f842b0e09"
+   ]
+  },
+  "Jaehun/PrismNLI-0.4B": {
+   "refs_main": "02b9102b34d5dce1bf29c4e6903fea33e1a0ddeb",
+   "cached_snapshots": [
+    "02b9102b34d5dce1bf29c4e6903fea33e1a0ddeb"
+   ]
+  },
+  "BAAI/bge-base-en-v1.5": {
+   "refs_main": "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
+   "cached_snapshots": [
+    "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a"
+   ]
+  },
+  "legacy-datasets/banking77": {
+   "refs_main": "f54121560de48f2852f90be299010d1d6dc612ec",
+   "cached_snapshots": [
+    "f54121560de48f2852f90be299010d1d6dc612ec"
+   ]
+  }
+ },
+ "hf_offline": "1",
+ "fields": {
+  "probs": "combined distribution of the calibrated members (rank_mean: normalised scores)",
+  "reader_probs/knn_probs/zs_probs": "softmax(member logits / fitted member temperature)",
+  "perm_reader_probs": "softmax(per-order reader logits) at T=1",
+  "retrieved_idx": "indices into the pinned train split (pool = train minus selection split)"
+ },
+ "versions": {
+  "torch": "2.9.0+cu129",
+  "transformers": "5.17.0",
+  "peft": "0.21.0",
+  "sentence_transformers": "6.1.0"
+ },
+ "device": "NVIDIA GB10",
+ "wall_seconds": 1837.0,
+ "written_at": "2026-10-04T23:20:26Z"
+}
