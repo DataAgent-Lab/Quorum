@@ -1,0 +1,187 @@
+{
+ "reranker": "BAAI/bge-reranker-v2-m3",
+ "reranker_revision": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
+ "template": "This message is about {label}.",
+ "precision": "fp16",
+ "max_length": 512,
+ "softmax_temperature": 1.0,
+ "ensemble4": "geometric mean (T=1) of PrismNLI, bge-large, bge-base (R3 member_probs) and the reranker",
+ "results": {
+  "banking77/names": {
+   "reranker_accuracy": 0.6451,
+   "seconds": 142.2,
+   "ensemble3_accuracy": 0.7555,
+   "ensemble4_accuracy": 0.751,
+   "best_existing_single_member": 0.7042,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 63,
+    "c": 77,
+    "p_two_sided_exact": 0.27184203624171227
+   }
+  },
+  "banking77/descriptions": {
+   "reranker_accuracy": 0.6597,
+   "seconds": 154.0,
+   "ensemble3_accuracy": 0.7737,
+   "ensemble4_accuracy": 0.7636,
+   "best_existing_single_member": 0.738,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 68,
+    "c": 99,
+    "p_two_sided_exact": 0.019986107366167807
+   }
+  },
+  "clinc150/names": {
+   "reranker_accuracy": 0.5729,
+   "seconds": 323.0,
+   "ensemble3_accuracy": 0.6518,
+   "ensemble4_accuracy": 0.6451,
+   "best_existing_single_member": 0.6307,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 136,
+    "c": 173,
+    "p_two_sided_exact": 0.0403898458596622
+   }
+  },
+  "clinc150/descriptions": {
+   "reranker_accuracy": 0.6027,
+   "seconds": 410.9,
+   "ensemble3_accuracy": 0.6816,
+   "ensemble4_accuracy": 0.6778,
+   "best_existing_single_member": 0.648,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 99,
+    "c": 120,
+    "p_two_sided_exact": 0.17640787441003639
+   }
+  },
+  "hwu64/names": {
+   "reranker_accuracy": 0.6078,
+   "seconds": 27.6,
+   "ensemble3_accuracy": 0.7388,
+   "ensemble4_accuracy": 0.7388,
+   "best_existing_single_member": 0.6431,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 38,
+    "c": 38,
+    "p_two_sided_exact": 1.0
+   }
+  },
+  "hwu64/descriptions": {
+   "reranker_accuracy": 0.6329,
+   "seconds": 34.4,
+   "ensemble3_accuracy": 0.7574,
+   "ensemble4_accuracy": 0.7565,
+   "best_existing_single_member": 0.737,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 34,
+    "c": 35,
+    "p_two_sided_exact": 1.0
+   }
+  },
+  "massive/names": {
+   "reranker_accuracy": 0.5521,
+   "seconds": 73.0,
+   "ensemble3_accuracy": 0.7394,
+   "ensemble4_accuracy": 0.7213,
+   "best_existing_single_member": 0.6907,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 65,
+    "c": 119,
+    "p_two_sided_exact": 8.380650820779783e-05
+   }
+  },
+  "massive/descriptions": {
+   "reranker_accuracy": 0.582,
+   "seconds": 91.2,
+   "ensemble3_accuracy": 0.7774,
+   "ensemble4_accuracy": 0.7589,
+   "best_existing_single_member": 0.7139,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 48,
+    "c": 103,
+    "p_two_sided_exact": 8.951596614941466e-06
+   }
+  },
+  "mtop/names": {
+   "reranker_accuracy": 0.4409,
+   "seconds": 193.8,
+   "ensemble3_accuracy": 0.614,
+   "ensemble4_accuracy": 0.5841,
+   "best_existing_single_member": 0.5871,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 170,
+    "c": 301,
+    "p_two_sided_exact": 1.6588903656214518e-09
+   }
+  },
+  "mtop/descriptions": {
+   "reranker_accuracy": 0.5059,
+   "seconds": 235.6,
+   "ensemble3_accuracy": 0.7214,
+   "ensemble4_accuracy": 0.7145,
+   "best_existing_single_member": 0.6507,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 140,
+    "c": 170,
+    "p_two_sided_exact": 0.09938375177013092
+   }
+  },
+  "snips/names": {
+   "reranker_accuracy": 0.7879,
+   "seconds": 5.4,
+   "ensemble3_accuracy": 0.8529,
+   "ensemble4_accuracy": 0.85,
+   "best_existing_single_member": 0.8671,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 30,
+    "c": 34,
+    "p_two_sided_exact": 0.707980754134764
+   }
+  },
+  "snips/descriptions": {
+   "reranker_accuracy": 0.8879,
+   "seconds": 7.5,
+   "ensemble3_accuracy": 0.9443,
+   "ensemble4_accuracy": 0.9436,
+   "best_existing_single_member": 0.9314,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 18,
+    "c": 19,
+    "p_two_sided_exact": 1.0
+   }
+  },
+  "bitext/names": {
+   "reranker_accuracy": 0.7684,
+   "seconds": 65.5,
+   "ensemble3_accuracy": 0.7751,
+   "ensemble4_accuracy": 0.8058,
+   "best_existing_single_member": 0.7127,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 246,
+    "c": 81,
+    "p_two_sided_exact": 1.74965383364031e-20
+   }
+  },
+  "bitext/descriptions": {
+   "reranker_accuracy": 0.8197,
+   "seconds": 78.3,
+   "ensemble3_accuracy": 0.8203,
+   "ensemble4_accuracy": 0.845,
+   "best_existing_single_member": 0.7797,
+   "mcnemar_ensemble4_vs_ensemble3": {
+    "b": 201,
+    "c": 68,
+    "p_two_sided_exact": 1.9851922471765042e-16
+   }
+  }
+ },
+ "code_sha256": "947efde984c206433e4aa9372cc387437d5f894a14c60f03758d2935b80fd735",
+ "versions": {
+  "torch": "2.9.0+cu129",
+  "transformers": "5.17.0"
+ },
+ "device": "NVIDIA GB10",
+ "wall_seconds": 1856.6,
+ "written_at": "2026-10-05T16:50:12Z"
+}
