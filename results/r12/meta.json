@@ -1,0 +1,32 @@
+{
+ "sample_ids_sha256": "68c9cdc05556d4674b27d93f6be733a06df53b310c52748e0f02273ce61a104e",
+ "seed": 20261008,
+ "config": "ZeroShotEnsemble defaults (PrismNLI-0.4B fp32 + bge-large + bge-base, T=1, geometric mean)",
+ "members": [
+  "Jaehun/PrismNLI-0.4B",
+  "BAAI/bge-large-en-v1.5",
+  "BAAI/bge-base-en-v1.5"
+ ],
+ "train_sample_accuracy": {
+  "banking77/names": 0.734,
+  "banking77/descriptions": 0.758,
+  "clinc150/names": 0.796,
+  "clinc150/descriptions": 0.834,
+  "hwu64/names": 0.723,
+  "hwu64/descriptions": 0.772,
+  "massive/names": 0.726,
+  "massive/descriptions": 0.793,
+  "mtop/names": 0.614,
+  "mtop/descriptions": 0.725,
+  "snips/names": 0.848,
+  "snips/descriptions": 0.928,
+  "bitext/names": 0.81,
+  "bitext/descriptions": 0.846
+ },
+ "versions": {
+  "torch": "2.9.0+cu129",
+  "transformers": "5.17.0"
+ },
+ "device": "NVIDIA GB10",
+ "written_at": "2026-10-05T07:53:27Z"
+}
