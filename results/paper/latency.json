@@ -1,0 +1,41 @@
+{
+ "code": {
+  "git_head": "44c8413ac7ac15b8b5bbaeeb337fe7f04112de58",
+  "sha256": {
+   "scripts/paper_runs.py": "20fa46e7019554258ac975d1db7e0cbcda0ba8a4cf5c5befe23bf55592272238",
+   "scripts/clean_24shot.py": "27a7e97adf38a904a0a426ae017e873b2a9b57b63bcc15fc3d0030bbdb3c132a",
+   "quorum/fewshot.py": "c79778c1cba86ce815c449f5afc7994115d2f796a21e110190a8f9ccccc36f26",
+   "quorum/prompting.py": "fd38c3ca6209d1972a2e71233ad1792c0a662de756b20b9c9b9e77c9231480dd"
+  }
+ },
+ "zero_shot_load_seconds": 18.3,
+ "zero_shot_cold_first_call_seconds": 1.311,
+ "zero_shot_warm_batch1": {
+  "n": 32,
+  "median_ms": 284.2,
+  "p95_ms": 336.0,
+  "note": "77 labels; NLI cast to fp32, embedders fp32 (sentence-transformers default)"
+ },
+ "fewshot_load_and_index_seconds": 65.82,
+ "fewshot_reader_bs1": {
+  "items": 64,
+  "seconds": 29.98,
+  "ms_per_item_per_order": 468.4,
+  "warmup_8_items_seconds": 4.07
+ },
+ "fewshot_reader_bs8": {
+  "items": 64,
+  "seconds": 35.91,
+  "ms_per_item_per_order": 561.0,
+  "warmup_8_items_seconds": 4.48
+ },
+ "fewshot_knn_ms_per_item": 9.24,
+ "hardware": {
+  "gpu": "NVIDIA GB10",
+  "memory_gb": 128.5,
+  "torch": "2.9.0+cu129",
+  "cuda": "12.9",
+  "reader_precision": "bf16",
+  "prompt": "best config (descriptions, 24 shots, 1 order)"
+ }
+}
