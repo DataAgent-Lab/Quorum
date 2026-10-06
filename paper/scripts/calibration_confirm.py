@@ -16,7 +16,12 @@ Primary procedure (fixed):
 Secondary (declared, descriptive): bootstrap 95% CIs on ECE-10 (raw and T*), 2,000 row resamples, seed 20261009;
 sensitivity: one temperature per label-text condition (fit on that condition's 7,000 train rows only).
 
-    python paper/scripts/calibration_confirm.py
+    python paper/scripts/calibration_confirm.py                 # original ensemble (PrismNLI member)
+    python paper/scripts/calibration_confirm.py --tag clean_c   # R13: same procedure, documented-clean NLI member
+    python paper/scripts/calibration_confirm.py --tag mnli_snli # R13: same procedure, SNLI+MNLI NLI member
+The --tag runs (added 2026-10-06, committed before running them) apply the IDENTICAL declared procedure to the R13
+ensembles: train-side inputs results/r13/<ds>_<cond>_train1000_<tag>.jsonl.gz (same pre-registered ids), test inputs
+results/predictions/<ds>_<cond>_r13_<tag>.jsonl.gz, output paper/generated/calibration_confirm_<tag>.json.
 """
 from __future__ import annotations
 import gzip, json, math, sys
@@ -66,7 +71,13 @@ def boot_ece(P, y, rng):
 
 
 def main():
-    train = {(ds, c): logp(ROOT / "results" / "r12" / f"{ds}_{c}_train1000.jsonl.gz") for ds, _ in DATASETS for c, _ in CONDS}
+    import argparse
+    ap = argparse.ArgumentParser(); ap.add_argument("--tag", default=""); tag = ap.parse_args().tag
+    tr = (lambda ds, c: ROOT / "results" / "r13" / f"{ds}_{c}_train1000_{tag}.jsonl.gz") if tag else \
+         (lambda ds, c: ROOT / "results" / "r12" / f"{ds}_{c}_train1000.jsonl.gz")
+    te = (lambda ds, c: ROOT / "results" / "predictions" / f"{ds}_{c}_r13_{tag}.jsonl.gz") if tag else \
+         (lambda ds, c: ROOT / "results" / "predictions" / f"{ds}_{c}.jsonl.gz")
+    train = {(ds, c): logp(tr(ds, c)) for ds, _ in DATASETS for c, _ in CONDS}
     T_star = fit_T(list(train.values()))
     T_cond = {c: fit_T([v for (d, cc), v in train.items() if cc == c]) for c, _ in CONDS}
     rng = np.random.default_rng(BOOT_SEED); res = {"T_star": T_star, "T_per_condition": T_cond, "tests": {}}
@@ -76,7 +87,7 @@ def main():
     print(f"{'dataset':10s} {'cond':6s} {'ECE raw [95% CI]':>24s} {'ECE T* [95% CI]':>24s} {'Brier raw→T*':>16s} {'LL raw→T*':>14s}  ECE(T_cond)")
     for ds, _ in DATASETS:
         for c, _ in CONDS:
-            L, y = logp(ROOT / "results" / "predictions" / f"{ds}_{c}.jsonl.gz")
+            L, y = logp(te(ds, c))
             P0, P1, P2 = softmax_T(L, 1.0), softmax_T(L, T_star), softmax_T(L, T_cond[c])
             raw, cal, cal_c = calibration(P0, y), calibration(P1, y), calibration(P2, y)
             ci0, ci1 = boot_ece(P0, y, rng), boot_ece(P1, y, rng)
@@ -90,7 +101,7 @@ def main():
     res["success_criterion"] = {"rule": "ECE-10 decreases on all 14 test conditions", "met": wins == 14,
                                 "decreased_on": int(wins)}
     print(f"success criterion (ECE decreases on all 14): {'MET' if wins == 14 else 'NOT MET'} ({wins}/14)")
-    (ROOT / "paper" / "generated" / "calibration_confirm.json").write_text(json.dumps(res, indent=1))
+    (ROOT / "paper" / "generated" / (f"calibration_confirm_{tag}.json" if tag else "calibration_confirm.json")).write_text(json.dumps(res, indent=1))
 
 
 if __name__ == "__main__":
