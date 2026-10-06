@@ -615,3 +615,20 @@ checkpoint unaffected (index 0 before and after). Tests: tests/test_entailment_i
 not_entailment-first order); serve fast suite 47 passed / 1 skipped. R13 running (clean_c, then mnli_snli).
 
 ===
+Human:
+
+[RESUME — 2026-10-06] Push: yes. Jev: credit added, try again.
+
+===
+AI:
+
+[NOTE] Pushed main to origin (8679044..2e35fbf, fast-forward, no force) after scans: 0 employer identities, 0 secrets,
+service/.env ignored. One public-file leak found before pushing — an earlier version of this log quoted the old employer
+email domain inside 6 objects of the unpushed range; fixed by rewriting ONLY the unpushed range (filter-repo
+--replace-text --refs origin/main..main; published history untouched), reflog expired + gc: 0 such objects anywhere.
+Added results/predictions/DATA_NOTICE.md (T2.11b) in the same push.
+Jev retry: still HTTP 403 "Free tier users do not have access to this model". The key's gateway balance reads
+{"balance":"5","totalUsed":"0"} — consistent with the free monthly allowance; the paid top-up is not visible to this
+key's team. Waiting for the user to add paid credit to the team that owns the key.
+
+===
