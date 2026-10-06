@@ -1,0 +1,304 @@
+{
+ "model": "MoritzLaurer/deberta-v3-large-zeroshot-v2.0-c",
+ "revision": "b2730f16019076bb0009481121efbe4705e0e378",
+ "id2label": {
+  "0": "entailment",
+  "1": "not_entailment"
+ },
+ "entailment_index": 0,
+ "precision": "fp32",
+ "template": "This message is about {label}.",
+ "max_length": 256,
+ "softmax_temperature": 1.0,
+ "ensemble": "geometric mean (T=1) of the new NLI member and the committed R3/R12 bge-large, bge-base member_probs",
+ "results": {
+  "banking77/names": {
+   "nli_alone_accuracy": 0.5617,
+   "bge_large_accuracy": 0.7003,
+   "bge_base_accuracy": 0.6724,
+   "ensemble_accuracy": 0.6899,
+   "original_ensemble_accuracy": 0.7555,
+   "best_single_member": "bge_large",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 184,
+    "c": 216,
+    "p_two_sided_exact": 0.121032836846099
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 49,
+    "c": 251,
+    "p_two_sided_exact": 7.546919142810706e-34
+   },
+   "train1000_ensemble_accuracy": 0.666,
+   "seconds": 1147.8
+  },
+  "banking77/descriptions": {
+   "nli_alone_accuracy": 0.525,
+   "bge_large_accuracy": 0.738,
+   "bge_base_accuracy": 0.7166,
+   "ensemble_accuracy": 0.7162,
+   "original_ensemble_accuracy": 0.7737,
+   "best_single_member": "bge_large",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 171,
+    "c": 238,
+    "p_two_sided_exact": 0.0010755991137410838
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 52,
+    "c": 229,
+    "p_two_sided_exact": 1.1498782555123692e-27
+   },
+   "train1000_ensemble_accuracy": 0.687,
+   "seconds": 1201.4
+  },
+  "clinc150/names": {
+   "nli_alone_accuracy": 0.5213,
+   "bge_large_accuracy": 0.5729,
+   "bge_base_accuracy": 0.5622,
+   "ensemble_accuracy": 0.6238,
+   "original_ensemble_accuracy": 0.6518,
+   "best_single_member": "bge_large",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 466,
+    "c": 186,
+    "p_two_sided_exact": 1.2015451836785857e-28
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 118,
+    "c": 272,
+    "p_two_sided_exact": 4.125571566587542e-15
+   },
+   "train1000_ensemble_accuracy": 0.784,
+   "seconds": 2974.1
+  },
+  "clinc150/descriptions": {
+   "nli_alone_accuracy": 0.5304,
+   "bge_large_accuracy": 0.648,
+   "bge_base_accuracy": 0.6215,
+   "ensemble_accuracy": 0.6684,
+   "original_ensemble_accuracy": 0.6816,
+   "best_single_member": "bge_large",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 316,
+    "c": 204,
+    "p_two_sided_exact": 1.0307585323602764e-06
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 133,
+    "c": 206,
+    "p_two_sided_exact": 8.692066594731804e-05
+   },
+   "train1000_ensemble_accuracy": 0.799,
+   "seconds": 3419.8
+  },
+  "hwu64/names": {
+   "nli_alone_accuracy": 0.473,
+   "bge_large_accuracy": 0.6152,
+   "bge_base_accuracy": 0.6022,
+   "ensemble_accuracy": 0.6868,
+   "original_ensemble_accuracy": 0.7388,
+   "best_single_member": "bge_large",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 126,
+    "c": 49,
+    "p_two_sided_exact": 5.244194712996739e-09
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 41,
+    "c": 97,
+    "p_two_sided_exact": 2.087575969839332e-06
+   },
+   "train1000_ensemble_accuracy": 0.691,
+   "seconds": 390.0
+  },
+  "hwu64/descriptions": {
+   "nli_alone_accuracy": 0.4954,
+   "bge_large_accuracy": 0.737,
+   "bge_base_accuracy": 0.6933,
+   "ensemble_accuracy": 0.724,
+   "original_ensemble_accuracy": 0.7574,
+   "best_single_member": "bge_large",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 80,
+    "c": 94,
+    "p_two_sided_exact": 0.3243734659085553
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 42,
+    "c": 78,
+    "p_two_sided_exact": 0.001299333097250276
+   },
+   "train1000_ensemble_accuracy": 0.713,
+   "seconds": 426.6
+  },
+  "massive/names": {
+   "nli_alone_accuracy": 0.5084,
+   "bge_large_accuracy": 0.5726,
+   "bge_base_accuracy": 0.574,
+   "ensemble_accuracy": 0.6476,
+   "original_ensemble_accuracy": 0.7394,
+   "best_single_member": "bge_base",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 412,
+    "c": 193,
+    "p_two_sided_exact": 3.1774956632186986e-19
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 98,
+    "c": 371,
+    "p_two_sided_exact": 2.032566742907594e-38
+   },
+   "train1000_ensemble_accuracy": 0.65,
+   "seconds": 700.7
+  },
+  "massive/descriptions": {
+   "nli_alone_accuracy": 0.505,
+   "bge_large_accuracy": 0.6453,
+   "bge_base_accuracy": 0.6015,
+   "ensemble_accuracy": 0.7041,
+   "original_ensemble_accuracy": 0.7774,
+   "best_single_member": "bge_large",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 342,
+    "c": 167,
+    "p_two_sided_exact": 6.723995307043247e-15
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 71,
+    "c": 289,
+    "p_two_sided_exact": 2.53472950249166e-32
+   },
+   "train1000_ensemble_accuracy": 0.7,
+   "seconds": 764.5
+  },
+  "mtop/names": {
+   "nli_alone_accuracy": 0.4558,
+   "bge_large_accuracy": 0.427,
+   "bge_base_accuracy": 0.4348,
+   "ensemble_accuracy": 0.5707,
+   "original_ensemble_accuracy": 0.614,
+   "best_single_member": "nli",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 755,
+    "c": 251,
+    "p_two_sided_exact": 3.5341117554559304e-59
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 155,
+    "c": 345,
+    "p_two_sided_exact": 1.1575866989993964e-17
+   },
+   "train1000_ensemble_accuracy": 0.577,
+   "seconds": 1841.5
+  },
+  "mtop/descriptions": {
+   "nli_alone_accuracy": 0.5221,
+   "bge_large_accuracy": 0.5657,
+   "bge_base_accuracy": 0.4437,
+   "ensemble_accuracy": 0.6338,
+   "original_ensemble_accuracy": 0.7214,
+   "best_single_member": "bge_large",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 764,
+    "c": 465,
+    "p_two_sided_exact": 1.3147847845187272e-17
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 141,
+    "c": 525,
+    "p_two_sided_exact": 6.8873920404312575e-53
+   },
+   "train1000_ensemble_accuracy": 0.639,
+   "seconds": 1999.1
+  },
+  "snips/names": {
+   "nli_alone_accuracy": 0.7707,
+   "bge_large_accuracy": 0.7879,
+   "bge_base_accuracy": 0.7293,
+   "ensemble_accuracy": 0.8736,
+   "original_ensemble_accuracy": 0.8529,
+   "best_single_member": "bge_large",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 146,
+    "c": 26,
+    "p_two_sided_exact": 1.8246324226630485e-21
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 68,
+    "c": 39,
+    "p_two_sided_exact": 0.006517764631278962
+   },
+   "train1000_ensemble_accuracy": 0.863,
+   "seconds": 88.5
+  },
+  "snips/descriptions": {
+   "nli_alone_accuracy": 0.8386,
+   "bge_large_accuracy": 0.8871,
+   "bge_base_accuracy": 0.875,
+   "ensemble_accuracy": 0.9307,
+   "original_ensemble_accuracy": 0.9443,
+   "best_single_member": "bge_large",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 78,
+    "c": 17,
+    "p_two_sided_exact": 1.6415483272931788e-10
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 13,
+    "c": 32,
+    "p_two_sided_exact": 0.00660882284228137
+   },
+   "train1000_ensemble_accuracy": 0.91,
+   "seconds": 97.4
+  },
+  "bitext/names": {
+   "nli_alone_accuracy": 0.7014,
+   "bge_large_accuracy": 0.7046,
+   "bge_base_accuracy": 0.6767,
+   "ensemble_accuracy": 0.782,
+   "original_ensemble_accuracy": 0.7751,
+   "best_single_member": "bge_large",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 621,
+    "c": 205,
+    "p_two_sided_exact": 2.1682849595629914e-49
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 294,
+    "c": 257,
+    "p_two_sided_exact": 0.12503821893205733
+   },
+   "train1000_ensemble_accuracy": 0.812,
+   "seconds": 556.3
+  },
+  "bitext/descriptions": {
+   "nli_alone_accuracy": 0.742,
+   "bge_large_accuracy": 0.7797,
+   "bge_base_accuracy": 0.7468,
+   "ensemble_accuracy": 0.8365,
+   "original_ensemble_accuracy": 0.8203,
+   "best_single_member": "bge_large",
+   "mcnemar_ensemble_vs_best_member": {
+    "b": 548,
+    "c": 243,
+    "p_two_sided_exact": 6.75660817973137e-28
+   },
+   "mcnemar_ensemble_vs_original_ensemble": {
+    "b": 233,
+    "c": 146,
+    "p_two_sided_exact": 9.17096552063031e-06
+   },
+   "train1000_ensemble_accuracy": 0.865,
+   "seconds": 596.4
+  }
+ },
+ "code_sha256": "ff97de639e819075c9aad6804ef751b80472baec310494eb9479a5e24edac8df",
+ "versions": {
+  "torch": "2.9.0+cu129",
+  "transformers": "5.17.0"
+ },
+ "device": "NVIDIA GB10",
+ "wall_seconds": 16205.8,
+ "written_at": "2026-10-06T04:46:32Z"
+}
