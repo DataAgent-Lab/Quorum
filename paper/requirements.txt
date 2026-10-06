@@ -1,2 +1,4 @@
 pypdf>=5
 # TeX engine: tectonic (single binary, https://tectonic-typesetting.github.io)
+pymupdf>=1.24   # paper/tools/ai_integrity.py `hidden` only; AGPL-3.0 — local dev tool, not a dependency of the quorum package
+pytest>=8
