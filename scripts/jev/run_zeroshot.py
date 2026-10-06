@@ -60,7 +60,8 @@ def build_arm(ds, arm, cache):
         gold = [d["raw_labels"][r["label"]] for r in test]
     else:
         labs = d["labels"]; D = descriptions(ds) if arm == "descriptions" else None
-        crit = {l: (D[l] if D else l) for l in labs}; instr = INSTR
+        # description files are keyed by raw labels (banking77) or humanized labels (mtop): resolve either form
+        crit = {l: ((D[l] if l in D else D[raw]) if D else l) for l, raw in zip(labs, d["raw_labels"])}; instr = INSTR
         gold = [labs[r["label"]] for r in test]
     return [(i, {"model": MODEL, "state": {"customer_message": r["text"]},
                  "questions": {"intent": {"type": "choice", "instructions": instr, "criteria": crit}}}, gold[i])
