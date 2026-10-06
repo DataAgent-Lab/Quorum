@@ -119,4 +119,5 @@
       "calibrated", "survives Bonferroni", "trained only on public intent data … Banking77 excluded" (CLINC/HWU/SNIPS
       + non-intent tasks are in the mixture), "full training pool" (9,079 for the study runs), 0.938 framing.
 - [ ] T8.6 arXiv endorser — user action; posting is must-ask.
+- [x] T8.8 Jev retrieval-swap run (BLOCKED #6 → done, ledger F15).
 - [ ] T8.7 Submission to TACL — must-ask, after AC-1…AC-16 pass.

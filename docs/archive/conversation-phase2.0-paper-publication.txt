@@ -641,3 +641,27 @@ original rerun identical. Ledger Z8/Z9. The entailment-label heuristic the resea
 (888e279, pushed). Data volume: R13 adds ~169 MB of dumps — consider Git LFS before the next push (user decision).
 
 ===
+Human:
+
+[RESUME — 2026-10-06] Push: yes, plus standing approval for verified Phase 2.0 commits. LFS: go with the
+recommendation (no LFS; future large outputs → HF dataset). Jev: switch to TypeSafe's own API (key updated).
+
+===
+AI:
+
+[DECISION #23 | user-decided + pre-registered run]
+  - Jev via TypeSafe's API: smoke test on a train item served jev-1.13.0 and matched the reproduction's recorded answer
+    and confidence. Protocol addendum (route change, pinned model asserted per response) and the analysis script were
+    committed AND pushed before any test-set call (a581270, c229285).
+  - Run: 6,160 calls, 0 failures, 0 retries, all jev-1.13.0, US$0.877.
+  - Pre-declared results (ledger F15): (1) PRIMARY at equal retrieval: ours 93.57% vs Jev 93.47%, p = 0.87 — TIE;
+    (2) Jev gains +1.07 pt from our retrieval rule (p = 6.7e-5); (3) exact replication of the published 92.40%
+    (99.48% identical choices); (4) calibration at equal retrieval: ours better on log loss (−0.508 [−0.655, −0.369])
+    and ECE (−0.012 [−0.024, −0.001]), Brier n.s.
+  - Consequence for the paper: the accuracy result is a retrieval-design finding (it helps the closed model too);
+    the model-level advantage is calibration. Spec C3 reframed.
+  - Outputs committed gzipped (16 MB → 1.8 MB; analysis reproduces identically from the gz files; input path only).
+  - Policy decided by the user: no Git LFS; future large outputs → HF dataset (memory saved).
+  - AI-use decision memo delivered (docs/phases/2.0/ai-use-policy-memo.md) — awaiting the user's choice (A+B / C / D, G).
+
+===
