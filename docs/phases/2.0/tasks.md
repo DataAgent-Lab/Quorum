@@ -50,7 +50,7 @@
 - [ ] T2.10 G9 CPU latency (time 1 item first; fp32 serve path) + GPU numbers from the research session.
 - [x] T2.11 G10 licence table (→ licences-contamination.md).
 - [x] T2.11b Data notice for results/predictions (results/predictions/DATA_NOTICE.md) (MTOP CC-BY-SA-4.0, Bitext CDLA-Sharing-1.0 share-alike) — push needs user OK.
-- [ ] T2.17 R13 contamination-robustness: zero-shot ensemble with a documented-clean NLI member (deberta-v3-large-zeroshot-v2.0-c); re-verify C1 + calibration on clean data; split zero-shot reporting into clean vs exposed datasets.
+- [x] T2.17 R13 contamination-robustness (→ ledger Z8/Z9: C1 8/8 on unexposed sets with a clean NLI member; calibration 14/14 for both clean ensembles): zero-shot ensemble with a documented-clean NLI member (deberta-v3-large-zeroshot-v2.0-c); re-verify C1 + calibration on clean data; split zero-shot reporting into clean vs exposed datasets.
 
 ## T2b — Reviewer-risk closures from the novelty memo (added 2026-10-05)
 - [x] T2.12 Combiner ablation (done 2026-10-05 → claims Z6/Z7) (CPU, needs R3 member probs): geometric mean vs true product of experts vs arithmetic

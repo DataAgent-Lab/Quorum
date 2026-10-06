@@ -632,3 +632,12 @@ Jev retry: still HTTP 403 "Free tier users do not have access to this model". Th
 key's team. Waiting for the user to add paid credit to the team that owns the key.
 
 ===
+AI:
+
+[DECISION #22 | log-and-proceed — R13 verified; contamination robustness]
+R13 (e6dc623) merged (133b384) and recomputed with Holm: clean-c NLI member → C1 11/14, 8/8 on the unexposed sets;
+SNLI+MNLI member → 5/4/5. Calibration procedure applied unchanged (declared a1b1155): 14/14 for both clean ensembles;
+original rerun identical. Ledger Z8/Z9. The entailment-label heuristic the research session flagged is already fixed
+(888e279, pushed). Data volume: R13 adds ~169 MB of dumps — consider Git LFS before the next push (user decision).
+
+===
