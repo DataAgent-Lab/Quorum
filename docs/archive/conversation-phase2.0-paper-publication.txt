@@ -605,3 +605,13 @@ AI:
     data notice (T2.11b; public change → user OK). No training on Jev outputs (TypeSafe terms).
 
 ===
+AI:
+
+[DECISION #21 | log-and-proceed — latent library bug fixed]
+The research session flagged (while preparing R13) that _NLIMember chose the first label CONTAINING "entail", which
+picks "not_entailment" whenever it is listed first. Reproduced here. Root fix: quorum.ensemble.entailment_index —
+exact "entailment", else the single label starting with "entail", else raise (no guessing). Current PrismNLI
+checkpoint unaffected (index 0 before and after). Tests: tests/test_entailment_index.py (7 passed, incl. the
+not_entailment-first order); serve fast suite 47 passed / 1 skipped. R13 running (clean_c, then mnli_snli).
+
+===
