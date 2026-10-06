@@ -680,3 +680,18 @@ AI:
     (relayed by quorum-dev); running.
 
 ===
+Human:
+
+[2026-10-06] The research session is running Cloudflare Clef and Clef-Flash (open models positioned like Jev,
+released 2026-10-05); ask it to sync the results here when done.
+
+===
+AI:
+
+[NOTE] Requested from the research session: Clef / Clef-Flash results with pins + licences, the same test items and
+label-text conditions (24-shot: the clean run's retrieved examples, i.e. equal retrieval with ours and Jev Arm B),
+per-item full probability vectors (+ whether outputs are rounded, cf. J2), served model ids, failures,
+pre-registration if any result is to be a claim (else exploratory), training-data/contamination disclosure, gzipped
+dumps (≫10 MB → HF dataset route). Will be verified independently like R1–R13.
+
+===
