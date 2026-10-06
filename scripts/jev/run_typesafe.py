@@ -5,7 +5,7 @@
 
 Arm A: the reproduction's own per-item request, unchanged (model jev-1.13.0). Arm B: the same request with
 state.labeled_examples replaced by the clean run's 24 retrieved training examples. Resumable: items already written
-to results/jev/arm{A,B}.jsonl are skipped. The key (service/.env, JEV_API_KEY) is never printed or written.
+to docs/phases/2.0/jev/24shot/arm{A,B}.jsonl are skipped (moved from results/jev on 2026-10-06). The key (service/.env, JEV_API_KEY) is never printed or written.
 """
 from __future__ import annotations
 import argparse, gzip, json, threading, time, urllib.error, urllib.request
@@ -13,7 +13,8 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "results" / "jev"
+JEV = ROOT / "docs" / "phases" / "2.0" / "jev"          # all Jev artifacts of Phase 2.0
+OUT = JEV / "24shot"
 REPRO = "https://raw.githubusercontent.com/simonmesmith/jev-banking77-experiment/5cac4ff/runs/test-v1"
 ENDPOINT = "https://api.typesafe.ai/v1/systemone"
 MODEL = "jev-1.13.0"
@@ -87,7 +88,7 @@ def call(arm: str, i: int, payload: dict, kept: int) -> dict:
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--cache", required=True); ap.add_argument("--limit", type=int, default=3080)
     a = ap.parse_args(); cache = Path(a.cache); cache.mkdir(parents=True, exist_ok=True); OUT.mkdir(parents=True, exist_ok=True)
-    train = json.loads((OUT / "train_pinned.json").read_text())
+    train = json.loads((JEV / "train_pinned.json").read_text())
     clean = [json.loads(l)["retrieved_idx"] for l in gzip.open(ROOT / "results/predictions/banking77_24shot_clean.jsonl.gz", "rt")]
     done = {arm: {json.loads(l)["idx"] for l in (OUT / f"arm{arm}.jsonl").read_text().splitlines()} if (OUT / f"arm{arm}.jsonl").exists() else set()
             for arm in "AB"}

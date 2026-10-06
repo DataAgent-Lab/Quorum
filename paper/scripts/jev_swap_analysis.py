@@ -27,7 +27,7 @@ BOOT_N, ECE_BOOT_N, SEED = 10_000, 2_000, 20261011
 
 def arm(name, names):
     rows = {}
-    src = ROOT / "results" / "jev" / f"arm{name}.jsonl"          # committed gzipped (size); plain file if present
+    src = ROOT / "docs" / "phases" / "2.0" / "jev" / "24shot" / f"arm{name}.jsonl"          # committed gzipped (size); plain file if present
     text = src.read_text() if src.exists() else gzip.open(str(src) + ".gz", "rt").read()
     for l in text.splitlines():
         r = json.loads(l); rows[r["idx"]] = r

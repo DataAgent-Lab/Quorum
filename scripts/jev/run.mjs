@@ -19,7 +19,7 @@ const model = createGateway({ apiKey: env.JEV_API_KEY }).evaluationModel("typesa
 const redact = s => String(s).split(env.JEV_API_KEY).join("[REDACTED]");
 
 // Pinned train texts/labels and the clean run's retrieved indices (both from this repository).
-const train = JSON.parse(readFileSync(ROOT + "results/jev/train_pinned.json", "utf8"));   // {text:[], label_name:[]}
+const train = JSON.parse(readFileSync(ROOT + "docs/phases/2.0/jev/train_pinned.json", "utf8"));   // moved 2026-10-06   // {text:[], label_name:[]}
 const clean = gunzipSync(readFileSync(ROOT + "results/predictions/banking77_24shot_clean.jsonl.gz")).toString()
   .trim().split("\n").map(l => JSON.parse(l));
 
