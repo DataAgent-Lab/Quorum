@@ -49,7 +49,7 @@
 - [ ] T2.9 G8 descriptions: review the authoring log; blind re-author + re-evaluate if iteration cannot be excluded.
 - [ ] T2.10 G9 CPU latency (time 1 item first; fp32 serve path) + GPU numbers from the research session.
 - [x] T2.11 G10 licence table (→ licences-contamination.md).
-- [ ] T2.11b Data notice for results/predictions (MTOP CC-BY-SA-4.0, Bitext CDLA-Sharing-1.0 share-alike) — push needs user OK.
+- [x] T2.11b Data notice for results/predictions (results/predictions/DATA_NOTICE.md) (MTOP CC-BY-SA-4.0, Bitext CDLA-Sharing-1.0 share-alike) — push needs user OK.
 - [ ] T2.17 R13 contamination-robustness: zero-shot ensemble with a documented-clean NLI member (deberta-v3-large-zeroshot-v2.0-c); re-verify C1 + calibration on clean data; split zero-shot reporting into clean vs exposed datasets.
 
 ## T2b — Reviewer-risk closures from the novelty memo (added 2026-10-05)
