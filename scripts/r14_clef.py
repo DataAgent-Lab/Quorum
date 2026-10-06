@@ -226,11 +226,13 @@ def phase_run(args):
     import torch, transformers
     from quorum import data
     J, model, proc, code_sha = load_model(args.model); tag = f"{args.model}_{args.setting}"
+    part = f"_part-{args.datasets.replace(',', '-')}" if args.datasets else ""   # dataset subset: inputs unchanged
     OUTP.mkdir(parents=True, exist_ok=True); OUT.mkdir(parents=True, exist_ok=True)
     jobs = []                                                         # (name, rows[(text,gold)], bodies, label order)
     if args.setting in ("zs", "train"):
         ids12 = json.loads((ROOT / "results" / "r12" / "sample_ids.json").read_text())
-        for ds in DATASETS:
+        for ds in (args.datasets.split(",") if args.datasets else DATASETS):
+            assert ds in DATASETS, ds
             d = data.load(ds); names = [str(l) for l in d["labels"]]
             rows = d["test"] if args.setting == "zs" else [d["train"][i] for i in ids12["ids"][ds]]
             rows = rows[: args.limit or len(rows)]
@@ -267,7 +269,8 @@ def phase_run(args):
             "code_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "versions": {"torch": torch.__version__, "transformers": transformers.__version__},
             "device": torch.cuda.get_device_name(0), "written_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
-    (OUT / f"summary_{tag}{'_limit' + str(args.limit) if args.limit else ''}.json").write_text(json.dumps(meta, indent=1))
+    meta["datasets"] = args.datasets or "all"; meta["host"] = __import__("socket").gethostname()
+    (OUT / f"summary_{tag}{part}{'_limit' + str(args.limit) if args.limit else ''}.json").write_text(json.dumps(meta, indent=1))
     print("R14_DONE", tag, flush=True)
 
 
@@ -275,4 +278,6 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("phase", choices=["parity", "batchcheck", "run"])
     ap.add_argument("--model", choices=sorted(MODELS)); ap.add_argument("--setting", choices=["zs", "b24", "defs", "train"])
     ap.add_argument("--limit", type=int, default=0); ap.add_argument("--bs", type=int, default=8)
+    ap.add_argument("--datasets", default="", help="comma list for zs/train: which datasets this run covers (a split "
+                    "of the work across hosts; each dataset's items and request bodies are unchanged)")
     a = ap.parse_args(); {"parity": phase_parity, "batchcheck": phase_batchcheck, "run": phase_run}[a.phase](a)
