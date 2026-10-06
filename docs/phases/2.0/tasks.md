@@ -30,7 +30,7 @@
       `member_picks`, exact McNemar ensemble-vs-best-member and names-vs-descriptions, **unrounded p** → macros.
 - [x] T1.3 G2: zero-shot Jev 0.801 → DROPPED (sole source a blog with no n/protocol; ledger Z5).
 - [ ] T1.4 G7 split audit: our splits (CLINC plus/OOS, Bitext 20% stratified, SNIPS 1400) vs each cited baseline's split.
-- [~] T1.5 C5 evidence (traps 1, 3, 4, 5 measured → ledger M1–M4; trap 2 citation pending): before/after numbers for each "trap" (or the section shrinks to a paragraph).
+- [x] T1.5 C5 evidence (traps 1, 3, 4, 5 measured → ledger M1–M4; trap 2 citation verified → M5): before/after numbers for each "trap" (or the section shrinks to a paragraph).
 
 ## T2 — Evidence-gap closure
 - [x] T2.1 G1 zero-shot calibration from dumps (ECE-10 as the reproduction, adaptive ECE, Brier, log loss, reliability).
