@@ -19,6 +19,8 @@ Z = ROOT / "docs" / "phases" / "2.0" / "jev" / "zeroshot"
 GEN = ROOT / "paper" / "generated"
 BOOT_N, ECE_BOOT_N, SEED = 10_000, 2_000, 20261012
 PRIMARY = [("banking77", "names"), ("banking77", "descriptions"), ("mtop", "names"), ("mtop", "descriptions")]
+# Addendum 1: family E (Holm over 6), declared separately; clean summary = MTOP + family E (descriptive)
+FAMILY_E = [(ds, c) for ds in ("clinc150", "snips", "bitext") for c in ("names", "descriptions")]
 
 
 def lines(path: Path):
@@ -79,6 +81,22 @@ def main():
                 prim_p.append(out[bucket][f"{ds}/{cond}"]["p"])
     for (ds, cond), ph in zip(PRIMARY, holm(prim_p)):
         out["primary"][f"{ds}/{cond}"]["p_holm"] = ph
+    if all((Z / f"{ds}_{c}.jsonl").exists() or (Z / f"{ds}_{c}.jsonl.gz").exists() for ds, c in FAMILY_E):
+        out["family_E"] = {}; pe = []
+        for ds, cond in FAMILY_E:
+            labs = data.load(ds)["labels"]; okJ, PJ, failed = jev(ds, cond, labs)
+            for tag, key in (("clean_c", "family_E"), ("", "secondary")):
+                y, okO, Pc, T = ours(ds, cond, tag); b, c = int((okO & ~okJ).sum()), int((~okO & okJ).sum())
+                out[key][f"{ds}/{cond}"] = {"ours": "clean-NLI ensemble" if tag else "original ensemble (PrismNLI)",
+                                            "acc_ours": float(okO.mean()), "acc_jev": float(okJ.mean()), "jev_failed": failed,
+                                            "b_ours_right_jev_wrong": b, "c_ours_wrong_jev_right": c, "p": mcnemar_exact_p(b, c)}
+                out["calibration"][f"{ds}/{cond}/{'clean_c' if tag else 'original'}"] = {"T_star": T, **paired_cal(Pc, PJ, y, rng)}
+                if key == "family_E":
+                    pe.append(out[key][f"{ds}/{cond}"]["p"])
+        for (ds, cond), ph in zip(FAMILY_E, holm(pe)):
+            out["family_E"][f"{ds}/{cond}"]["p_holm"] = ph
+        for k, v in out["family_E"].items():
+            print(f"FAMILY E {k:23s} clean-NLI {v['acc_ours']:.4f} vs Jev {v['acc_jev']:.4f} | b/c {v['b_ours_right_jev_wrong']}/{v['c_ours_wrong_jev_right']} p={v['p']:.3g} p_Holm={v['p_holm']:.3g}")
     d = data.load("banking77"); okR, PR, failed = jev("banking77", "repro_definitions", d["raw_labels"])
     y = np.array([r["label"] for r in d["test"]])
     out["descriptive"]["banking77/repro_definitions"] = {"acc": float(okR.mean()), "failed": failed,

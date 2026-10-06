@@ -22,9 +22,13 @@ REPRO = "https://raw.githubusercontent.com/simonmesmith/jev-banking77-experiment
 INSTR = ("Which ONE intent best describes `customer_message`? "
          "Every message belongs to exactly one of these categories.")
 WORKERS, ATTEMPTS, SPACING, CAP_USD, RATE = 8, 3, 0.12, 5.0, 0.042 / 1_000_000
+CAP_TOTAL_WITH_ADDENDUM = 6.0                # addendum 1: base arms ≤ $5, all arms together ≤ $6
 RETRYABLE = {429, 500, 502, 503, 504, 529}
 ARMS = [("banking77", "names"), ("banking77", "descriptions"), ("banking77", "repro_definitions"),
         ("mtop", "names"), ("mtop", "descriptions")]
+# Addendum 1 (PROTOCOL_ADDENDUM_clean_datasets.md): the remaining clean datasets, run with --arms clean
+ARMS_CLEAN = [(ds, arm) for ds in ("clinc150", "snips", "bitext") for arm in ("names", "descriptions")]
+DESC_FILE = {"clinc150": "clinc"}            # examples/clinc_descriptions.py serves clinc150
 
 env = dict(l.split("=", 1) for l in (ROOT / "service" / ".env").read_text().splitlines() if "=" in l)
 KEY = env["JEV_API_KEY"].strip().strip('"').strip("'")
@@ -41,7 +45,7 @@ def write(name, rec):
 
 
 def descriptions(ds):
-    spec = importlib.util.spec_from_file_location("d", ROOT / "examples" / f"{ds}_descriptions.py")
+    spec = importlib.util.spec_from_file_location("d", ROOT / "examples" / f"{DESC_FILE.get(ds, ds)}_descriptions.py")
     m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
     return next(v for k, v in vars(m).items() if k.endswith("_DESCRIPTIONS"))
 
@@ -104,11 +108,15 @@ def call(ds, arm, i, payload, gold):
 
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("--cache", required=True); a = ap.parse_args()
+    ap = argparse.ArgumentParser(); ap.add_argument("--cache", required=True)
+    ap.add_argument("--arms", choices=["base", "clean"], default="base"); a = ap.parse_args()
+    global CAP_USD
+    if a.arms == "clean":
+        CAP_USD = CAP_TOTAL_WITH_ADDENDUM
     cache = Path(a.cache); cache.mkdir(parents=True, exist_ok=True); OUT.mkdir(parents=True, exist_ok=True)
     if (OUT / "ledger.jsonl").exists():
         state["spent"] = sum(json.loads(l).get("cost_usd", 0) for l in (OUT / "ledger.jsonl").read_text().splitlines())
-    for ds, arm in ARMS:
+    for ds, arm in (ARMS if a.arms == "base" else ARMS_CLEAN):
         f = OUT / f"{ds}_{arm}.jsonl"
         done = {json.loads(l)["idx"] for l in f.read_text().splitlines()} if f.exists() else set()
         todo = [x for x in build_arm(ds, arm, cache) if x[0] not in done]
