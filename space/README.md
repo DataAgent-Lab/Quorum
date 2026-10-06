@@ -25,6 +25,11 @@ doesn't. You can also type your own sentence and labels.
 - Code + study: https://github.com/DataAgent-Lab/Quorum ·
   Collection: https://huggingface.co/collections/DataAgent/quorum-6abb3255e0fab20d66add39b
 
-**Honest note.** This is the zero-shot tier — cheap and calibrated, but *not* open zero-shot state-of-the-art: the
-closed API Jev (an independent reproduction, ~0.801 on Banking77) still leads zero-shot. The 24-shot pipeline that
-edges it (0.932 vs 0.924 on Banking77) uses a gated LoRA adapter, `DataAgent/Quorum-Reader-Qwen3-4B-Adapter`.
+**Honest note.** This is the zero-shot tier: three models under 1B that run on a CPU, but *not* open zero-shot
+state-of-the-art. Measured on the same test sentences and label text, the closed model Jev is clearly ahead zero-shot
+on all five benchmarks we ran (Banking77: 0.803 vs 0.716 for this jury with an NLI juror never trained on Banking77).
+Banking77, MASSIVE and HWU64 are not fully held out here: the NLI juror's base model was trained on the Banking77 and
+MASSIVE train splits, and 44% of HWU64's test sentences appear in MASSIVE's train split. Only the 24-shot pipeline,
+with a 4B reader (gated LoRA adapter `DataAgent/Quorum-Reader-Qwen3-4B-Adapter`), ties Jev on Banking77 (0.932 vs
+0.924, not significant; 0.936 vs 0.935 given the same retrieved examples). Details:
+https://academy.idataagent.com/research/quorum

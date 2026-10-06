@@ -493,7 +493,9 @@ function showVerdict(res, labels, gold, source, secs) {
   $("tau").oninput = gate; gate();
 }
 function accLine() { const d = state.ds;
-  return `Quorum gets ${(d.accuracy * 100).toFixed(1)}% of ${d.n_test.toLocaleString()} ${esc(d.dataset)} test sentences right (zero-shot).`; }
+  const exposed = ["banking77", "massive", "hwu64"].includes(d.key)
+    ? ' Not fully held out, see the <a href="https://academy.idataagent.com/research/quorum#limits-h" target="_blank" rel="noopener">research page</a>.' : "";
+  return `Quorum gets ${(d.accuracy * 100).toFixed(1)}% of ${d.n_test.toLocaleString()} ${esc(d.dataset)} test sentences right (zero-shot).${exposed}`; }
 function sealSVG() {
   const id = "c" + Math.random().toString(36).slice(2, 7);
   return `<svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="${id}" d="M60,60 m-48,0 a48,48 0 1,1 96,0 a48,48 0 1,1 -96,0"/></defs>
