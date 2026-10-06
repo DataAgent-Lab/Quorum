@@ -29,6 +29,20 @@ def _softmax(z: np.ndarray) -> np.ndarray:
     return e / e.sum()
 
 
+def entailment_index(id2label) -> int:
+    """Index of the entailment class. An exact 'entailment' label wins; otherwise the single label that STARTS with
+    'entail'. A substring match is not used: 'not_entailment' contains 'entail', so it would pick the wrong class
+    whenever 'not_entailment' is listed first. Raises if the label set is ambiguous rather than guessing."""
+    labels = {int(k): str(v).strip().lower() for k, v in id2label.items()}
+    exact = [i for i, v in labels.items() if v == "entailment"]
+    if len(exact) == 1:
+        return exact[0]
+    starts = [i for i, v in labels.items() if v.startswith("entail")]
+    if len(starts) == 1:
+        return starts[0]
+    raise ValueError(f"cannot identify the entailment class in id2label={dict(id2label)}")
+
+
 class _NLIMember:
     """Cross-attention NLI entailment scorer: score(premise=text, hypothesis='This message is about {label}.')."""
     def __init__(self, model_name: str = DEFAULT_NLI, device: str = "cpu"):
@@ -43,8 +57,7 @@ class _NLIMember:
         self.model = AutoModelForSequenceClassification.from_pretrained(
             model_name, torch_dtype=dtype).to(device).eval()
         self.device = device
-        id2label = {int(k): str(v).lower() for k, v in self.model.config.id2label.items()}
-        self.entail = next((i for i, v in id2label.items() if "entail" in v), id2label and max(id2label) or 0)
+        self.entail = entailment_index(self.model.config.id2label)
 
     def logits(self, text: str, label_texts: list[str], batch: int = 32) -> np.ndarray:
         hyp = [TEMPLATE.format(label=t) for t in label_texts]
