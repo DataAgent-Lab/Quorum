@@ -60,6 +60,8 @@
 | P3 | Exact-match overlap of eval test sets with the adapter mixture: **MASSIVE 318/2,974 (10.7%)** (311 via HWU64 train), MTOP 11/4,386, Banking77 0, Bitext 0 (lower bound) → MASSIVE is **not** a clean held-out set for adapter-based results; zero-shot results unaffected | **REPORTED** (R4) |
 | P4 | Description authorship: six sets written by an LLM coding agent (Claude Opus 4.8, the research session) from label names only, one pass, measured once, never revised; Banking77 by an earlier agent session (model not recorded), hand-authored from HF label names, never edited; names-only test accuracies existed beforehand; per-class test errors not consulted for the six, unknown for Banking77 | **REPORTED** (R7, A3) — must be disclosed (AC-16 / G8) |
 | P5 | Banking77 train/test: 25 normalized-text overlaps (reproduction's report) | **REPORTED** (reproduction) — disclose |
+| P6 | **NLI member lineage contamination (verified here):** PrismNLI-0.4B starts from deberta-v3-large-zeroshot-v2.0, whose training mix includes Banking77 and MASSIVE train splits (≤500/class; no test data) → zero-shot results on Banking77/MASSIVE are train-exposed for the NLI member; README trap 2 ("switched to a clean synthetic-NLI-only model") is **wrong** — the replacement inherits the same base. 24-shot headline unaffected. R13 requested (clean NLI member). | **VERIFIED** |
+| P7 | HWU64 ↔ MASSIVE share text (SLURP origin): 43.7% of HWU64 test in MASSIVE train; 32.6% of MASSIVE test in HWU64 train (verified here with controls) → they are not independent datasets; exposure to one leaks into the other. | **VERIFIED** |
 
 ## README claims refuted or needing correction (→ T8.5, push is must-ask)
 

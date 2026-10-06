@@ -588,3 +588,20 @@ retrieval-swap run (pre-registered 747a393; blocked on gateway credit). Next on 
 T4.1 (outline + page budget).
 
 ===
+AI:
+
+[DECISION #20 | log-and-proceed — licences + contamination; a claim corrected]
+  - Background research (licences of all models/datasets; disclosed training data of each member) → summarised in
+    docs/phases/2.0/licences-contamination.md.
+  - Verified here: PrismNLI-0.4B's card states it starts from deberta-v3-large-zeroshot-v2.0, whose pinned training
+    list includes banking77 and massive (train splits). → the NLI member is train-exposed for Banking77/MASSIVE; the
+    README's trap-2 claim ("switched to a clean synthetic-NLI-only model") is wrong. HWU64↔MASSIVE overlap measured
+    (43.7% / 32.6%, controls 100%/0%). Ledger P6/P7. The 24-shot headline does not use PrismNLI (unaffected).
+  - Methodology consequence: a sixth self-caught trap — contamination through model lineage (the base checkpoint),
+    not only the final fine-tuning data.
+  - Requested R13 from the research session: zero-shot ensemble with a documented-clean NLI member
+    (deberta-v3-large-zeroshot-v2.0-c; optional plain MNLI/ANLI model), 7 datasets × 2 + R12 train samples.
+  - Licences: MTOP (CC-BY-SA-4.0) and Bitext (CDLA-Sharing-1.0) texts sit inside committed prediction dumps → add a
+    data notice (T2.11b; public change → user OK). No training on Jev outputs (TypeSafe terms).
+
+===

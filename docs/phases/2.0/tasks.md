@@ -48,7 +48,9 @@
 - [ ] T2.8 G6 contamination table; Qwen3 probe decision [unproven — measure first].
 - [ ] T2.9 G8 descriptions: review the authoring log; blind re-author + re-evaluate if iteration cannot be excluded.
 - [ ] T2.10 G9 CPU latency (time 1 item first; fp32 serve path) + GPU numbers from the research session.
-- [ ] T2.11 G10 license table.
+- [x] T2.11 G10 licence table (→ licences-contamination.md).
+- [ ] T2.11b Data notice for results/predictions (MTOP CC-BY-SA-4.0, Bitext CDLA-Sharing-1.0 share-alike) — push needs user OK.
+- [ ] T2.17 R13 contamination-robustness: zero-shot ensemble with a documented-clean NLI member (deberta-v3-large-zeroshot-v2.0-c); re-verify C1 + calibration on clean data; split zero-shot reporting into clean vs exposed datasets.
 
 ## T2b — Reviewer-risk closures from the novelty memo (added 2026-10-05)
 - [x] T2.12 Combiner ablation (done 2026-10-05 → claims Z6/Z7) (CPU, needs R3 member probs): geometric mean vs true product of experts vs arithmetic
@@ -62,7 +64,7 @@
       TRAIN-split samples only (no test data in fitting), frozen, then applied once to all 14 test conditions —
       turns the exploratory LODO result (Z4b) into a clean one. Bootstrap CI on the ECE gap vs Jev (24-shot).
 - [~] T2.16 Retrieval tie-break sensitivity (R6c done → F14: 2 predictions change, headline unchanged; cross-platform identity verified) — remaining: + library root fix after the evidence freeze (stable sort, index tie-break, sorted term order); report platform in the paper.
-- [ ] T2.15 Contamination of the embedders: bge-v1.5 training/fine-tuning data vs our eval sets (MTEB includes
+- [x] T2.15 Contamination (→ licences-contamination.md; embedders clean†; **PrismNLI train-exposed to Banking77/MASSIVE via its base**, HWU64 indirect; R13 clean-NLI rerun requested): bge-v1.5 training/fine-tuning data vs our eval sets (MTEB includes
       Banking77/MASSIVE/MTOP *evaluation* tasks — check whether any *training* data overlaps); split wording
       (HWU64/Bitext have no official test split; CLINC150 variant = plus).
 
