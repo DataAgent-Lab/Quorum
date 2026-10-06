@@ -695,3 +695,15 @@ pre-registration if any result is to be a claim (else exploratory), training-dat
 dumps (≫10 MB → HF dataset route). Will be verified independently like R1–R13.
 
 ===
+AI:
+
+[NOTE] Zero-shot addendum 1 complete: 42,562 calls in total, 0 failed items, all jev-1.13.0. Family E (Holm over 6):
+Jev ahead on every clean dataset (CLINC150 88–91% vs 62–67%, SNIPS 97.5–97.9% vs 87–93%, Bitext 90–92% vs 78–84%);
+calibration favours Jev (Brier everywhere; ECE favours Jev or n.s.). Ledger J3. Outputs gzipped (194 MB → 16 MB,
+committed per the protocol incl. raw responses); analysis reproduces identically from the gz files.
+TypeSafe terms checked at the source (MCA 2026-09-23): no benchmarking clause; Output assigned to the customer
+(§4.2); Output may not be used for distillation/training/competing products (§2.3(b)) — evaluation only, never tune
+on Jev outputs; "Customer's Fees and all pricing information" are confidential (§14.1) — our spend figures in public
+docs are public-price × tokens; whether to keep them is flagged to the user.
+
+===
