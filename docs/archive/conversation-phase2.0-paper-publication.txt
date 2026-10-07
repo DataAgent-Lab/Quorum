@@ -733,3 +733,13 @@ Arm-A (reproduction-retrieval) condition, not equal-retrieval with our clean run
 Jev zero-shot bodies. Ledger K1–K4. Consequence for the paper's positioning raised with the user.
 
 ===
+AI:
+
+[NOTE] Amendment A4 (research branch b8b60a0, "approved", before any run): Clef-Flash, Clef and pplx-decider v1.1 on
+the exact Jev Arm B bodies (equal retrieval with our clean run and Jev Arm B); every body's sha256 must equal the
+request manifest or the run aborts; McNemar vs Jev Arm B, vs our clean run, vs the same model's b24; no log loss vs
+Jev. Checked here: no result files touched, personal-address identity, fast-forward of main. Merged into main and
+pushed so the pre-registration is public before the runs. Order per the user: Clef-Flash first, after the research
+session's serving-parity work.
+
+===
