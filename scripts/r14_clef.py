@@ -10,6 +10,10 @@ Settings (all on the full official test sets unless noted; protocol: provenance/
          10,003 training rows, its instruction and its 77 definitions. Per-item comparable with the reproduction's
          Jev predictions and with the clean 24-shot run.
   defs   Banking77, the reproduction's `definitions` request body (its definitions, no examples).
+  b24B   Banking77, Jev "Arm B" (equal retrieval with the clean 24-shot run; amendment A4): the b24 body with
+         state.labeled_examples replaced by the clean run's 24 retrieved training examples, built exactly as
+         scripts/jev/run_typesafe.py did; every body's sha256 must equal the request manifest (else abort).
+         Per-item comparable with Jev Arm B and with the clean 24-shot run on identical evidence.
   train  the R12 pre-registered train-side sample (7 x 1,000) with the `zs` request: a memorisation probe
          (train accuracy far above test accuracy would indicate training on these splits).
 
@@ -36,6 +40,8 @@ ZS_INSTRUCTION = ("Which ONE intent best describes `message`? Every message belo
 DATASETS = ["banking77", "clinc150", "hwu64", "massive", "mtop", "snips", "bitext"]
 DESC_MODULE = {"clinc150": "clinc"}
 OUTP, OUT = ROOT / "results" / "predictions", ROOT / "results" / "r14"
+JEV = ROOT / "docs" / "phases" / "2.0" / "jev"
+ARMB_BYTE_LIMIT = 30_000                                              # as scripts/jev/run_typesafe.py
 g7 = lambda v: [float(f"{x:.7g}") for x in v]
 
 
@@ -215,6 +221,32 @@ def mcnemar_exact(b, c):
     return min(1.0, 2 * sum(math.comb(n, i) for i in range(k + 1)) / 2 ** n) if n else 1.0
 
 
+def armb_bodies(rq, rows):
+    """Jev Arm B request bodies (see b24B), verified against the sha256 of the bytes Jev received."""
+    train = json.loads((JEV / "train_pinned.json").read_text())
+    clean = [json.loads(l)["retrieved_idx"] for l in gzip.open(OUTP / "banking77_24shot_clean.jsonl.gz", "rt")]
+    man = [json.loads(l) for l in gzip.open(JEV / "24shot" / "request_manifest.jsonl.gz", "rt")]
+    out = []
+    for i, r in enumerate(rows):
+        body = json.loads(json.dumps(rq.body(r["text"], "retrieved24")[0]))
+        ex = [{"message": train["text"][j], "intent": train["label_name"][j]} for j in clean[i]]
+        while True:
+            body["state"]["labeled_examples"] = ex
+            if len(json.dumps(body, ensure_ascii=True).encode()) <= ARMB_BYTE_LIMIT or not ex:
+                break
+            ex = ex[:-1]
+        if hashlib.sha256(json.dumps(body).encode()).hexdigest() != man[i]["B"]["sha256"]:
+            raise SystemExit(f"Arm B body {i} differs from the request Jev received; aborting")
+        out.append(body)
+    return out
+
+
+def jev_armb_hits(raw, gold):
+    rec = {json.loads(l)["idx"]: json.loads(l) for l in gzip.open(JEV / "24shot" / "armB.jsonl.gz", "rt")}
+    assert len(rec) == 3080 and not any(x.get("failed") for x in rec.values())
+    return np.array([rec[i]["choice"] == raw[g] for i, g in enumerate(gold)])
+
+
 def repro_hits():
     import csv
     txt = fetch("results/predictions.csv").decode()
@@ -241,8 +273,11 @@ def phase_run(args):
     else:
         rq = ReproRequests(); d = data.load("banking77")
         rows = d["test"][: args.limit or len(d["test"])]
-        variant = "retrieved24" if args.setting == "b24" else "definitions"
-        jobs.append(("banking77", rows, [rq.body(r["text"], variant)[0] for r in rows], rq.raw))
+        if args.setting == "b24B":
+            jobs.append(("banking77", rows, armb_bodies(rq, rows), rq.raw))
+        else:
+            variant = "retrieved24" if args.setting == "b24" else "definitions"
+            jobs.append(("banking77", rows, [rq.body(r["text"], variant)[0] for r in rows], rq.raw))
     summary = {}
     for name, rows, bodies, label_order in jobs:
         t0 = time.time(); res = score(J, model, proc, bodies, args.bs)
@@ -259,9 +294,13 @@ def phase_run(args):
                 f.write(json.dumps({"idx": i, "text": r["text"], "gold": int(gold[i]), "pred": int(P[i].argmax()),
                                     "probs": g7(P[i])}) + "\n")
         if name == "banking77" and not args.limit:
-            th, h = repro_hits(), P.argmax(1) == gold
+            h = P.argmax(1) == gold
+            if args.setting == "b24B":                                  # Jev on the identical Arm B bodies
+                th = jev_armb_hits(label_order, gold); key = "mcnemar_vs_jev_armB"
+            else:
+                th = repro_hits(); key = "mcnemar_vs_reproduction"
             b, c = int((h & ~th).sum()), int((~h & th).sum())
-            rec["mcnemar_vs_reproduction"] = {"b": b, "c": c, "p_two_sided_exact": mcnemar_exact(b, c)}
+            rec[key] = {"b": b, "c": c, "p_two_sided_exact": mcnemar_exact(b, c)}
         summary[name] = rec; print(f"[{tag}/{name}] {json.dumps(rec)}", flush=True)
     meta = {"model": MODELS[args.model][0], "revision": MODELS[args.model][1], "setting": args.setting,
             "limit": args.limit, "batch_size": args.bs, "dtype": "bf16", "custom_code_sha256": code_sha,
@@ -276,7 +315,7 @@ def phase_run(args):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("phase", choices=["parity", "batchcheck", "run"])
-    ap.add_argument("--model", choices=sorted(MODELS)); ap.add_argument("--setting", choices=["zs", "b24", "defs", "train"])
+    ap.add_argument("--model", choices=sorted(MODELS)); ap.add_argument("--setting", choices=["zs", "b24", "b24B", "defs", "train"])
     ap.add_argument("--limit", type=int, default=0); ap.add_argument("--bs", type=int, default=8)
     ap.add_argument("--datasets", default="", help="comma list for zs/train: which datasets this run covers (a split "
                     "of the work across hosts; each dataset's items and request bodies are unchanged)")

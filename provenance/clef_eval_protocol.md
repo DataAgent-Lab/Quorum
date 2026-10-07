@@ -128,3 +128,24 @@ builder still includes MASSIVE en-US train. Reading for this evaluation:
 - **Banking77, CLINC150, Bitext:** not in the manifest by name; reported as "not documented", not "clean".
 
 Everything else in A2 (settings, items, request bodies, batch 4, watchdog, direct-to-GPU loading) is unchanged.
+
+## Amendment A4 (DRAFT 2026-10-07, before any Arm-B run): equal-retrieval 24-shot setting `b24B`
+
+Adds one setting for Clef-Flash, Clef and pplx-decider v1.1: Banking77 full test (3,080) with Jev **Arm B** request
+bodies, i.e. equal retrieval with the clean 24-shot run (`results/predictions/banking77_24shot_clean.jsonl.gz`)
+and with Jev Arm B (`docs/phases/2.0/jev/24shot/`, F15). The existing `b24` setting is the reproduction-retrieval
+(Arm A) condition; both are reported, never pooled (ledger K4).
+
+Bodies: the `b24` body with `state.labeled_examples` replaced by the clean run's 24 retrieved training examples
+(`docs/phases/2.0/jev/train_pinned.json`), trimmed from the end only if the body exceeds 30,000 bytes — the logic of
+`scripts/jev/run_typesafe.py`. **Every body's sha256 must equal the request manifest's Arm B hash, or the run
+aborts.** Checked before this amendment on CPU: 3,080/3,080 Arm A and Arm B hashes match, retrieved ids match the
+manifest, and Jev Arm B accuracy recomputed from `armB.jsonl.gz` = 93.47 % (ledger F15).
+
+Comparisons (exact two-sided McNemar, same items): vs Jev Arm B; vs the clean 24-shot run (93.57 %); vs the same
+model's `b24` (does the uncapped retrieval also help it?). Metrics as before (accuracy, macro-F1, ECE-10, Brier);
+no log-loss comparison with Jev (ledger J2). Clef / Clef-Flash run on the release code; pplx-decider v1.1 on the
+release code unless the Phase 20.8 SGLang parity gate has passed and a further amendment says otherwise.
+
+Execution order (operator, 2026-10-07): after the serving parity work; Clef-Flash first. Batch sizes and the memory
+watchdog as in A1.

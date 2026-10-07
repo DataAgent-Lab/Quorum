@@ -105,8 +105,11 @@ def phase_run(args):
                 jobs.append((f"{ds}_{variant}", rows, [R14.zs_body(r["text"], names, lt) for r in rows], names))
     else:
         rq = R14.ReproRequests(); d = data.load("banking77"); rows = d["test"][: args.limit or len(d["test"])]
-        variant = "retrieved24" if args.setting == "b24" else "definitions"
-        jobs.append(("banking77", rows, [rq.body(r["text"], variant)[0] for r in rows], rq.raw))
+        if args.setting == "b24B":                                      # Jev Arm B bodies (amendment A4)
+            jobs.append(("banking77", rows, R14.armb_bodies(rq, rows), rq.raw))
+        else:
+            variant = "retrieved24" if args.setting == "b24" else "definitions"
+            jobs.append(("banking77", rows, [rq.body(r["text"], variant)[0] for r in rows], rq.raw))
     summary = {}
     for name, rows, bodies, label_order in jobs:
         t0 = time.time(); res, lens = score(model, bodies, args.bs)
@@ -123,9 +126,13 @@ def phase_run(args):
                 f.write(json.dumps({"idx": i, "text": r["text"], "gold": int(gold[i]), "pred": int(P[i].argmax()),
                                     "probs": R14.g7(P[i])}) + "\n")
         if name == "banking77" and not args.limit:
-            th, h = R14.repro_hits(), P.argmax(1) == gold
+            h = P.argmax(1) == gold
+            if args.setting == "b24B":
+                th = R14.jev_armb_hits(label_order, gold); key = "mcnemar_vs_jev_armB"
+            else:
+                th = R14.repro_hits(); key = "mcnemar_vs_reproduction"
             b, c = int((h & ~th).sum()), int((~h & th).sum())
-            rec["mcnemar_vs_reproduction"] = {"b": b, "c": c, "p_two_sided_exact": R14.mcnemar_exact(b, c)}
+            rec[key] = {"b": b, "c": c, "p_two_sided_exact": R14.mcnemar_exact(b, c)}
         summary[name] = rec; print(f"[{tag}/{name}] {json.dumps(rec)}", flush=True)
     meta = {"model": MODEL, "revision": REV, "setting": args.setting, "limit": args.limit, "batch_size": args.bs,
             "datasets": args.datasets or "all", "temperature": model.temperature, "attention_mode": model.attention_mode, "pooling": model.pooling, "release_model_py_sha256": code_sha,
@@ -140,6 +147,6 @@ def phase_run(args):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("phase", choices=["batchcheck", "run"])
-    ap.add_argument("--setting", choices=["zs", "b24", "defs", "train"]); ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--setting", choices=["zs", "b24", "b24B", "defs", "train"]); ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--bs", type=int, default=4); ap.add_argument("--datasets", default="")
     a = ap.parse_args(); {"batchcheck": phase_batchcheck, "run": phase_run}[a.phase](a)
