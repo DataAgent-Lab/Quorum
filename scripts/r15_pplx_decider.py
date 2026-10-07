@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""R15 — perplexity-ai/pplx-decider-v1-27b under the same protocol as R14 (Clef): same items, same request
+"""R15 — perplexity-ai/pplx-decider-v1.1-27b (amendment A3; was v1) under the same protocol as R14 (Clef): same items, same request
 bodies, same metrics (provenance/clef_eval_protocol.md, amendment A2).
 
 pplx-decider takes {state, question} with a Jev-style question ({type, instructions, criteria}). It lists the
@@ -25,11 +25,11 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 _spec = importlib.util.spec_from_file_location("r14", ROOT / "scripts" / "r14_clef.py")
 R14 = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(R14)
-MODEL, REV = "perplexity-ai/pplx-decider-v1-27b", "5117a6c7fe73b19308dc1a6b0fb529a40c2ecad4"
+MODEL, REV = "perplexity-ai/pplx-decider-v1.1-27b", "3b45dead91dfa6d95aad6b95764a606fab2bf7a6"
 FILES = ["model-*.safetensors", "model.safetensors.index.json", "readout.safetensors", "config.json",
          "decision_config.json", "processor_config.json", "tokenizer.json", "tokenizer_config.json",
          "chat_template.jinja", "source/src/autojev/__init__.py", "source/src/autojev/model.py",
-         "source/src/autojev/types.py"]
+         "source/src/autojev/types.py", "release-manifest.json", "training/data-manifest.json"]
 TAG = "pplx_decider"
 
 
@@ -128,7 +128,7 @@ def phase_run(args):
             rec["mcnemar_vs_reproduction"] = {"b": b, "c": c, "p_two_sided_exact": R14.mcnemar_exact(b, c)}
         summary[name] = rec; print(f"[{tag}/{name}] {json.dumps(rec)}", flush=True)
     meta = {"model": MODEL, "revision": REV, "setting": args.setting, "limit": args.limit, "batch_size": args.bs,
-            "datasets": args.datasets or "all", "temperature": model.temperature, "release_model_py_sha256": code_sha,
+            "datasets": args.datasets or "all", "temperature": model.temperature, "attention_mode": model.attention_mode, "pooling": model.pooling, "release_model_py_sha256": code_sha,
             "zs_instruction": R14.ZS_INSTRUCTION, "results": summary,
             "code_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "r14_code_sha256": hashlib.sha256((ROOT / "scripts" / "r14_clef.py").read_bytes()).hexdigest(),

@@ -106,3 +106,25 @@ on a curated 73,000-row subset that is **not** bundled. Reading for our evaluati
 Execution: batch 4 and the A1 memory watchdog, with the pattern widened to this script. The backbone is loaded
 straight onto the GPU instead of CPU-then-GPU (device placement only), because CPU-then-GPU would briefly need
 ~2x the weights on unified memory.
+
+## Amendment A3 (2026-10-07, before any pplx-decider run): pplx-decider v1 → v1.1
+
+R15 now evaluates `perplexity-ai/pplx-decider-v1.1-27b` @ `3b45dead91dfa6d95aad6b95764a606fab2bf7a6` instead of
+v1. No v1 run had started, so no result is discarded or selected. Reason: v1.1 is the current release and the
+one on the public Decision Index board. Same backbone, same 255 letter codes and token ids, same prompt builder.
+
+Differences read in the release code and `decision_config.json`:
+- the 16 full-attention layers run **non-causally** (`attention_mode: noncausal_full_attention`); the
+  linear-attention layers keep their recurrence; readout on the last token (`pooling: last`);
+- calibration temperature 1.0087 (v1: 2.2076), applied by the release's own `predict`, unchanged;
+- the card states that default causal inference does not reproduce the evaluated checkpoint, so scores come only
+  from the release `DecisionModel` (transformers 5.17.0, SDPA), as for v1.
+
+**Training-data status: PARTLY DOCUMENTED, more exposure than v1.** `training/data-manifest.json` lists tasksource
+`multilingual/massive` (535 rows), `multilingual/mtop` (582) and `snips_built_in_intents` (396); the bundled
+builder still includes MASSIVE en-US train. Reading for this evaluation:
+- **MASSIVE, MTOP, SNIPS: exposed** (splits not stated);
+- **HWU64: indirectly exposed** (MASSIVE overlap, as in A2);
+- **Banking77, CLINC150, Bitext:** not in the manifest by name; reported as "not documented", not "clean".
+
+Everything else in A2 (settings, items, request bodies, batch 4, watchdog, direct-to-GPU loading) is unchanged.
