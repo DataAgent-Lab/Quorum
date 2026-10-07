@@ -70,7 +70,7 @@ Changes for all remaining runs. None of them alters any item, request body, mode
   causal backbone; Clef-Flash batch-1 vs batch-8 gave 0 argmax changes. `batchcheck` is rerun for Clef 27B
   before its runs.
 - `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`, an allocator setting, to limit fragmentation.
-- A host memory watchdog: below 20 GB (Spark3) / 25 GB (second host) MemAvailable it kills the eval process. A
+- A host memory watchdog: below 20 GB (first host) / 25 GB (second host) MemAvailable it kills the eval process. A
   killed run is rerun from scratch with a smaller batch, never resumed or partially reported.
 - Timing (ms/item) of a run is reported together with its batch size. Latency is not compared across batch
   sizes.
