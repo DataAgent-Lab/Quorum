@@ -74,3 +74,35 @@ Changes for all remaining runs. None of them alters any item, request body, mode
   killed run is rerun from scratch with a smaller batch, never resumed or partially reported.
 - Timing (ms/item) of a run is reported together with its batch size. Latency is not compared across batch
   sizes.
+
+## Amendment A2 (2026-10-07, before any pplx-decider run): add `perplexity-ai/pplx-decider-v1-27b`
+
+Model `perplexity-ai/pplx-decider-v1-27b` @ `5117a6c7fe73b19308dc1a6b0fb529a40c2ecad4`: Apache-2.0, Qwen3.8-27B
+fine-tuned, bf16, ~52 GB. Script `scripts/r15_pplx_decider.py`, reusing R14's request builders, metrics and
+McNemar code unchanged.
+
+How the model scores (read in its release code):
+- prompt `State / Question / Options`, with the options listed as single-token letter codes **in the criteria's
+  own order**;
+- one logit per code from a readout over the last hidden state;
+- softmax at the release's saved temperature (2.2076), exactly as its own `predict` does.
+
+Settings and items are identical to R14:
+- zs: same state/instruction/criteria; the order is the dataset's label order;
+- b24 and defs: the reproduction's bodies verbatim, i.e. its criteria order, as sent to Jev;
+- train: the R12 sample.
+
+Option order is part of the request and is not tuned.
+
+**Training-data status: PARTLY DOCUMENTED.** The release ships its data builder (`source/src/autojev/data.py`).
+Its tasks: vitaminc, **MASSIVE en-US (10,000 train rows)** and de-DE, boolq, squad2, paws, multinli,
+civil_comments, aegis2, pubmedqa. Benchmark test splits are family-separated. The released checkpoint was trained
+on a curated 73,000-row subset that is **not** bundled. Reading for our evaluation:
+- **MASSIVE: exposed** (its train split);
+- **HWU64: indirectly exposed** (43.7 % of HWU64 test utterances occur verbatim in MASSIVE train);
+- **Banking77, CLINC150, MTOP, SNIPS, Bitext:** not among the documented sources. Because the curated subset is
+  undisclosed, this is "not documented", not "verified clean".
+
+Execution: batch 4 and the A1 memory watchdog, with the pattern widened to this script. The backbone is loaded
+straight onto the GPU instead of CPU-then-GPU (device placement only), because CPU-then-GPU would briefly need
+~2x the weights on unified memory.
