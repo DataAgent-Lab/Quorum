@@ -57,3 +57,20 @@ prompt tokens, ms/item. Exact two-sided McNemar:
   differences reported). Right padding with a causal backbone; batching is not expected to change outputs beyond
   bf16 noise.
 - All comparisons beyond the reproduction McNemar are secondary and uncorrected.
+
+## Amendment A1 (2026-10-07, before any Clef 27B result)
+
+The first Clef 27B b24 run (batch 8) was **stopped by the operator before completion** at 1 h 47 min. Its
+process held 100 GB of GPU memory and still rising (length-sorted batches; caching-allocator growth), with host
+MemAvailable down to 13.5 GB on the 119 GB unified-memory GB10. A second GB10 host had hung earlier under a
+similar load. No output was written, so there is no partial result to discard or select from.
+
+Changes for all remaining runs. None of them alters any item, request body, model or scoring:
+- Clef 27B uses batch 4 (Clef-Flash keeps batch 8). Batching only adds bf16-level noise: right padding with a
+  causal backbone; Clef-Flash batch-1 vs batch-8 gave 0 argmax changes. `batchcheck` is rerun for Clef 27B
+  before its runs.
+- `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`, an allocator setting, to limit fragmentation.
+- A host memory watchdog: below 20 GB (Spark3) / 25 GB (second host) MemAvailable it kills the eval process. A
+  killed run is rerun from scratch with a smaller batch, never resumed or partially reported.
+- Timing (ms/item) of a run is reported together with its batch size. Latency is not compared across batch
+  sizes.
