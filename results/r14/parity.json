@@ -1,0 +1,13 @@
+{
+ "reproduction": "https://raw.githubusercontent.com/simonmesmith/jev-banking77-experiment/5cac4ff/",
+ "result": {
+  "definitions": {
+   "items": 3080,
+   "bodies_differing": 0
+  },
+  "retrieved24": {
+   "items": 3080,
+   "bodies_differing": 0
+  }
+ }
+}

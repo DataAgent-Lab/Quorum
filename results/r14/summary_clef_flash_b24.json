@@ -1,0 +1,38 @@
+{
+ "model": "Cloudflare/clef-flash",
+ "revision": "17f0b0ad64efb65d273590632833508766b2aae6",
+ "setting": "b24",
+ "limit": 0,
+ "batch_size": 8,
+ "dtype": "bf16",
+ "custom_code_sha256": "0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3",
+ "zs_instruction": "Which ONE intent best describes `message`? Every message belongs to exactly one of the listed categories.",
+ "repro_instruction": "Which ONE banking intent best describes `customer_message`? Choose its main requested action or problem. Use category meanings and any labeled examples to distinguish similar intents. Match meaning, not shared keywords. Examples are references, not the message to classify. Every message belongs to exactly one of these 77 categories.",
+ "results": {
+  "banking77": {
+   "accuracy": 0.9549,
+   "correct": 2941,
+   "macro_f1": 0.9546,
+   "log_loss": 0.3899,
+   "brier": 0.1271,
+   "ece": 0.1756,
+   "prompt_tokens_max": 3740,
+   "seconds": 4759.9,
+   "ms_per_item": 1545.4,
+   "mcnemar_vs_reproduction": {
+    "b": 115,
+    "c": 20,
+    "p_two_sided_exact": 2.092527117251818e-17
+   }
+  }
+ },
+ "code_sha256": "cc6e6e8465339a1f630778734cee743f7ee4a3be7a6d752851224b8b1c97407e",
+ "versions": {
+  "torch": "2.9.0+cu129",
+  "transformers": "5.17.0"
+ },
+ "device": "NVIDIA GB10",
+ "written_at": "2026-10-06T17:21:07Z",
+ "executed_code_sha256": "8a5d4966cbdfb8665d3350813ac30a135ba378e79f462441f54f15a7b125f34f",
+ "code_sha256_note": "code_sha256 was read from disk when this summary was written; the file had been replaced mid-run (git pull of be86528, which only adds --datasets and summary host/subset fields). The process executed the script of commit 4bc6faf (sha256 above, 'executed_code_sha256'); the b24 code path is identical in both."
+}

@@ -1,0 +1,66 @@
+{
+ "model": "Cloudflare/clef-flash",
+ "revision": "17f0b0ad64efb65d273590632833508766b2aae6",
+ "setting": "zs",
+ "limit": 0,
+ "batch_size": 8,
+ "dtype": "bf16",
+ "custom_code_sha256": "0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3",
+ "zs_instruction": "Which ONE intent best describes `message`? Every message belongs to exactly one of the listed categories.",
+ "repro_instruction": null,
+ "results": {
+  "clinc150_names": {
+   "accuracy": 0.9682,
+   "correct": 5325,
+   "macro_f1": 0.9775,
+   "log_loss": 0.1545,
+   "brier": 0.0498,
+   "ece": 0.0376,
+   "prompt_tokens_max": 3083,
+   "seconds": 7940.6,
+   "ms_per_item": 1443.7
+  },
+  "clinc150_descriptions": {
+   "accuracy": 0.9607,
+   "correct": 5284,
+   "macro_f1": 0.9642,
+   "log_loss": 0.1791,
+   "brier": 0.0639,
+   "ece": 0.0332,
+   "prompt_tokens_max": 3734,
+   "seconds": 9634.0,
+   "ms_per_item": 1751.6
+  },
+  "mtop_names": {
+   "accuracy": 0.8035,
+   "correct": 3524,
+   "macro_f1": 0.6707,
+   "log_loss": 0.7136,
+   "brier": 0.3051,
+   "ece": 0.0253,
+   "prompt_tokens_max": 2424,
+   "seconds": 4990.0,
+   "ms_per_item": 1137.7
+  },
+  "mtop_descriptions": {
+   "accuracy": 0.8304,
+   "correct": 3642,
+   "macro_f1": 0.6973,
+   "log_loss": 0.6156,
+   "brier": 0.2558,
+   "ece": 0.0286,
+   "prompt_tokens_max": 2686,
+   "seconds": 5525.7,
+   "ms_per_item": 1259.8
+  }
+ },
+ "code_sha256": "cc6e6e8465339a1f630778734cee743f7ee4a3be7a6d752851224b8b1c97407e",
+ "versions": {
+  "torch": "2.9.0+cu129",
+  "transformers": "5.17.0"
+ },
+ "device": "NVIDIA GB10",
+ "written_at": "2026-10-07T01:12:00Z",
+ "datasets": "clinc150,mtop",
+ "host": "7190c9507e0f"
+}
