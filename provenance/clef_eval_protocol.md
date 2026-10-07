@@ -149,3 +149,20 @@ release code unless the Phase 20.8 SGLang parity gate has passed and a further a
 
 Execution order (operator, 2026-10-07): after the serving parity work; Clef-Flash first. Batch sizes and the memory
 watchdog as in A1.
+
+## Amendment A5 (2026-10-08): remaining R14/R15 cells deferred; Clef 27B zero-shot run stopped by the operator
+
+The Clef 27B `zs` run on CLINC150 + MTOP was **stopped by the operator** at 10 h 41 min (process killed,
+exit 143). The reason is speed only: on the reference kernels it runs ~4.6 s/item, and the serving work in progress
+(an SGLang path, gated on per-item parity with these release-code dumps) may make the remaining cells much faster.
+The decision was not based on any result.
+- The stop came during `clinc150_descriptions`. That cell has no output; nothing from it is used.
+- `clinc150_names` had finished before the stop (all 5,500 items). Its dump was written when the cell finished and
+  is kept: `results/predictions/clinc150_names_r14_clef_zs.jsonl.gz` (sha256 `443ebab4…`), metrics in
+  `results/r14/summary_clef_zs_part-clinc150_names.json` (accuracy 0.9658, recomputed from the dump). The run's own
+  summary file was never written, so that summary was written afterwards from the printed line and the dump.
+- Not run yet and deferred: Clef 27B `zs` on CLINC150 descriptions, MTOP, and part B; `defs` and `train` for
+  both models; Clef-Flash `zs` part B; all of R15 (pplx-decider v1.1); `b24B` (A4).
+- These cells will run either on the release code (as before) or on a serving engine. A serving engine is used
+  only if, for that model, it has passed the per-item parity gate against these release-code dumps, and only
+  after a further amendment naming the engine, its version and the parity result. Every result records its engine.

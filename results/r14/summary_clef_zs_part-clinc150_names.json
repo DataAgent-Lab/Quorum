@@ -1,0 +1,36 @@
+{
+ "model": "Cloudflare/clef",
+ "revision": "2f3de3dd85f379784083b0814d997ab627200f0c",
+ "setting": "zs",
+ "datasets": "clinc150,mtop (run stopped by the operator after clinc150_names; see amendment A5)",
+ "completed_cells": [
+  "clinc150_names"
+ ],
+ "batch_size": 4,
+ "dtype": "bf16",
+ "custom_code_sha256": "0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3",
+ "executed_code_sha256": "cc6e6e8465339a1f630778734cee743f7ee4a3be7a6d752851224b8b1c97407e",
+ "zs_instruction": "Which ONE intent best describes `message`? Every message belongs to exactly one of the listed categories.",
+ "results": {
+  "clinc150_names": {
+   "accuracy": 0.9658,
+   "correct": 5312,
+   "macro_f1": 0.9709,
+   "log_loss": 0.157,
+   "brier": 0.0542,
+   "ece": 0.0307,
+   "prompt_tokens_max": 3083,
+   "seconds": 25470.6,
+   "ms_per_item": 4631.0
+  }
+ },
+ "dump_sha256": {
+  "results/predictions/clinc150_names_r14_clef_zs.jsonl.gz": "443ebab4fbccc879c4bec1d76230027422238bf8fed1cc27880f2c6c171c0182"
+ },
+ "versions": {
+  "torch": "2.9.0+cu129",
+  "transformers": "5.17.0"
+ },
+ "device": "NVIDIA GB10",
+ "note": "The eval process printed this cell's metrics and wrote its dump when the cell finished; the run's own summary file was never written because the operator stopped the run during the next cell (amendment A5). This file was written afterwards from that printed line and the dump."
+}
