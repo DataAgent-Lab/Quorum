@@ -129,7 +129,7 @@ builder still includes MASSIVE en-US train. Reading for this evaluation:
 
 Everything else in A2 (settings, items, request bodies, batch 4, watchdog, direct-to-GPU loading) is unchanged.
 
-## Amendment A4 (DRAFT 2026-10-07, before any Arm-B run): equal-retrieval 24-shot setting `b24B`
+## Amendment A4 (2026-10-07, before any Arm-B run): equal-retrieval 24-shot setting `b24B`
 
 Adds one setting for Clef-Flash, Clef and pplx-decider v1.1: Banking77 full test (3,080) with Jev **Arm B** request
 bodies, i.e. equal retrieval with the clean 24-shot run (`results/predictions/banking77_24shot_clean.jsonl.gz`)
