@@ -722,3 +722,14 @@ confidential); the pending Clef / Clef-Flash sync request; new artifact location
 records.
 
 ===
+AI:
+
+[DECISION #25 | log-and-proceed — Clef / Clef-Flash verified; four-way equal-evidence comparison]
+R14 merged (fcea02f) and recomputed: Clef-Flash 95.49%, Clef 94.32% on the reproduction's byte-identical retrieved24
+bodies; both significantly above Jev on the same bodies. Our R6 parity run used exactly those 24 examples (3,080/3,080,
+same order), so ours 92.34% joins a four-way equal-evidence comparison: Clef-Flash > Clef > Jev ≈ ours. Calibration:
+ours best ECE; Clef 27B best Brier; Clef-Flash worst on both. Research session's two conflicts accepted: Clef b24 is the
+Arm-A (reproduction-retrieval) condition, not equal-retrieval with our clean run; Clef zero-shot bodies differ from our
+Jev zero-shot bodies. Ledger K1–K4. Consequence for the paper's positioning raised with the user.
+
+===
