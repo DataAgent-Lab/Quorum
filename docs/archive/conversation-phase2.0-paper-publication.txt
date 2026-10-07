@@ -707,3 +707,18 @@ on Jev outputs; "Customer's Fees and all pricing information" are confidential (
 docs are public-price × tokens; whether to keep them is flagged to the user.
 
 ===
+Human:
+
+[2026-10-07] Collect everything not delivered to the research session while it was offline and send it together.
+
+===
+AI:
+
+[NOTE] Sent one consolidated catch-up to the research session (now online): R13 verification + entailment fix; no-LFS
+policy; Jev 24-shot results (with the superseded log-loss "calibration win" explicitly marked); zero-shot Jev results on
+all datasets incl. addendum 1 (J1/J3); the J2 rounding correction; the binding framing agreed with quorum-dev (no 0.938
+claim; F1 + F15 + J1/J3; never credit the fine-tuned reader); TypeSafe terms (§2.3(b) evaluation only, §14.1 fees
+confidential); the pending Clef / Clef-Flash sync request; new artifact locations. Asked for any conflict with its
+records.
+
+===
