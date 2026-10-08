@@ -166,3 +166,17 @@ The decision was not based on any result.
 - These cells will run either on the release code (as before) or on a serving engine. A serving engine is used
   only if, for that model, it has passed the per-item parity gate against these release-code dumps, and only
   after a further amendment naming the engine, its version and the parity result. Every result records its engine.
+
+## Amendment A6 (2026-10-08, before any scored R15 run): R15 runs on one NVIDIA GB300
+
+All R15 (pplx-decider v1.1) runs, starting with `b24`, execute on **one NVIDIA GB300** instead of a GB10, for speed.
+This changes only the hardware and software stack. The release `DecisionModel` code is unchanged, and so are the
+model revision, bf16, batch 4, GPU-direct loading, items, request bodies and scoring.
+- Environment: the pinned SGLang image `lmsysorg/sglang@sha256:868b0bd8…a8b77f` used only as a Python environment.
+  It has torch 2.14.1+cu130 and transformers 5.17.0. `flash-linear-attention` and `causal-conv1d` are both absent,
+  so the GDN layers use transformers' reference path. This also avoids the known causal-conv1d wrong-output issue
+  on this GPU generation.
+- The GPU is shared with another served model, so ms/item from these runs is not compared with GB10 timings.
+- Every summary records the device name and package versions, as before.
+- The 32-item smoke reference used to check the serving patch was produced on a GB10. It is a smoke, not a result,
+  and nothing in R15 is computed from it.
