@@ -1,0 +1,40 @@
+{
+ "model": "perplexity-ai/pplx-decider-v1.1-27b",
+ "revision": "3b45dead91dfa6d95aad6b95764a606fab2bf7a6",
+ "setting": "b24",
+ "limit": 0,
+ "batch_size": 4,
+ "datasets": "all",
+ "temperature": 1.0087417621345625,
+ "attention_mode": "noncausal_full_attention",
+ "pooling": "last",
+ "release_model_py_sha256": "824721da4d8f8ba1e534f3ee35081869243c4457f6b3bd0a9a91b611b2ec1076",
+ "zs_instruction": "Which ONE intent best describes `message`? Every message belongs to exactly one of the listed categories.",
+ "results": {
+  "banking77": {
+   "accuracy": 0.9419,
+   "correct": 2901,
+   "macro_f1": 0.9419,
+   "log_loss": 0.2305,
+   "brier": 0.0924,
+   "ece": 0.0147,
+   "prompt_tokens_max": 3012,
+   "seconds": 1727.8,
+   "ms_per_item": 561.0,
+   "mcnemar_vs_reproduction": {
+    "b": 85,
+    "c": 30,
+    "p_two_sided_exact": 2.860656604093182e-07
+   }
+  }
+ },
+ "code_sha256": "db13ff4ce073e812ca27e44a625e081243f2d510cbea8a2db5e05ff8db76bae3",
+ "r14_code_sha256": "024630ecbbb1f2183c15183f44624c74b7803a9d854fd11586f1598b33ff0752",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "transformers": "5.17.0"
+ },
+ "device": "NVIDIA GB300",
+ "host": "06500536469b",
+ "written_at": "2026-10-08T06:14:55Z"
+}
