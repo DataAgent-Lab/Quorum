@@ -1,0 +1,192 @@
+{
+ "model": "perplexity-ai/pplx-decider-v1.1-27b",
+ "revision": "3b45dead91dfa6d95aad6b95764a606fab2bf7a6",
+ "setting": "zs",
+ "limit": 0,
+ "batch_size": 4,
+ "datasets": "all",
+ "release_model_py_sha256": "824721da4d8f8ba1e534f3ee35081869243c4457f6b3bd0a9a91b611b2ec1076",
+ "engine": {
+  "name": "SGLang + pplx-decider-v1.1 noncausal patch",
+  "image": "lmsysorg/sglang@sha256:868b0bd8eaf9b0b52c796a14a0ed55c04d6d2160eddaeb45d42c39a345a8b77f",
+  "patch_sha256": "fa7f6afc0363bc370e4d7c9c2c055e29b82146d3004013a02a8fa29707a04167",
+  "flags": "--attention-backend triton --chunked-prefill-size -1 --disable-radix-cache --disable-prefill-cuda-graph --mem-fraction-static 0.80",
+  "gate": {
+   "summary": "summary_p11_b24_banking77.json",
+   "verdict": "PASS",
+   "argmax_agreement": 0.99935,
+   "max_abs_dp": 0.06
+  },
+  "device": "NVIDIA GB300",
+  "concurrency": 1
+ },
+ "temperature": 1.0087417621345625,
+ "attention_mode": "noncausal_full_attention",
+ "pooling": "last",
+ "zs_instruction": "Which ONE intent best describes `message`? Every message belongs to exactly one of the listed categories.",
+ "results": {
+  "banking77_names": {
+   "accuracy": 0.8071,
+   "correct": 2486,
+   "macro_f1": 0.8005,
+   "log_loss": 0.8109,
+   "brier": 0.2918,
+   "ece": 0.0544,
+   "prompt_tokens_max": 991,
+   "seconds": 367.6,
+   "ms_per_item": 119.4
+  },
+  "banking77_descriptions": {
+   "accuracy": 0.812,
+   "correct": 2501,
+   "macro_f1": 0.806,
+   "log_loss": 0.7923,
+   "brier": 0.285,
+   "ece": 0.056,
+   "prompt_tokens_max": 1183,
+   "seconds": 362.1,
+   "ms_per_item": 117.6
+  },
+  "clinc150_names": {
+   "accuracy": 0.9111,
+   "correct": 5011,
+   "macro_f1": 0.9103,
+   "log_loss": 0.3582,
+   "brier": 0.1459,
+   "ece": 0.0236,
+   "prompt_tokens_max": 1336,
+   "seconds": 636.8,
+   "ms_per_item": 115.8
+  },
+  "clinc150_descriptions": {
+   "accuracy": 0.926,
+   "correct": 5093,
+   "macro_f1": 0.9248,
+   "log_loss": 0.3067,
+   "brier": 0.1175,
+   "ece": 0.0135,
+   "prompt_tokens_max": 1955,
+   "seconds": 1360.4,
+   "ms_per_item": 247.3
+  },
+  "hwu64_names": {
+   "accuracy": 0.8848,
+   "correct": 952,
+   "macro_f1": 0.8839,
+   "log_loss": 0.3887,
+   "brier": 0.1702,
+   "ece": 0.0243,
+   "prompt_tokens_max": 697,
+   "seconds": 145.3,
+   "ms_per_item": 135.0
+  },
+  "hwu64_descriptions": {
+   "accuracy": 0.8699,
+   "correct": 936,
+   "macro_f1": 0.8686,
+   "log_loss": 0.4582,
+   "brier": 0.1912,
+   "ece": 0.0464,
+   "prompt_tokens_max": 850,
+   "seconds": 164.5,
+   "ms_per_item": 152.9
+  },
+  "massive_names": {
+   "accuracy": 0.8867,
+   "correct": 2637,
+   "macro_f1": 0.864,
+   "log_loss": 0.4403,
+   "brier": 0.1735,
+   "ece": 0.0279,
+   "prompt_tokens_max": 707,
+   "seconds": 383.7,
+   "ms_per_item": 129.0
+  },
+  "massive_descriptions": {
+   "accuracy": 0.8796,
+   "correct": 2616,
+   "macro_f1": 0.8625,
+   "log_loss": 0.4747,
+   "brier": 0.1835,
+   "ece": 0.0351,
+   "prompt_tokens_max": 854,
+   "seconds": 417.1,
+   "ms_per_item": 140.3
+  },
+  "mtop_names": {
+   "accuracy": 0.9403,
+   "correct": 4124,
+   "macro_f1": 0.8226,
+   "log_loss": 0.21,
+   "brier": 0.0907,
+   "ece": 0.0066,
+   "prompt_tokens_max": 1147,
+   "seconds": 791.6,
+   "ms_per_item": 180.5
+  },
+  "mtop_descriptions": {
+   "accuracy": 0.9352,
+   "correct": 4102,
+   "macro_f1": 0.8103,
+   "log_loss": 0.2283,
+   "brier": 0.1,
+   "ece": 0.0055,
+   "prompt_tokens_max": 1383,
+   "seconds": 898.2,
+   "ms_per_item": 204.8
+  },
+  "snips_names": {
+   "accuracy": 0.9807,
+   "correct": 1373,
+   "macro_f1": 0.9806,
+   "log_loss": 0.0926,
+   "brier": 0.0347,
+   "ece": 0.0104,
+   "prompt_tokens_max": 188,
+   "seconds": 152.5,
+   "ms_per_item": 108.9
+  },
+  "snips_descriptions": {
+   "accuracy": 0.9814,
+   "correct": 1374,
+   "macro_f1": 0.9815,
+   "log_loss": 0.0962,
+   "brier": 0.0333,
+   "ece": 0.0053,
+   "prompt_tokens_max": 239,
+   "seconds": 152.3,
+   "ms_per_item": 108.8
+  },
+  "bitext_names": {
+   "accuracy": 0.9289,
+   "correct": 4993,
+   "macro_f1": 0.9278,
+   "log_loss": 0.2273,
+   "brier": 0.1125,
+   "ece": 0.0168,
+   "prompt_tokens_max": 343,
+   "seconds": 621.2,
+   "ms_per_item": 115.6
+  },
+  "bitext_descriptions": {
+   "accuracy": 0.9291,
+   "correct": 4994,
+   "macro_f1": 0.928,
+   "log_loss": 0.2363,
+   "brier": 0.1168,
+   "ece": 0.02,
+   "prompt_tokens_max": 397,
+   "seconds": 649.3,
+   "ms_per_item": 120.8
+  }
+ },
+ "code_sha256": "1365b971b7e1e85eb0786e478c61f1c21ae6ce4244b08b4b714be333c94d7e13",
+ "r14_code_sha256": "024630ecbbb1f2183c15183f44624c74b7803a9d854fd11586f1598b33ff0752",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "transformers": "5.17.0"
+ },
+ "device": "NVIDIA GB300",
+ "host": "redacted (client ran on the GB300 host's network namespace)",
+ "written_at": "2026-10-08T09:51:57Z"
+}
