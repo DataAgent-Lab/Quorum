@@ -180,3 +180,29 @@ model revision, bf16, batch 4, GPU-direct loading, items, request bodies and sco
 - Every summary records the device name and package versions, as before.
 - The 32-item smoke reference used to check the serving patch was produced on a GB10. It is a smoke, not a result,
   and nothing in R15 is computed from it.
+
+## Amendment A7 (2026-10-08, before any R15 cell other than b24): remaining R15 cells are scored by a serving engine that passed the parity gate
+
+Decided by the user after the gate result below. It applies to every R15 (pplx-decider v1.1) cell except `b24`,
+which stays the release-code headline and the gate's reference. That is `zs` (7 datasets × names/descriptions),
+`defs`, `train` and `b24B`.
+
+- **Engine**: SGLang from the pinned image `lmsysorg/sglang@sha256:868b0bd8…a8b77f`, plus a 61-line patch
+  (sha256 `fa7f6afc…4167`). The patch runs the checkpoint's full-attention layers non-causally, as its
+  `decision_config.json` requires; stock SGLang ignores that field and runs them causally. Flags:
+  `--attention-backend triton --chunked-prefill-size -1 --disable-radix-cache --disable-prefill-cuda-graph`.
+  Hardware: one GB300 (A6).
+- **Gate passed before this amendment.** The engine was run on the 3,080 `b24` bodies against the release-code dump
+  `banking77_r15_pplx_decider_b24.jsonl.gz` (sha256 `b88be647…`), one request at a time:
+  - argmax agreement 99.94 % (2 items differ);
+  - accuracy difference +0.03 pt, McNemar b/c 1/0, p = 1;
+  - max |Δp| 0.060, mean 4e-5;
+  - 0 failed requests.
+  These meet the pre-set thresholds (agreement ≥ 99.5 %, |Δacc| ≤ 0.5 pt with p ≥ 0.05, max |Δp| ≤ 0.10).
+- **How cells run**: `scripts/r15_pplx_decider.py run … --engine-url … --engine-meta …`. Jobs, items, request
+  bodies, metrics and dump format are unchanged.
+  - Requests go one at a time, the gate's condition.
+  - Any failed request aborts the whole run; no partial results.
+  - Output files carry the suffix `_sgl`, and each summary records the engine (image, patch, gate summary).
+- **Reporting**: release-code and engine results are labelled by engine and never pooled without that label. The
+  2 / 3,080 argmax disagreements bound how much engine choice can move a cell.

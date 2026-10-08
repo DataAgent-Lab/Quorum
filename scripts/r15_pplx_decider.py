@@ -16,6 +16,12 @@ Settings, mirroring R14:
 
     python scripts/r15_pplx_decider.py batchcheck
     python scripts/r15_pplx_decider.py run --setting b24 [--limit N] [--bs 4] [--datasets a,b]
+    python scripts/r15_pplx_decider.py run --setting zs --engine-url http://HOST:PORT --engine-meta engine.json
+
+--engine-url (amendment A7): score through a /v1/systemone serving engine that passed the per-item parity gate
+against this script's release-code b24 dump, instead of loading the release model. Same jobs, bodies, metrics and
+dump format; requests are sent one at a time (the gate's condition); any failed request aborts the run; output
+files get the suffix `_sgl` and the summary records the engine (`--engine-meta`: image, patch, parity summary).
 """
 import argparse, gzip, hashlib, importlib.util, json, socket, sys, time
 from pathlib import Path
@@ -76,6 +82,31 @@ def score(model, bodies, bs):
     return res, lens
 
 
+def score_engine(url, bodies):
+    """(probabilities in each body's criteria order, prompt tokens) from a /v1/systemone engine, one request at a time."""
+    import urllib.request
+    res, lens = [], []
+    for b in bodies:
+        req = urllib.request.Request(url.rstrip("/") + "/v1/systemone", data=json.dumps(b).encode(),
+                                     headers={"Content-Type": "application/json"})
+        with urllib.request.urlopen(req, timeout=900) as r:                # any error aborts the run (A7)
+            out = json.loads(r.read())
+        (qid,) = b["questions"]; p = out["answers"][qid]["probabilities"]; keys = list(b["questions"][qid]["criteria"])
+        if set(p) != set(keys):
+            raise SystemExit("engine returned option ids that differ from the request's criteria")
+        res.append(np.array([float(p[k]) for k in keys])); lens.append(int(out.get("usage", {}).get("input_tokens", 0)))
+    return res, lens
+
+
+def checkpoint_facts():
+    """Temperature / attention mode / pooling and the release model.py hash, without loading the model (engine mode)."""
+    from huggingface_hub import snapshot_download
+    path = Path(snapshot_download(MODEL, revision=REV, allow_patterns=["decision_config.json", "source/src/autojev/model.py"]))
+    dc = json.loads((path / "decision_config.json").read_text())
+    code = hashlib.sha256((path / "source" / "src" / "autojev" / "model.py").read_bytes()).hexdigest()
+    return dc, code
+
+
 def phase_batchcheck(args):
     model, _ = load()
     from quorum import data
@@ -89,7 +120,11 @@ def phase_batchcheck(args):
 def phase_run(args):
     import torch, transformers
     from quorum import data
-    model, code_sha = load(); tag = f"{TAG}_{args.setting}"
+    if args.engine_url:
+        dc, code_sha = checkpoint_facts(); model = None; tag = f"{TAG}_{args.setting}_sgl"
+        engine = json.loads(Path(args.engine_meta).read_text())
+    else:
+        model, code_sha = load(); tag = f"{TAG}_{args.setting}"; engine = {"name": "release DecisionModel"}
     part = f"_part-{args.datasets.replace(',', '-')}" if args.datasets else ""
     lim = f"_limit{args.limit}" if args.limit else ""
     R14.OUTP.mkdir(parents=True, exist_ok=True); OUT = ROOT / "results" / "r15"; OUT.mkdir(parents=True, exist_ok=True)
@@ -112,7 +147,7 @@ def phase_run(args):
             jobs.append(("banking77", rows, [rq.body(r["text"], variant)[0] for r in rows], rq.raw))
     summary = {}
     for name, rows, bodies, label_order in jobs:
-        t0 = time.time(); res, lens = score(model, bodies, args.bs)
+        t0 = time.time(); res, lens = score_engine(args.engine_url, bodies) if args.engine_url else score(model, bodies, args.bs)
         P = np.zeros((len(rows), len(label_order)))
         for i, (b, p) in enumerate(zip(bodies, res)):
             (q,) = b["questions"].values(); keys = list(q["criteria"])           # criteria order = option order
@@ -135,12 +170,15 @@ def phase_run(args):
             rec[key] = {"b": b, "c": c, "p_two_sided_exact": R14.mcnemar_exact(b, c)}
         summary[name] = rec; print(f"[{tag}/{name}] {json.dumps(rec)}", flush=True)
     meta = {"model": MODEL, "revision": REV, "setting": args.setting, "limit": args.limit, "batch_size": args.bs,
-            "datasets": args.datasets or "all", "temperature": model.temperature, "attention_mode": model.attention_mode, "pooling": model.pooling, "release_model_py_sha256": code_sha,
+            "datasets": args.datasets or "all", "release_model_py_sha256": code_sha, "engine": engine,
+            "temperature": dc["temperature"] if model is None else model.temperature,
+            "attention_mode": dc.get("attention_mode") if model is None else model.attention_mode,
+            "pooling": dc.get("pooling") if model is None else model.pooling,
             "zs_instruction": R14.ZS_INSTRUCTION, "results": summary,
             "code_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "r14_code_sha256": hashlib.sha256((ROOT / "scripts" / "r14_clef.py").read_bytes()).hexdigest(),
             "versions": {"torch": torch.__version__, "transformers": transformers.__version__},
-            "device": torch.cuda.get_device_name(0), "host": socket.gethostname(),
+            "device": engine.get("device") if model is None else torch.cuda.get_device_name(0), "host": socket.gethostname(),
             "written_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     (OUT / f"summary_{tag}{part}{lim}.json").write_text(json.dumps(meta, indent=1)); print("R15_DONE", tag, flush=True)
 
@@ -149,4 +187,5 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("phase", choices=["batchcheck", "run"])
     ap.add_argument("--setting", choices=["zs", "b24", "b24B", "defs", "train"]); ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--bs", type=int, default=4); ap.add_argument("--datasets", default="")
+    ap.add_argument("--engine-url", default=""); ap.add_argument("--engine-meta", default="")
     a = ap.parse_args(); {"batchcheck": phase_batchcheck, "run": phase_run}[a.phase](a)
