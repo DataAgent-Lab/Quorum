@@ -1,6 +1,6 @@
 # Paper positioning after the open decision models (2026-10-11)
 
-> Agreed between this session and the research session; **decisions marked USER are pending the author**. Numbers:
+> Agreed between this session and the research session. **USER decisions (2026-10-11): P1 adopted; venue TMLR; GO for Clef/Clef-Flash b24B on any idle GPU; GO for Bitext as the second 24-shot dataset with Jev ≤ US$1 (one arm); de-identification of internal findings approved.** Pending: whether the 13-task code/workflow comparison joins this paper (recommended — see below). Numbers:
 > `claims-ledger.md` (F1–F15, J1–J3, K1–K5, L1–L2). Internal deployment details may enter the paper only with the
 > author's explicit go, de-identified.
 
@@ -56,8 +56,7 @@ pplx matches its ECE and beats its Brier. Zero-shot, every decision model is far
    from internal work (USER go + de-identification); Jev's API latency is not comparable.
 5. **Pool-size curve for ≥2 models** (pplx done).
 
-Out of this paper unless the author decides otherwise: the internal 13-task code/workflow comparison of the three
-open models (pplx +9, Clef −1, Clef-Flash −8 Holm wins − losses) — a separate scope.
+**Revised recommendation (2026-10-11): include** the 13-task code/workflow comparison of the three open models (pplx +9, Clef −1, Clef-Flash −8 Holm wins − losses) as a second evidence block: it answers the main counter-argument (one dataset), several methodology findings come from it, and TMLR has no page limit. Pending: its protocol/pre-registration location, dataset licences, per-item dumps for independent verification, and the author's final OK.
 
 ## Venue (USER)
 

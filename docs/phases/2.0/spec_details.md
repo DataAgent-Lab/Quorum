@@ -1,5 +1,6 @@
 # Phase 2.0 — Paper publication: a submission-ready TACL paper on Quorum
 
+> **Repositioned 2026-10-11 (user):** P1 evaluation-methodology paper on decision models; venue TMLR — see [`positioning.md`](./positioning.md). TACL-specific requirements below are kept for the record.
 > **Status**: IN PROGRESS — evidence phase (2026-10-05): toolchain ready, zero-shot numbers + calibration verified, 24-shot headline verified; numbers live in [`claims-ledger.md`](./claims-ledger.md). Spec + tasks v2 (2026-10-04) after independent self-review (REVISE: 2 Critical, 15
 > Warning, 7 Note — all applied or routed to must-ask; see "Self-review record") · **Predecessors**: Phases
 > 1.0–1.1 (results), 1.0a/1.0b (demo, per-item dumps) · **Runs in parallel with**: Phase 1.2 (not started)
@@ -43,7 +44,7 @@ cut.**
 | # | Decision |
 |---|---|
 | D1 | Phase number **2.0**. |
-| D2 | **Primary venue: TACL** (Tier 1; rolling monthly; 10 pages + appendices; free). Fallbacks: ARR → ACL 2027 / EMNLP 2027; TMLR (Tier 2) backup. NAACL Demo only after the TACL outcome. |
+| D2 | ~~Primary venue: TACL~~ → **changed 2026-10-11 (user): TMLR**, after repositioning to an evaluation-methodology paper (P1, `positioning.md`). Former TACL text: **Primary venue: TACL** (Tier 1; rolling monthly; 10 pages + appendices; free). Fallbacks: ARR → ACL 2027 / EMNLP 2027; TMLR (Tier 2) backup. NAACL Demo only after the TACL outcome. |
 | D3 | **24-shot is a main result.** ~~0.938 as the headline~~ → **revised 2026-10-05 after G11 (user decision): the headline is the single test run of a CLEAN, pre-registered re-selection protocol**, reported whatever its value and significance. 0.938 is reported as exploratory history with full disclosure (R1 §8). |
 | D4 | **Phase 1.2 in parallel**; gate before the final draft with three outcomes: passed → section; failed → measured negative; **not run by the cut-off → omitted** (mentioned as future work). |
 | D5 | Quality first; ARR 2026-10-12 and Industry 2026-10-31 are not targets. |

@@ -761,3 +761,21 @@ as the low-cost baseline/testbed). Written up in docs/phases/2.0/positioning.md.
 dataset incl. paid Jev calls; latency numbers and serving-engine findings from internal work need go + de-identification).
 
 ===
+Human:
+
+[2026-10-11] Adopt P1. Venue → TMLR. Run Clef and Clef-Flash with our retrieval (ask the research session to use any
+idle GPU). Bitext OK; Jev ≤ US$1 OK. De-identification approved. Why not put the 13-task comparison in the same paper —
+wouldn't two papers each be thin?
+
+===
+AI:
+
+[DECISION #27 | user-decided + recommendation revised]
+D2 changed: TACL → TMLR (spec, venues, positioning updated). Clef/Clef-Flash b24B and the Bitext 24-shot extension
+requested from the research session (division of work proposed: it pre-registers the Bitext protocol and builds the
+bodies once with a sha256 manifest; this session runs one Jev arm ≤ US$1; it runs the open models on identical bodies).
+Recommendation on the 13-task comparison REVISED to include it (answers the one-dataset counter-argument; source of the
+serving findings; TMLR has no page limit); asked the research session for its protocol location, licences and per-item
+dumps before the user's final OK.
+
+===
