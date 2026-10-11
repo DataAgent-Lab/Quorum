@@ -743,3 +743,21 @@ pushed so the pre-registration is public before the runs. Order per the user: Cl
 session's serving-parity work.
 
 ===
+Human:
+
+[2026-10-11] The research session ran more open Jev-class models; align with it on status/results and discuss how best
+to reposition the paper.
+
+===
+AI:
+
+[DECISION #26 | log-and-proceed — alignment + positioning agreed with the research session; USER decisions pending]
+R15 (pplx-decider v1.1) merged and recomputed (ledger L1/L2): on identical evidence pplx beats ours and Jev at 24-shot,
+matches our ECE and beats our Brier; zero-shot far ahead (exposure caveats). No other Jev-class models exist beyond Clef,
+Clef-Flash, pplx. Pending cells (Clef b24B etc.) unscheduled — GPU now serves production; need user go + amendment.
+Agreed direction P1: an evaluation-methodology paper on the decision-model class (protocol as the contribution; Quorum
+as the low-cost baseline/testbed). Written up in docs/phases/2.0/positioning.md. User decisions: adopt P1; venue
+(TMLR recommended by both sessions vs TACL); which essential experiments to fund (Clef b24B first; Bitext second
+dataset incl. paid Jev calls; latency numbers and serving-engine findings from internal work need go + de-identification).
+
+===
