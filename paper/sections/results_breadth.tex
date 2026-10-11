@@ -1,0 +1,70 @@
+% DRAFT (LLM-drafted from claims ledger rows J1, J3, K5, L2, Z8; the author reviews and confirms).
+\section{Results II: breadth}
+\label{sec:res-breadth}
+
+\subsection{Zero-shot on seven intent datasets}
+\label{sec:res-zeroshot}
+
+\begin{table}[t]
+\centering\small
+\caption{Zero-shot accuracy (\%) on the full test splits, label names (N) or one-line descriptions (D). \gj{} with
+its original NLI member, and with a documented-clean NLI member. Exposure marks follow
+Table~\ref{tab:exposure}: $^\times$training split documented in the model's (or its initialisation's) training data;
+$^\circ$indirect; $^?$undisclosed. \jev{} was run on the five datasets that are clean for every \gj{} member or that
+anchor the 24-shot comparison. Request wording differs between \jev{} and \pplx, so their columns are not an
+equal-request comparison.}
+\label{tab:zeroshot}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Dataset & & \gj{} & \gj{} (clean NLI) & \jev$^?$ & \pplx \\
+\midrule
+Banking77 & N & \zsBankingNameAcc$^\times$ & \zxBankingNameCleanNliAcc & \zxBankingNameJevAcc & \zxBankingNamePplxAcc$^?$ \\
+          & D & \zsBankingDescAcc$^\times$ & \zxBankingDescCleanNliAcc & \zxBankingDescJevAcc & \zxBankingDescPplxAcc$^?$ \\
+CLINC150  & N & \zsClincNameAcc & \zxClincNameCleanNliAcc & \zxClincNameJevAcc & \zxClincNamePplxAcc$^?$ \\
+          & D & \zsClincDescAcc & \zxClincDescCleanNliAcc & \zxClincDescJevAcc & \zxClincDescPplxAcc$^?$ \\
+HWU64     & N & \zsHwuNameAcc$^\circ$ & \zxHwuNameCleanNliAcc & -- & \zxHwuNamePplxAcc$^\circ$ \\
+          & D & \zsHwuDescAcc$^\circ$ & \zxHwuDescCleanNliAcc & -- & \zxHwuDescPplxAcc$^\circ$ \\
+MASSIVE   & N & \zsMassiveNameAcc$^\times$ & \zxMassiveNameCleanNliAcc & -- & \zxMassiveNamePplxAcc$^\times$ \\
+          & D & \zsMassiveDescAcc$^\times$ & \zxMassiveDescCleanNliAcc & -- & \zxMassiveDescPplxAcc$^\times$ \\
+MTOP      & N & \zsMtopNameAcc & \zxMtopNameCleanNliAcc & \zxMtopNameJevAcc & \zxMtopNamePplxAcc$^\times$ \\
+          & D & \zsMtopDescAcc & \zxMtopDescCleanNliAcc & \zxMtopDescJevAcc & \zxMtopDescPplxAcc$^\times$ \\
+SNIPS     & N & \zsSnipsNameAcc & \zxSnipsNameCleanNliAcc & \zxSnipsNameJevAcc & \zxSnipsNamePplxAcc$^\times$ \\
+          & D & \zsSnipsDescAcc & \zxSnipsDescCleanNliAcc & \zxSnipsDescJevAcc & \zxSnipsDescPplxAcc$^\times$ \\
+Bitext    & N & \zsBitextNameAcc & \zxBitextNameCleanNliAcc & \zxBitextNameJevAcc & \zxBitextNamePplxAcc$^?$ \\
+          & D & \zsBitextDescAcc & \zxBitextDescCleanNliAcc & \zxBitextDescJevAcc & \zxBitextDescPplxAcc$^?$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Zero-shot, the decision models lead by wide margins (Table~\ref{tab:zeroshot}). In the pre-registered comparison
+against \gj{} with the clean NLI member, \jev{} is ahead on every condition (Holm over four primary conditions:
+Banking77 and MTOP, $p_\text{Holm}\le\fsZsBankingDescJevPHolm$; Holm over six further conditions on CLINC150, SNIPS
+and Bitext, $p_\text{Holm}\le\fsZsSnipsDescJevPHolm$). \pplx{} is higher than \jev{} on every condition where both were run (with different request wording), and \clef{} reaches
+\zxClincNameClefBigAcc\% on CLINC150 with label names (the only completed \clef{} zero-shot cell).
+
+How to read these numbers is the point of this subsection. Only one column is interpretable as zero-shot for every
+dataset: \gj{} with the clean NLI member, whose three members document their training data and exclude all seven
+benchmarks. The other columns mix three cases. Some cells are \emph{exposed}: \pplx's training manifest lists
+MASSIVE, MTOP and SNIPS, and our own original NLI member inherits the Banking77 and MASSIVE training splits through
+its initialisation (\S\ref{sec:find-exposure}). Some are \emph{undisclosed}: \jev{} and \clef{} do not document their
+training data, and the remaining \pplx{} cells are not covered by its manifest. Some are \emph{indirect}: HWU64 and
+MASSIVE share a large fraction of their utterances. We therefore report decision-model zero-shot numbers as
+measurements of these systems on these test sets, not as evidence of zero-shot generalisation.
+\authorcheck{The public leaderboard gap for \clef{} on CLINC150 (public vs.\ private set) is reported by a third
+party and not verified here; decide whether to mention it.}
+
+Within \gj, the internal findings that motivated it hold with the clean member: the jury beats its best single
+member on \zxCleanNliWins{} of 14 conditions (Holm), including all \zxCleanNliUnexposedOf{} conditions on datasets that
+are unexposed for every member, and loses on \zxCleanNliLosses. Appendix~\ref{app:jury} reports the jury in full.
+
+\subsection{A second 24-shot dataset}
+\label{sec:res-bitext}
+\pending{Bitext customer support at 24 shots: our selection and retrieval pre-registered; request-body manifest;
+\orb, the three open decision models and one \jev{} arm on identical bodies. Results enter only after the
+pre-registration commit and the single scored run.}
+
+\subsection{Beyond intent: thirteen code and workflow decision tasks}
+\label{sec:res-13task}
+\pending{The 13-task comparison of \pplx, \clef{} and \flash{} (Holm wins minus losses per model). Required before
+it enters: protocol and pre-registration location, dataset licences, per-item dumps for independent recomputation,
+and de-identification of task descriptions.}

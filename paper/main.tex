@@ -1,0 +1,62 @@
+\documentclass[10pt]{article}
+\usepackage{tmlr}
+% Camera-ready: \usepackage[accepted]{tmlr}   Preprint (de-anonymised): \usepackage[preprint]{tmlr}
+
+\input{math_commands.tex}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{siunitx}
+
+% Every number in the text comes from these generated files (paper/scripts/*.py); see the claims ledger.
+\input{generated/numbers_zeroshot.tex}
+\input{generated/numbers_fewshot.tex}
+\input{generated/numbers_zsx.tex}
+
+% Names used in the review version (changeable in one place).
+\newcommand{\gj}{GeoJury}          % the zero-shot jury baseline
+\newcommand{\orb}{R24}             % the open retrieval-augmented 24-shot baseline
+\newcommand{\jev}{Jev}
+\newcommand{\clef}{Clef}
+\newcommand{\flash}{Clef-Flash}
+\newcommand{\pplx}{pplx-decider}
+
+% Drafting aids: must be empty before submission (the build fails the check if any remain).
+\newcommand{\pending}[1]{\par\noindent\fbox{\parbox{0.97\linewidth}{\small\textcolor{red}{\textbf{PENDING:} #1}}}\par}
+\newcommand{\authorcheck}[1]{\textcolor{blue}{[\textbf{author:} #1]}}
+
+\title{Comparing Decision Models on Equal Evidence:\\A Protocol and What It Reveals}
+
+\author{\name Anonymous authors}
+
+\def\month{MM}
+\def\year{YYYY}
+\def\openreview{\url{https://openreview.net/forum?id=XXXX}}
+
+\begin{document}
+\maketitle
+
+\input{sections/abstract}
+\input{sections/introduction}
+\input{sections/background}
+\input{sections/protocol}
+\input{sections/systems}
+\input{sections/results_banking}
+\input{sections/results_breadth}
+\input{sections/findings}
+\input{sections/cost}
+\input{sections/limitations}
+
+\bibliography{main}
+\bibliographystyle{tmlr}
+
+\appendix
+\input{sections/appendix_jury}
+\input{sections/appendix_protocol}
+
+\end{document}

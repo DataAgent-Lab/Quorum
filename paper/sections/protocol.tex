@@ -1,0 +1,43 @@
+% DRAFT (LLM-drafted from the protocol documents and the claims ledger; the author reviews and confirms).
+\section{The equal-evidence protocol}
+\label{sec:protocol}
+
+The protocol has five parts. None is new on its own; the point is to apply all of them to every scored run.
+
+\paragraph{1. Identical, hash-pinned requests.} For each comparison we fix a set of \emph{request bodies}: the
+instruction, the options with their names or descriptions, the retrieved examples in order, and the test input. Each
+body is serialised once, its SHA-256 is written to a manifest, and every system receives that body (translated only
+by the minimal adapter its interface requires, which is itself versioned). Two systems are said to be compared on
+\emph{equal evidence} only when their manifests match item by item. In the 24-shot setting this separates two
+sources of difference that published numbers conflate: the model and the retrieval rule that chose its examples.
+
+\paragraph{2. Pre-registration before every scored run.} Before a run touches test data, a commit fixes the
+configuration, the selection procedure (on data disjoint from test), the primary and secondary analyses, the
+multiple-comparison families and the failure handling (for example, a failed API call counts as wrong for accuracy
+and is excluded, with a count, from calibration). Later deviations are written as dated amendments before the runs
+they govern. The repository history makes the order verifiable: for our headline run, the protocol, the selection
+and the single test run are separate commits, and the test-time dump is touched by exactly one commit
+(Appendix~\ref{app:protocol}).
+
+\paragraph{3. Paired exact tests.} Every accuracy comparison is an exact McNemar test on the same test items,
+reported with its discordant counts $b$ (first system right, second wrong) and $c$ (the reverse). Within a declared
+family we apply Holm's step-down correction; post hoc families are labelled as such. Calibration is compared with
+paired bootstrap intervals over items (10,000 resamples; 2,000 for ECE) % numbers-ok: protocol constants, jev_swap_analysis.py
+for ECE with 10 equal-width bins, the Brier score summed over classes, and log loss where the returned probabilities permit
+it (\S\ref{sec:find-rounding}).
+
+\paragraph{4. Release code first; a parity gate for any other engine.} Each open model is scored with its release
+code when feasible. When throughput requires a different serving engine, the engine must first reproduce the
+release code item by item on a full benchmark (argmax agreement and maximum absolute probability difference are
+recorded); a model that fails the gate is scored only with its release code. Over-length requests follow each
+model's release code, and the policy is recorded per model, because systems that truncate, reject or silently
+shorten long requests can otherwise be ranked on different inputs.
+
+\paragraph{5. Replication before comparison.} When a closed system's published result exists with per-item
+predictions, we first re-send its exact request bodies to the pinned version and test agreement item by item. Only a
+system whose published result we can reproduce is used as a reference.
+
+\paragraph{What the protocol does not control.} It cannot verify what a model was trained on. We record each
+model's documented training data per dataset and report zero-shot results for exposed or undocumented combinations
+separately (\S\ref{sec:find-exposure}). It also does not equalise compute: models are compared at their released
+sizes, and cost is reported separately (\S\ref{sec:cost}).

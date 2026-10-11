@@ -8,8 +8,10 @@
 
 | Banking77 24-shot, identical evidence | accuracy | ECE / Brier |
 |---|---|---|
-| reproduction's retrieval: Clef-Flash · Clef · pplx · Jev · ours¹ | 95.49 · 94.32 · 94.19 · 92.40 · 92.34 | 0.176/0.127 · 0.066/0.093 · 0.015/0.092 · 0.029/0.105 · —/— |
+| reproduction's retrieval: Clef-Flash · Clef · pplx · Jev · ours¹ | 95.49 · 94.32 · 94.19 · 92.40 · 92.34 | 0.176/0.127 · 0.066/0.093 · 0.015/0.092 · 0.034/0.119 · 0.024/0.116 |
 | our retrieval: pplx · ours · Jev (Clef pending) | 94.64 · 93.57 · 93.47 | 0.016/0.084 · 0.017/0.100 · 0.029/0.105 |
+
+*(Jev under the reproduction's retrieval corrected 2026-10-11 to 0.034/0.119 — the table previously repeated its Arm-B values.)*
 
 ¹ ours with the reproduction's full retrieval rule over all 10,003 rows (F13), not our clean run.
 Scoring provenance: pplx b24 release code (A6), pplx b24B parity-gated SGLang (A7); Clef b24 release code (R14).

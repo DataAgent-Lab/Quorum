@@ -1,0 +1,41 @@
+% DRAFT (LLM-drafted; every citation resolved by tool and checked by hand before submission).
+\section{Background and related work}
+\label{sec:background}
+
+\paragraph{Decision models.} We use \emph{decision model} for a system whose interface is a closed-set decision:
+the request contains an instruction, a list of options (names, optionally with descriptions) and optional evidence
+(labelled examples, context); the response is a choice and a probability for every option. \jev{} is a closed API of
+this kind that advertises calibrated probabilities \citep{typesafe-2026-jev}; its responses round each probability
+to two decimals (\S\ref{sec:find-rounding}). \clef{} and \flash{} are open-weight decision models built on 27B and
+9B language-model backbones with a scoring head \authorcheck{cite cards; confirm backbone names as stated on the
+cards}; \pplx{} is an open-weight 27B decision model that scores options with non-causal attention over the request
+\authorcheck{cite card}. A community reproduction evaluated \jev{} on Banking77 with a pinned request format,
+retrieved examples and published per-item predictions \citep{smith-2026-jev-banking77}; several open clones and
+community benchmarks followed \citep{cai-2026-open-jev,mehra-2026-jevbench,abdelstark-2026-jev-benchmarks}, none of
+them on identical evidence.
+
+\paragraph{Intent classification as a testbed.} Intent classification offers many labels, public test splits and a
+long record of results: Banking77 \citep{casanueva-etal-2020-efficient}, CLINC150 \citep{larson-etal-2019-evaluation},
+HWU64 \citep{liu-etal-2021-hwu64}, MASSIVE \citep{fitzgerald-etal-2023-massive}, MTOP \citep{li-etal-2021-mtop},
+SNIPS \citep{coucke-etal-2018-snips} and Bitext customer support \citep{bitext-2023-customer-support}. Zero-shot
+approaches score utterances against label names or descriptions with NLI cross-encoders
+\citep{yin-etal-2019-benchmarking,laurer-etal-2023-less} or embedding similarity
+\citep{hu-etal-2024-exploring,sung-etal-2023-pre}; a recent benchmark compares these families on official test
+splits without ensembles or significance tests \citep{aarab-2026-btzsc}. Few-shot approaches retrieve labelled
+examples for in-context learning \citep{milios-etal-2023-context,bertsch-etal-2024-long-context-icl}, combine
+language-model scores with nearest neighbours \citep{xu-etal-2023-knn-prompting}, or fine-tune small models
+\citep{tunstall-etal-2022-setfit,loukas-etal-2023-breaking-bank}. Our baselines combine these known pieces; they are
+not a methodological contribution.
+
+\paragraph{Evaluation practice.} Our protocol assembles established practice rather than inventing it: paired
+significance testing on the same items \citep{mcnemar-1947,dietterich-1998-approximate,dror-etal-2018-hitchhikers},
+multiplicity control \citep{dror-etal-2017-replicability}, reporting of the full search behind a configuration
+\citep{dodge-etal-2019-show,gorman-bedrick-2019-need}, adequately powered comparisons \citep{card-etal-2020-little},
+pre-registration \citep{van-miltenburg-etal-2021-preregistering} and model selection without the test set
+\citep{perez-etal-2021-true-few-shot}. Calibration is measured with expected calibration error
+\citep{guo-etal-2017-calibration} and proper scoring rules. Data contamination is a known threat to zero-shot claims
+\citep{magar-schwartz-2022-data,sainz-etal-2023-nlp}. What is new here is applying these practices together to a
+product class whose members are evaluated by their vendors with their own evidence, and measuring how much each
+uncontrolled factor moves the result.
+\authorcheck{Missing references to add and verify: the Clef and pplx-decider model cards; Holm (1979); Brier
+(1950); a serving-engine reference for SGLang.}

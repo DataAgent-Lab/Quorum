@@ -795,3 +795,20 @@ checks.py gained a TMLR layout mode; 10/10 checker tests pass (TMLR submission p
 flagged).
 
 ===
+Human:
+
+[2026-10-11] (continuation) Draft the paper: LLM drafts, author reviews.
+
+===
+AI:
+
+[DECISION #29 | auto-decided]
+First full TMLR draft built (paper/main.tex + sections/, 14 pages incl. references and two appendices). Every number
+comes from generated macros: new generators numbers_24shot.py (455 macros, recomputed from per-item dumps; all F/K/L/J
+ledger values reproduce) and numbers_zeroshot_compare.py (108 macros). The generator caught one ledger error (K3 and
+the positioning table gave Jev Arm-B calibration under the Arm-A label; corrected) and refined J2's error share
+(27.9% by choice). Checks: TMLR layout PASS, numbers PASS, anonymity PASS (third-party links allowed only when cited
+in main.bib; new test, 11/11). Sections awaiting runs or approvals carry red PENDING boxes; claims the author must
+confirm carry blue author notes.
+
+===

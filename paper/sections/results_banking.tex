@@ -1,0 +1,95 @@
+% DRAFT (LLM-drafted from the claims ledger, rows F1-F15, K1-K3, L1; the author reviews and confirms).
+\section{Results I: Banking77 at 24 shots}
+\label{sec:res-banking}
+
+\begin{table}[t]
+\centering\small
+\caption{Banking77, 24 shots, full test set (\fsN{} items). Rows within a block received byte-identical request
+bodies. ECE: 10 equal-width bins; Brier summed over classes. Log loss is omitted for \jev{} because its probabilities
+are rounded to two decimals (\S\ref{sec:find-rounding}). $^\ddagger$scored by a parity-gated serving engine.}
+\label{tab:main}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Evidence & System & Acc.\ (\%) & ECE & Brier & Log loss \\
+\midrule
+\multirow{5}{*}{reproduction's retrieval} & \flash & \fsFlashAcc & \fsFlashEce & \fsFlashBrier & \fsFlashLogLoss \\
+ & \clef & \fsClefAcc & \fsClefEce & \fsClefBrier & \fsClefLogLoss \\
+ & \pplx & \fsPplxAcc & \fsPplxEce & \fsPplxBrier & \fsPplxLogLoss \\
+ & \jev{} (our replication) & \fsJevAAcc & \fsJevAEce & \fsJevABrier & -- \\
+ & \orb{} with this retrieval & \fsParBestAcc & \fsParBestEce & \fsParBestBrier & \fsParBestLogLoss \\
+\midrule
+\multirow{3}{*}{our retrieval (\orb)} & \pplx$^\ddagger$ & \fsPplxBAcc & \fsPplxBEce & \fsPplxBBrier & \fsPplxBLogLoss \\
+ & \orb & \fsCleanAcc & \fsCleanEce & \fsCleanBrier & \fsCleanLogLoss \\
+ & \jev & \fsJevBAcc & \fsJevBEce & \fsJevBBrier & -- \\
+\midrule
+\multirow{2}{*}{other budgets} & fine-tune (fixed budget) & \fsFtAcc & \fsFtEce & \fsFtBrier & \fsFtLogLoss \\
+ & \gj{}, zero-shot, descriptions & \zsBankingDescAcc & \multicolumn{3}{l}{see Appendix~\ref{app:jury}} \\
+\bottomrule
+\end{tabular}
+\pending{\clef{} and \flash{} with our retrieval (pre-registered amendment; GPU run pending).}
+\end{table}
+
+\subsection{Replicating the closed API}
+\label{sec:res-replication}
+We re-sent the reproduction's \fsN{} request bodies, unchanged, to the pinned \jev{} version. Accuracy was
+\fsJevAAcc\%, equal to the published \fsJevPubAcc\%; the two runs agree on \fsJevAAgreement\% of choices and differ
+in correctness on $\fsJevAVsJevB+\fsJevAVsJevC$ items, evenly split ($p=\fsJevAVsJevP$). Our recomputation of the
+published calibration from its per-item probabilities also matches the reported values (ECE \fsJevPubEce, Brier
+\fsJevPubBrier). Every later \jev{} comparison is therefore against a reference we can reproduce.
+
+\subsection{The retrieval rule moves results as much as the model}
+\label{sec:res-retrieval}
+Our baseline \orb{} exceeds the published \jev{} result:
+\fsCleanAcc\% vs.\ \fsJevPubAcc\% (b/c $\fsCleanVsJevB/\fsCleanVsJevC$, $p=\fsCleanVsJevP$; pre-registered,
+single test run). The protocol shows that this advantage belongs to the evidence, not to the model:
+
+\begin{itemize}
+  \item \textbf{Same evidence, tie.} Sending \jev{} the 24 examples that \orb{} retrieved raises it to
+  \fsJevBAcc\%; against \orb{} on these identical bodies the difference is $\fsCleanMinusJevBPt$ points
+  (b/c $\fsCleanVsJevBB/\fsCleanVsJevBC$, $p=\fsCleanVsJevBP$). This comparison was the pre-registered primary
+  analysis of the swap.
+  \item \textbf{The retrieval rule alone moves \jev.} With our retrieval instead of the reproduction's, \jev{} gains
+  \fsJevBMinusJevAPt{} points (b/c $\fsJevBVsJevAB/\fsJevBVsJevAC$, $p=\fsJevBVsJevAP$).
+  \item \textbf{The reverse also holds.} \orb{} scored with the reproduction's retrieval rule reaches
+  \fsParBestAcc\%, a tie with \jev{} (b/c $\fsParBestVsJevB/\fsParBestVsJevC$, $p=\fsParBestVsJevP$); the same model
+  with its own retrieval is \fsCleanMinusParBestPt{} points higher (b/c $\fsCleanVsParBestB/\fsCleanVsParBestC$,
+  $p=\fsCleanVsParBestP$).
+  \item \textbf{A stronger model gains less.} \pplx{} improves by \fsPplxBMinusPplxPt{} points with our retrieval,
+  which is not significant (b/c $\fsPplxBVsPplxB/\fsPplxBVsPplxC$, $p=\fsPplxBVsPplxP$).
+  \pending{\clef{} and \flash{} under our retrieval decide whether this pattern holds for the most accurate models.}
+\end{itemize}
+
+\paragraph{What in the rule matters (post hoc).} The two retrieval rules differ in three ways: a per-class cap of
+four examples, bigram tokens, and the pool (full training split vs.\ our pool without the selection split). A
+factorial re-run of \orb{} on our pool (Holm over six contrasts) attributes the gain mainly to the cap. Removing it
+raises accuracy from \fsCapUniAcc\% to \fsCleanAcc\% with unigram tokens (b/c $\fsCapEffUniB/\fsCapEffUniC$,
+$p_\text{Holm}=\fsCapEffUniPHolm$); tokenisation contributes a borderline part (b/c $\fsBiEffNocapB/\fsBiEffNocapC$,
+$p_\text{Holm}=\fsBiEffNocapPHolm$); the pool has no effect (b/c $\fsPoolEffB/\fsPoolEffC$). Without the cap the
+retriever returns fewer distinct classes per query (\fsCleanClasses{} vs.\ \fsCapUniClasses), i.e.\ more
+neighbours from the most likely class. Because this analysis is post hoc and covers one dataset, we report it as a
+mechanism to test, not as a general rule.
+\pending{Pool-size curve for \pplx{} (24/class, 8/class, names only): numbers delivered by the research session
+must be recomputed here before they enter the text.}
+
+\paragraph{What in \orb{} matters (post hoc).} Most of \orb's accuracy comes from retrieval and the nearest-neighbour
+vote: the vote alone reaches \fsKnnAloneAcc\%, itself a tie with the published \jev{} result
+($p=\fsKnnAloneVsJevP$). The reader adds a small, significant increment over the vote alone
+(\fsCleanMinusKnnAlonePt{} points; b/c $\fsCleanVsKnnAloneB/\fsCleanVsKnnAloneC$,
+$p_\text{Holm}=\fsCleanVsKnnAlonePHolm$), but the reader's task adapter does not add a significant increment once
+the vote is present (base reader with the vote: \fsBaseKnnAcc\%, $p_\text{Holm}=\fsCleanVsBaseKnnPHolm$). The
+reader alone scores \fsReaderAloneAcc\%, below \jev{} though not significantly ($p=\fsReaderAloneVsJevP$).
+A standard fine-tune on the same pool reaches \fsFtAcc\%, a tie with \orb{} ($p=\fsCleanVsFtP$).
+
+\subsection{Accuracy and calibration rank models differently}
+\label{sec:res-calibration}
+On the reproduction's bodies, the accuracy order is \flash{} > \clef{} $\approx$ \pplx{} > \jev{} $\approx$ \orb{}
+(\flash{} vs.\ \jev: b/c $\fsFlashVsJevAB/\fsFlashVsJevAC$, $p=\fsFlashVsJevAP$; \clef{} vs.\ \pplx:
+$p=\fsPplxVsClefP$; \orb{} vs.\ \jev: $p=\fsParBestVsJevP$). Calibration orders them differently
+(Table~\ref{tab:main}). \flash{}, the most accurate, has the highest ECE (\fsFlashEce) and a higher log loss than
+\orb{} on identical evidence (difference \fsLlParMinusFlash, 95\% CI % numbers-ok: confidence level
+ [\fsLlParMinusFlashLo, \fsLlParMinusFlashHi]).
+\pplx{} matches the lowest ECE and has the lowest Brier score in both blocks. Against \jev{} on identical evidence,
+\orb{} has lower ECE (difference \fsSwapDiffEce, CI [\fsSwapDiffEceLo, \fsSwapDiffEceHi]) and a Brier score that is
+not distinguishable (\fsSwapDiffBrier, CI [\fsSwapDiffBrierLo, \fsSwapDiffBrierHi]). A system's accuracy rank is
+therefore not a proxy for the quality of its probabilities, which matters for decision models whose stated purpose
+is to return usable probabilities.

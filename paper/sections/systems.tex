@@ -1,0 +1,80 @@
+% DRAFT (LLM-drafted from run metadata, model cards and the licences/contamination audit; author reviews).
+\section{Systems and data}
+\label{sec:systems}
+
+\begin{table}[t]
+\centering\small
+\caption{Systems compared. ``Scoring'' records how each system's probabilities were obtained.
+\authorcheck{Confirm model sizes and licences against the cards before submission.}}
+\label{tab:systems}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}p{3.4cm}>{\raggedright\arraybackslash}p{4.6cm}>{\raggedright\arraybackslash}p{4.6cm}@{}}
+\toprule
+System & Kind & Scoring & Training data (benchmarks) \\
+\midrule
+\jev{} & closed API, version pinned & vendor API, probabilities rounded to 0.01 & undisclosed \\ % numbers-ok: API rounding resolution
+\clef{} & open weights, 27B backbone & release code, bf16 & ``internal synthetic'', undisclosed \\
+\flash{} & open weights, 9B backbone & release code, bf16 & ``internal synthetic'', undisclosed \\
+\pplx{} & open weights, 27B & release code; one engine behind a parity gate & manifest lists MASSIVE, MTOP, SNIPS \\
+\midrule
+\orb{} (ours) & open, 4B reader + 0.3B kNN & our code & reader adapter: other tasks, Banking77 excluded \\
+\gj{} (ours) & open, three sub-1B encoders & our code & see Table~\ref{tab:exposure} \\
+Fine-tune (ours) & 4B + LoRA, fixed budget & our code & Banking77 training split \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Decision models.} \jev{} was called through its vendor API; every one of the \fsJevFsCalls{} 24-shot
+and \fsJevZsCalls{} zero-shot scored calls was served by the same model version, which we record per call. We never
+trained or tuned anything on its outputs. \clef{} and \flash{} were scored with their release code. \pplx{} was
+scored with its release code on the reproduction's 24-shot bodies; its other cells used a serving engine that first
+passed our parity gate on the full Banking77 test set (argmax agreement \fsPplxGateAgree\%, maximum absolute
+probability difference \fsPplxGateMaxDp). Table~\ref{tab:systems} summarises the systems.
+
+\paragraph{\orb, the open 24-shot baseline.} For each test utterance, BM25 \citep{robertson-zaragoza-2009-bm25}
+retrieves 24 labelled examples from a pool of \fsPoolN{} training utterances (the training split minus a held-out
+selection split of \fsSelN{} utterances), with unigram tokens and no per-class cap. A Qwen3-4B reader
+\citep{yang-etal-2025-qwen3} with a LoRA adapter \citep{hu-etal-2021-lora} scores all 77 options in one forward pass
+\citep{robinson-wingate-2023-mcp}; the adapter was trained on other intent and text-classification tasks with
+Banking77 excluded by exact and near-duplicate filtering. A bge-large \citep{xiao-etal-2024-cpack} nearest-neighbour
+vote over the same 24 examples \citep{xu-etal-2023-knn-prompting} is combined with the reader by a weighted mean of
+temperature-scaled probabilities. Members, combination rule, option text (descriptions) and the number of option
+orders were chosen once, out of fold on the selection split, before the single test run
+(Appendix~\ref{app:protocol}). We report calibration on the stored combined probabilities, which is conservative:
+the pre-registered final temperature lowers ECE further but is not used in any comparison.
+
+\paragraph{\gj, the zero-shot baseline.} Three encoders score the label names or descriptions: an NLI cross-encoder
+(PrismNLI-0.4B; \citealp{jung-etal-2025-prismatic}) and two bi-encoders (bge-large and bge-base). Each member's
+scores pass through a softmax with temperature one and the members are pooled by an equal-weight geometric mean,
+with no per-task weights or temperatures. Appendix~\ref{app:jury} documents the jury in full.
+
+\paragraph{Fixed-budget fine-tuning reference.} To place the few-shot numbers, we fine-tuned Qwen3-4B with LoRA on
+the same \fsPoolN{} pool utterances for two epochs (\fsFtGpuHours{} GPU-hours) and scored the test set once. Its
+validation accuracy was still rising when the budget ended, so it is a reference, not a ceiling.
+
+\paragraph{Data.} Banking77 \citep{casanueva-etal-2020-efficient} has \fsN{} test utterances over 77 intents and
+\fsFullTrain{} training utterances; all systems are scored on the full test split. The reproduction's 24-shot
+request bodies use word and bigram BM25 over the full training split with at most four examples per class, and its
+own label definitions \citep{smith-2026-jev-banking77}. Zero-shot results cover seven intent datasets
+(\S\ref{sec:res-zeroshot}).
+\pending{Bitext 24-shot data and the 13 code/workflow tasks (sources, licences, sizes) once their protocols are
+fixed.}
+
+\begin{table}[t]
+\centering\small
+\caption{Documented exposure of zero-shot systems to each dataset's training data. C = clean in every disclosed
+training list; X = training split present; I = indirect (HWU64 and MASSIVE share utterances); ? = undisclosed.
+\authorcheck{Check against the audit file before submission.}}
+\label{tab:exposure}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+ & Banking77 & CLINC150 & HWU64 & MASSIVE & MTOP & SNIPS & Bitext \\
+\midrule
+bge-large / bge-base & C & C & C & C & C & C & C \\
+PrismNLI-0.4B (via its initialisation) & X & C & I & X & C & C & C \\
+\pplx{} & ? & ? & I & X & X & X & ? \\
+\clef{}, \flash{} & ? & ? & ? & ? & ? & ? & ? \\
+\jev{} & ? & ? & ? & ? & ? & ? & ? \\
+\bottomrule
+\end{tabular}}
+\end{table}

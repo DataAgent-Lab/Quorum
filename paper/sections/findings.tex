@@ -1,0 +1,72 @@
+% DRAFT (LLM-drafted from claims ledger rows J2, F5, F10, F14, M1-M5, P6, P7; the author reviews and confirms).
+\section{Methodology findings}
+\label{sec:findings}
+
+The protocol was designed to avoid known pitfalls; applying it surfaced others. Each finding below is measured on
+our data, and several are mistakes we made first and caught later.
+
+\subsection{Probability rounding makes log loss unusable against one API}
+\label{sec:find-rounding}
+\jev{} returns probabilities rounded to two decimals, so the gold option often receives exactly zero when the model
+is wrong. On the 24-shot bodies of our retrieval, \fsJevBGoldZero{} items (\fsJevBGoldZeroPct\% of the test set;
+\fsJevBGoldZeroOfErrors\% of \jev's errors) have gold probability zero, and these items dominate its log loss. Our
+pre-registered analysis found \orb's log loss lower by \fsSwapDiffLogLoss{} (CI [\fsSwapDiffLogLossLo,
+\fsSwapDiffLogLossHi]); flooring \jev's probabilities at $10^{-3}$, below the rounding resolution, shrinks the
+difference to \fsSwapDiffLogLossFloor. We had initially reported the log-loss difference as a calibration advantage
+and withdrew it. For systems that round their outputs, only metrics that are insensitive to the rounding (ECE,
+Brier) support comparisons; log loss is reported for the open models, whose release code returns unrounded
+probabilities.
+
+\subsection{Retrieval tie-breaking depends on the platform}
+\label{sec:find-ties}
+Our BM25 implementation ranked candidates with an unstable sort and summed term scores in hash order. Re-running
+retrieval on a different processor architecture and numerical library changed the retrieved set for hundreds of
+test items, all of them ties at the 24th rank. We fixed the ranking (sorted term order, stable sort with an index
+tie-break) and re-scored the headline configuration post hoc: the retrieved set changes for \fsStableSetDiff{} items
+(\fsStableSetDiffPct\%) and the order only for \fsStableOrderOnlyDiff{} more, but only \fsStableChanged{} predictions
+change, accuracy is unchanged (\fsStableAcc\%) and the comparison with \jev{} is unaffected ($p=\fsStableVsJevP$).
+The effect was negligible here, but a request manifest is the only way to know that two runs saw the same evidence.
+
+\subsection{Selection on the test set changes significance}
+\label{sec:find-selection}
+Before pre-registering, we explored about forty configurations scored on the test set and found one at 93.8\% that % numbers-ok: exploratory history (claims ledger F5), not used as evidence
+beat the published \jev{} result with a small $p$-value.
+The repository's default configuration, by contrast, is not significantly better than \jev{} (\fsDefaultAcc\%,
+$p=\fsDefaultVsJevP$), and the pre-registered configuration chosen without test data is (\fsCleanAcc\%,
+$p=\fsCleanVsJevP$), under each of three test-time seeds ($p\le\fsCleanVsJevP$). The three numbers differ by less
+than a point, but the significance verdict depends on how the configuration was chosen. We report only the
+pre-registered result as evidence and the exploratory one as history.
+
+\subsection{Paired and unpaired tests disagree on the headline}
+\label{sec:find-paired}
+The 95\% Wilson intervals of % numbers-ok: confidence level
+ \orb{} and the published \jev{} result overlap ([\fsCleanWilsonLo, \fsCleanWilsonHi]
+vs.\ [\fsJevPubWilsonLo, \fsJevPubWilsonHi]), which an unpaired reading would call no difference; the paired exact
+test on the same items gives $p=\fsCleanVsJevP$. Comparisons of decision models on a shared test set should be
+paired, which requires per-item predictions; published aggregate numbers alone do not support them.
+
+\subsection{Small or ordered slices mislead in either direction}
+\label{sec:find-slices}
+The SNIPS test file is ordered by class, so its first 100 rows contain \zxSmokeSnipsClasses{} of
+\zxSnipsClasses{} classes. On that slice \gj{} scores \zxSmokeSnipsNameAcc\% with label names (full test set:
+\zxSmokeSnipsNameFullAcc\%) but \zxSmokeSnipsDescAcc\% with descriptions (full: \zxSmokeSnipsDescFullAcc\%). A
+smoke-test slice can overstate or understate; all numbers in this paper use full test splits.
+
+\subsection{Training-data exposure through model lineage}
+\label{sec:find-exposure}
+We selected PrismNLI-0.4B as \gj's NLI member because its card describes training on synthetic NLI data. The card
+also states that training starts from an earlier zero-shot classifier \citep{jung-2025-prismnli-card}, whose own
+training mix includes the Banking77 and MASSIVE training splits \citep{laurer-etal-2023-less}
+\authorcheck{cite the pinned dataset list of the earlier classifier}. Our zero-shot numbers on those two datasets
+are therefore exposed, and HWU64 is indirectly exposed because it shares utterances with MASSIVE. We replaced the
+member with one whose training data are documented and exclude all seven benchmarks; the jury's internal findings
+hold (\S\ref{sec:res-zeroshot}), but its absolute accuracy is lower on most datasets, including some that were never
+exposed. A model card's description of the final training stage is not a statement about the data its
+initialisation saw.
+
+\subsection{Serving engines and over-length requests}
+\label{sec:find-serving}
+\pending{De-identified findings from deployment work, approved by the author: one model failed the parity gate on
+one of \fsN{} items; a serving engine's input limit differed from the release code's and silently refused
+requests the release code accepts; over-length policies differ by model and flipped one task's ranking. Each needs
+its per-item evidence before it enters the text.}

@@ -76,6 +76,15 @@ def test_anonymity_flags_planted_terms(tmp_path):
     assert errs.count("Quorum") == 1, "comment lines must be ignored"
 
 
+def test_anonymity_allows_links_cited_in_bib_only(tmp_path):
+    bib = tmp_path / "r.bib"
+    bib.write_text("@misc{x,\n  url = {https://github.com/thirdparty/repo},\n}\n")
+    f = tmp_path / "s.tex"
+    f.write_text("See github.com/thirdparty/repo and github.com/ourselves/code.\n")
+    errs = checks.check_anonymity([f, bib])
+    assert len(errs) == 1 and "github.com/ourselves" in errs[0]
+
+
 def test_anonymity_clean_text_passes(tmp_path):
     f = tmp_path / "s.tex"
     f.write_text("GeoJury pools three open models \\citep{yin2019}. Prior work by Yang et al. is cited.\n")

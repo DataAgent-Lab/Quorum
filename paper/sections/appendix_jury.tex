@@ -1,0 +1,35 @@
+% DRAFT (LLM-drafted from claims ledger rows Z1-Z9, B1; the author reviews and confirms).
+\section{The zero-shot jury in full}
+\label{app:jury}
+
+\paragraph{Design.} \gj{} scores each utterance against every label text (name or one-line description) with three
+encoders: an NLI cross-encoder, which scores the hypothesis ``This example is about \emph{label}'', and two
+bi-encoders, which score cosine similarity between utterance and label text \authorcheck{confirm the exact NLI
+template}. Each member's scores pass through a softmax with temperature one, and the members are pooled by an
+equal-weight geometric mean. No weight or temperature is fitted per task.
+
+\paragraph{The jury against its members.} With the original NLI member, the jury beats its best single member on
+\zsWinsNames{} of 7 datasets with label names and \zsWinsDesc{} of 7 with descriptions (exact McNemar, Holm over
+14). With the documented-clean NLI member it wins on \zxCleanNliWins{} of 14 and on all
+\zxCleanNliUnexposedOf{} conditions that are unexposed for every member. With a weaker NLI member trained only on
+SNLI and MNLI the picture is mixed, so the benefit of pooling depends on member quality.
+\authorcheck{Add the per-dataset table generated from zero\_shot.json.}
+
+\paragraph{Descriptions vs.\ names.} One-line descriptions written by an LLM from the label names alone improve the
+jury on six of seven datasets, most on MTOP (\zsMtopDescVsNameGain{} points) and SNIPS
+(\zsSnipsDescVsNameGain), whose label names are terse identifiers.
+
+\paragraph{Combination rule.} The geometric mean is more accurate than the arithmetic mean on \zxGeoGtArith{} of 14
+conditions and than majority vote on \zxGeoGtVote{} of 14 \authorcheck{add the significant counts from the
+combiner generator}.
+
+\paragraph{Calibration with one temperature.} The raw jury is under-confident on all \zxRawUnderconfident{}
+conditions (ECE \zxRawEceMin--\zxRawEceMax; on Banking77 with names, mean confidence \zxBankingNameRawConf{} at
+accuracy \zsBankingNameAcc\%), because the two bi-encoders produce nearly flat distributions and the geometric mean
+inherits their flatness. A single global temperature, fitted once on a pre-registered sample of training-split
+utterances across tasks ($T^*=\zxTstarOrig$), lowers test ECE on \zxTstarOrigBetter{} of \zxTstarOrigOf{} conditions
+(e.g.\ Banking77 names \zxBankingNameRawEce{} to \zxBankingNameTstarEce; MTOP names \zxMtopNameRawEce{} to
+\zxMtopNameTstarEce), with non-overlapping bootstrap intervals on \zxTstarCiDisjoint{} and accuracy unchanged by
+construction. The same procedure, run once per jury, gives the same result for the clean-member jury
+($T^*=\zxTstarCleanNli$, \zxTstarCleanNliBetter/\zxTstarCleanNliOf) and the SNLI/MNLI jury ($T^*=\zxTstarSnliNli$,
+\zxTstarSnliNliBetter/\zxTstarSnliNliOf).

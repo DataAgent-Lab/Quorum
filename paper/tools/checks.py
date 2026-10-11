@@ -3,7 +3,7 @@
 
     python paper/tools/checks.py layout-tmlr paper/build/main.pdf   (current venue: TMLR)
     python paper/tools/checks.py layout    paper/build/main.pdf      (TACL, kept for the record)
-    python paper/tools/checks.py anonymity paper/build/main.pdf paper/sections paper/main.tex
+    python paper/tools/checks.py anonymity paper/build/main.pdf paper/sections paper/main.tex paper/main.bib
     python paper/tools/checks.py numbers   paper/sections
     python paper/tools/checks.py bib       paper/refs.bib
 
@@ -207,8 +207,17 @@ def anonymity_patterns():
     return [(re.compile(p, re.I), why) for p, why in pats]
 
 
+LINK_KINDS = ("GitHub link", "Hugging Face link (identifies the uploader)")
+
+
 def check_anonymity(paths: list[Path]) -> list[str]:
+    """A .bib among the paths is not scanned: GitHub / Hugging Face links that occur in it are cited third-party
+    resources and are allowed in the PDF (the reference list). Personal terms are still flagged everywhere."""
     errs, pats = [], anonymity_patterns()
+    cited = set()
+    for b in [p for p in paths if p.suffix == ".bib"]:
+        cited |= {m.group(0) for rx, why in pats if why in LINK_KINDS for m in rx.finditer(b.read_text(errors="ignore"))}
+    paths = [p for p in paths if p.suffix != ".bib"]
     for p in paths:
         files = sorted(p.rglob("*.tex")) if p.is_dir() else [p]
         for f in files:
@@ -220,6 +229,8 @@ def check_anonymity(paths: list[Path]) -> list[str]:
             for where, text in texts:
                 for rx, why in pats:
                     for m in rx.finditer(text):
+                        if why in LINK_KINDS and m.group(0) in cited:
+                            continue
                         errs.append(f"{where}: {why}: {m.group(0)!r}")
     return errs
 

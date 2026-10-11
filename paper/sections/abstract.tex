@@ -1,0 +1,18 @@
+% DRAFT (LLM-drafted from the claims ledger; the author confirms every claim before submission).
+\begin{abstract}
+A new kind of model is being released as a product: the \emph{decision model}, which takes a question, a closed
+set of options and optional evidence, and returns a probability for each option. Closed APIs and open-weight models
+of this kind now report results on the same public benchmarks, but their numbers are rarely comparable: each
+system is evaluated with its own prompts, its own retrieved examples and its own metrics. We propose an
+\emph{equal-evidence} protocol for comparing decision models: every system receives byte-identical, hash-pinned
+requests; every scored run is pre-registered; systems are compared item by item with exact paired tests; and any
+serving engine other than the release code must first pass a per-item parity gate. Applied to Banking77 at 24
+shots, the protocol reproduces a closed API's published accuracy exactly (\fsJevAAcc\% vs.\ \fsJevPubAcc\%) and
+shows that the choice of retrieved examples moves results as much as the choice of model: the closed API gains
+\fsJevBMinusJevAPt{} points from a different retrieval rule ($p=\fsJevBVsJevAP$), and the open baseline whose
+advantage over it was significant ties it once both see the same examples ($p=\fsCleanVsJevBP$). The protocol also
+exposes that the most accurate model is the worst calibrated, that probability rounding makes log loss unusable for
+one API, and that zero-shot numbers of models with undisclosed training data cannot be interpreted.
+\pending{Bitext 24-shot and the 13-task comparison will extend this abstract; the author confirms the final claims.}
+We release every request body, per-item prediction and analysis script.
+\end{abstract}

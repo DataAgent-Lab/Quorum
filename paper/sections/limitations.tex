@@ -1,0 +1,41 @@
+% DRAFT (LLM-drafted; the author reviews and confirms).
+\section{Limitations}
+\label{sec:limitations}
+
+\paragraph{One deep case.} The equal-evidence comparisons rest mainly on one dataset (Banking77) at one shot count.
+The retrieval findings are measured on it, and the factorial analysis of what in the retrieval rule matters is post
+hoc. \pending{Bitext and the 13-task block reduce, but do not remove, this limitation.}
+
+\paragraph{Fast-moving systems.} The decision models evaluated here are versioned products; later versions may
+behave differently. We pin every version, record it per call or per run, and release the request bodies so that new
+versions can be scored on the same evidence.
+
+\paragraph{Training data cannot be verified.} The protocol equalises inputs, not training data. Exposure is recorded
+from documentation; where documentation is missing, results are marked undisclosed, and absence of a dataset from a
+manifest does not prove absence from training.
+
+\paragraph{Calibration metrics.} ECE with equal-width bins depends on the binning; we use one scheme throughout and
+also report the Brier score. Log loss is not usable for systems that round their probabilities.
+
+\paragraph{Baselines are not tuned for leaderboards.} \orb{} and \gj{} were built as low-cost, documented testbeds.
+They are not the strongest open systems we evaluate, and the fine-tuning reference is not converged.
+
+\section{Broader impact}
+Better comparisons of decision models help practitioners choose systems for routing and triage, where errors and
+over-confident probabilities affect people. The same evidence could be used to market one system over another; we
+report every result we pre-registered, including those unfavourable to our own baselines.
+
+\section{Release}
+\label{sec:release}
+We release, under the licences of their sources, every request body with its hash manifest, every per-item
+prediction and probability of every system, the pre-registration documents with their commit history, and the
+scripts that generate every number in this paper from those files. Per-item files containing test utterances keep
+the licences of their datasets (share-alike for MTOP and Bitext). Closed-API outputs are released as measurements;
+they were never used to train or tune any model. \authorcheck{Anonymous supplementary material for review: decide
+whether to upload an anonymised archive (allowed by TMLR, up to 100 MB).} % numbers-ok: TMLR limit
+
+\section*{Use of AI assistants}
+\authorcheck{Final wording from the AI-use log: experiments, analysis code and verification were run by AI coding
+agents under the author's direction; the label descriptions for six datasets were written by an LLM from label
+names only; this manuscript was drafted by an LLM from the verified results and reviewed, edited and approved by
+the author, who takes full responsibility for its content.}

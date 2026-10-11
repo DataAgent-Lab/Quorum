@@ -1,0 +1,64 @@
+% DRAFT (LLM-drafted from the claims ledger; the author reviews, edits and confirms every claim).
+\section{Introduction}
+\label{sec:intro}
+
+Many applied classification problems reduce to a decision among a known set of options: route a customer message to
+one of 77 banking intents, pick the tool an agent should call, or choose the next step in a workflow. A recent class
+of systems targets exactly this setting. We call them \emph{decision models}: given an instruction, a closed list of
+options (optionally with descriptions) and optional evidence such as labelled examples, they return a probability
+distribution over the options. Some are offered as closed APIs that advertise calibrated probabilities
+\citep{typesafe-2026-jev}; others are released with open weights \authorcheck{cite the Clef and pplx-decider model
+cards}. All of them report results on public benchmarks.
+
+Those results are hard to compare. A decision model's accuracy depends not only on the model but on everything that
+goes into the request: the instruction, the wording of the options and, in the few-shot setting, which labelled
+examples are retrieved and in what order. Published numbers are usually produced with each system's own request
+format and retrieval, on different subsets, and with metrics whose definitions differ (binning of calibration error,
+rounding of probabilities). A difference between two published numbers can therefore reflect the evidence the
+systems were given rather than the systems.
+
+This paper proposes and applies an \textbf{equal-evidence protocol} for comparing decision models
+(\S\ref{sec:protocol}). Every system receives byte-identical requests whose hashes are recorded before scoring; every
+scored run is pre-registered in a public commit before it starts; systems are compared item by item with exact
+McNemar tests and Holm correction within declared families; probabilities are compared with paired bootstrap
+intervals; and a model scored on any engine other than its release code must first pass a per-item parity gate
+against that code. The protocol is deliberately simple. Its value lies in what it exposes when it is applied
+strictly.
+
+We apply it to one closed API (\jev), three open decision models (\clef, \flash{} and \pplx) and two low-cost open
+baselines that we built as a testbed (\S\ref{sec:systems}): a training-free zero-shot jury of three sub-1B
+encoders (\gj) and a retrieval-augmented 24-shot stack around a 4B reader (\orb). Our main case is Banking77
+\citep{casanueva-etal-2020-efficient} at 24 shots, where a public reproduction of the closed API provides the
+reference request format, retrieved examples and per-item predictions \citep{smith-2026-jev-banking77}.
+\pending{Breadth: Bitext 24-shot (pre-registration pending) and the 13-task code/workflow comparison of the three
+open models (verification pending) will be summarised here.}
+
+\paragraph{Findings.}
+\begin{enumerate}
+  \item \textbf{A closed API's published result can be replicated exactly.} Re-sending the reproduction's
+  \fsN{} request bodies to the pinned API version gives \fsJevAAcc\%, equal to the published \fsJevPubAcc\%
+  (b/c $=\fsJevAVsJevB/\fsJevAVsJevC$, \fsJevAAgreement\% identical choices; \S\ref{sec:res-replication}).
+  \item \textbf{The retrieved evidence matters as much as the model.} With our retrieval rule instead of the
+  reproduction's, the same API gains \fsJevBMinusJevAPt{} points ($p=\fsJevBVsJevAP$). Our open baseline beat the
+  published API result ($p=\fsCleanVsJevP$), but at equal retrieval the two tie ($p=\fsCleanVsJevBP$), and under the
+  reproduction's rule our baseline also ties it ($p=\fsParBestVsJevP$). A post hoc factorial analysis attributes the
+  gain mainly to the absence of a per-class cap in retrieval (\S\ref{sec:res-retrieval}).
+  \item \textbf{Accuracy and calibration rank models differently.} On identical evidence the most accurate model
+  (\flash, \fsFlashAcc\%) has the highest calibration error (ECE \fsFlashEce), while a 27B open model (\pplx)
+  matches the best ECE and has the lowest Brier score (\S\ref{sec:res-calibration}).
+  \item \textbf{Metric and reproducibility pitfalls change conclusions.} Rounding of returned probabilities to
+  two decimals makes log loss unusable against one API (\S\ref{sec:find-rounding}); platform-dependent tie-breaking
+  in BM25 changes the retrieved examples for \fsStableSetDiff{} of \fsN{} test items yet only \fsStableChanged{}
+  predictions (\S\ref{sec:find-ties}); and a configuration chosen on the test set reached a
+  significance that the pre-registered one does not need (\S\ref{sec:find-selection}).
+  \item \textbf{Zero-shot comparisons need training-data disclosure.} Decision models lead zero-shot by wide
+  margins, but the open models either list benchmark datasets in their training data or do not disclose it, and
+  one of our own baseline members inherits benchmark training data through its initialisation
+  (\S\ref{sec:find-exposure}).
+\end{enumerate}
+
+\paragraph{Contributions.} (i) The equal-evidence protocol, with the tooling to apply it (request manifests,
+parity gate, pre-registration chain); (ii) the measured findings above; (iii) two documented, low-cost open
+baselines; and (iv) a release of every request body, per-item prediction and analysis script, so that new decision
+models can be added to the comparison on the same evidence (\S\ref{sec:release}).
+\authorcheck{Confirm that these four contributions are the ones you want to claim, in this order.}

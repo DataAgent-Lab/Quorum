@@ -1,0 +1,21 @@
+% DRAFT (LLM-drafted from the protocol documents; the author reviews and confirms).
+\section{Pre-registration chain and request manifests}
+\label{app:protocol}
+
+\paragraph{Headline run.} The protocol and its addendum were committed before any code that could score the test
+set; the selection of \orb's configuration was a separate commit containing only out-of-fold scores on the
+selection split; the single test run was the only commit to touch the test-time prediction file, and its metadata
+records that it was not re-run. \authorcheck{Insert the post-rewrite commit identifiers in the de-anonymised version
+only; for review, describe the order and give the anonymous archive.}
+
+\paragraph{Closed-API runs.} The 24-shot swap protocol, its addendum and the analysis script were committed before
+the first scored call; the zero-shot protocol and its addendum likewise. Every request body's hash is recorded in a
+manifest, every call's outcome in a ledger, and the served model version with every response; \fsJevFsCalls{} 24-shot calls succeeded on the first attempt, and the
+zero-shot run needed \fsJevZsFailedAttempts{} retried attempt with no failed item.
+
+\paragraph{Open-model runs.} Each open-model run was pre-registered with amendments before the runs they govern
+(new engine, new cells). The serving-engine parity gate compares, item by item on the full Banking77 test set, the
+engine's probabilities with the release code's (argmax agreement and maximum absolute difference).
+
+\pending{Request formats (one example body per setting), the full per-model table of versions and hashes, and the
+over-length policy per model.}
