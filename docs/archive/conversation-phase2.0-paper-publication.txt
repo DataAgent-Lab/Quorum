@@ -779,3 +779,19 @@ serving findings; TMLR has no page limit); asked the research session for its pr
 dumps before the user's final OK.
 
 ===
+Human:
+
+[2026-10-11] Include the 13-task comparison in the same paper. Writing: the LLM drafts, the author reviews and edits.
+
+===
+AI:
+
+[DECISION #28 | user-decided]
+13-task comparison joins the paper once its data is verified. Writing workflow switched to LLM drafting + author review
+and responsibility (TMLR policy); ai-use log, memo and how-to-start updated; outline v2 (TMLR, P1) written. TMLR rules
+read at the source (official tmlr.sty, US Letter, double-blind, no page limit, appendix optional for reviewers,
+anonymized supplement ≤ 100 MB allowed, preprints any time). TMLR style vendored (paper/style-tmlr, SHA256SUMS);
+checks.py gained a TMLR layout mode; 10/10 checker tests pass (TMLR submission passes; accepted mode + planted author
+flagged).
+
+===

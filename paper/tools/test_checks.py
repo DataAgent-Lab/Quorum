@@ -5,7 +5,7 @@ flag a clean sample — an untested checker that says "PASS" proves nothing.
 Layout tests compile the vendored TACL template with tectonic (skipped if absent); bib tests need the network
 (skipped offline).
 """
-import shutil, subprocess, sys, urllib.request
+import re, shutil, subprocess, sys, urllib.request
 from pathlib import Path
 import pytest
 
@@ -109,3 +109,29 @@ def test_bib_resolves_real_and_flags_fake(tmp_path):
                    "@article{fake,\n  title = {Not a paper},\n  doi = {10.9999/definitely-not-a-real-doi-20261005},\n}\n")
     errs = checks.check_bib(bib, delay=0)
     assert len(errs) == 1 and errs[0].startswith("fake:")
+
+
+STYLE_TMLR = Path(__file__).resolve().parents[1] / "style-tmlr"
+
+
+def _compile_tmlr(tmp, tex_text, name):
+    for f in ("tmlr.sty", "tmlr.bst", "fancyhdr.sty", "math_commands.tex"):
+        shutil.copy(STYLE_TMLR / f, tmp / f)
+    shutil.copy(STYLE_TMLR / "tmlr-template.bib", tmp / "main.bib")
+    (tmp / f"{name}.tex").write_text(tex_text)
+    subprocess.run([TECTONIC, "-X", "compile", f"{name}.tex"], cwd=tmp, capture_output=True, check=True)
+    return tmp / f"{name}.pdf"
+
+
+@needs_tex
+def test_layout_tmlr_submission_passes(tmp_path):
+    pdf = _compile_tmlr(tmp_path, (STYLE_TMLR / "tmlr-template.tex").read_text(), "good")
+    assert checks.check_layout_tmlr(pdf) == []
+
+
+@needs_tex
+def test_layout_tmlr_flags_accepted_mode_and_author(tmp_path):
+    src = (STYLE_TMLR / "tmlr-template.tex").read_text()
+    src = re.sub(r"\\usepackage(\[[^\]]*\])?\{tmlr\}", r"\\usepackage[accepted]{tmlr}\\AtBeginDocument{\\hypersetup{pdfauthor={Planted Author}}}", src, count=1)
+    errs = " | ".join(checks.check_layout_tmlr(_compile_tmlr(tmp_path, src, "bad")))
+    assert "header" in errs and "Author" in errs

@@ -1,3 +1,5 @@
+> **2026-10-11:** the author changed the venue to **TMLR** (option D) and chose "the LLM drafts, the author reviews, edits and takes responsibility". TMLR policy: "LLMs may be used as general-purpose assistive tools. Whichever tools are used, authors are fully responsible for content…". The ACL analysis below is kept for the record (it would apply again if the paper went to an ACL venue).
+
 # Decision memo — AI use in writing the TACL paper (Phase 2.0)
 
 > 2026-10-06. Policy text quoted verbatim from the primary sources (fetched today). Hours are estimates for a

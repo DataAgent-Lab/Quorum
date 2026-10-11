@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Compliance checks for the TACL submission (Phase 2.0, AC-1/2/3/6).
 
-    python paper/tools/checks.py layout    paper/build/main.pdf
+    python paper/tools/checks.py layout-tmlr paper/build/main.pdf   (current venue: TMLR)
+    python paper/tools/checks.py layout    paper/build/main.pdf      (TACL, kept for the record)
     python paper/tools/checks.py anonymity paper/build/main.pdf paper/sections paper/main.tex
     python paper/tools/checks.py numbers   paper/sections
     python paper/tools/checks.py bib       paper/refs.bib
@@ -21,8 +22,11 @@ ROOT = Path(__file__).resolve().parents[2]
 STYLE = ROOT / "paper" / "style"
 LIGATURES = {"\ufb00": "ff", "\ufb01": "fi", "\ufb02": "fl", "\ufb03": "ffi", "\ufb04": "ffl"}
 A4 = (595.28, 841.89)
+LETTER = (612.0, 792.0)
 MAX_CONTENT_PAGES, MAX_APPX_A, MAX_APPX_B = 10, 5, 3
 HEADER = "Confidential TACL submission. DO NOT DISTRIBUTE."
+TMLR_HEADER = "Under review as submission to TMLR"
+STYLE_TMLR = ROOT / "paper" / "style-tmlr"
 
 GENERIC_ANON = [
     (r"huggingface\.co/(?!datasets/)[\w.-]+", "Hugging Face link (identifies the uploader)"),
@@ -64,6 +68,50 @@ def _heading_page(pages, pattern):
 
 
 # ------------------------------------------------------------------ layout (AC-1)
+def check_layout_tmlr(pdf: Path) -> list[str]:
+    """TMLR submission: official style untouched, US Letter, the review header and 'Anonymous authors' on page 1,
+    Author metadata empty, fonts embedded. No page limit (length should be justified; appendices optional to read)."""
+    errs = []
+    from pypdf import PdfReader
+    r = PdfReader(str(pdf))
+    for i, pg in enumerate(r.pages):
+        w, h = float(pg.mediabox.width), float(pg.mediabox.height)
+        if abs(w - LETTER[0]) > 1.5 or abs(h - LETTER[1]) > 1.5:
+            errs.append(f"page {i + 1}: size {w:.1f}x{h:.1f} pt is not US Letter")
+    if str((r.metadata or {}).get("/Author", "") or "").strip():
+        errs.append("PDF metadata /Author is set — remove it")
+    errs += [e for e in _fonts_missing(r)]
+    pages = pdf_pages_text(pdf)
+    first = re.sub(r"\s+", " ", pages[0]) if pages else ""
+    if TMLR_HEADER not in first:
+        errs.append(f"page 1 lacks the TMLR review header {TMLR_HEADER!r} (use the style's submission mode)")
+    if "Anonymous authors" not in first:
+        errs.append("page 1 does not show 'Anonymous authors' (double-blind submission mode)")
+    for line in (STYLE_TMLR / "SHA256SUMS").read_text().splitlines():
+        digest, name = line.split(maxsplit=1)
+        if name.endswith(".sty") and hashlib.sha256((STYLE_TMLR / name).read_bytes()).hexdigest() != digest:
+            errs.append(f"official TMLR style file {name} was modified")
+    return errs
+
+
+def _fonts_missing(r) -> list[str]:
+    missing = set()
+    for pg in r.pages:
+        res = pg.get("/Resources") or {}
+        fonts = (res.get("/Font") or {}) if hasattr(res, "get") else {}
+        for _, ref in (fonts.items() if hasattr(fonts, "items") else []):
+            f = ref.get_object()
+            if f.get("/Subtype") == "/Type3":
+                continue
+            desc = f.get("/FontDescriptor")
+            if f.get("/Subtype") == "/Type0":
+                desc = f["/DescendantFonts"][0].get_object().get("/FontDescriptor")
+            d = desc.get_object() if desc is not None else None
+            if d is None or not any(k in d for k in ("/FontFile", "/FontFile2", "/FontFile3")):
+                missing.add(str(f.get("/BaseFont")))
+    return [f"font not embedded: {m}" for m in sorted(missing)]
+
+
 def check_layout(pdf: Path) -> list[str]:
     errs = []
     from pypdf import PdfReader
@@ -238,7 +286,7 @@ def check_bib(bib: Path, delay: float = 0.4) -> list[str]:
 
 def main(argv):
     cmd, args = argv[1], [Path(a) for a in argv[2:]]
-    errs = {"layout": lambda: check_layout(args[0]), "anonymity": lambda: check_anonymity(args),
+    errs = {"layout": lambda: check_layout(args[0]), "layout-tmlr": lambda: check_layout_tmlr(args[0]), "anonymity": lambda: check_anonymity(args),
             "numbers": lambda: check_numbers(args), "bib": lambda: check_bib(args[0])}[cmd]()
     for e in errs:
         print("FAIL", e)

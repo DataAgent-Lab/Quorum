@@ -11,5 +11,5 @@ verification run by AI coding agents under the author's direction) and METHOD-IN
 | 2026-09-29 → 10-04 | label descriptions (7 datasets) | LLM coding agents (six sets: Claude Opus 4.8; Banking77: model not recorded) | METHOD-INPUT | one-line descriptions written from class names only, one pass, never revised | disclosed in the method section |
 | 2026-10-04 → 10-06 | venue research, literature candidates, novelty memo | Claude Code agents | (c), (e) | search + candidate bibliography (every entry resolved by tool) | reviewed |
 | 2026-10-06 | outline proposal | Claude Code | (e) | suggested section structure | approval pending |
-| … | each dictated section | Claude Code | (a) | transcription + translation + language polishing of the author's dictation | paragraph-by-paragraph approval |
-| … | §2, parts of §3–4, Appendix A | Claude Code | (d) | drafts about pre-existing ideas, citations verified | reviewed |
+| 2026-10-11 | writing workflow | — | — | venue changed to TMLR; author chose: the LLM drafts, the author reviews, edits and is fully responsible (TMLR LLM policy) | decision |
+| … | each drafted section | Claude Code | DRAFTING | full drafts from the claims ledger; every number via generated macros; citations verified by tool + hand | section-by-section review, edits and approval by the author |
