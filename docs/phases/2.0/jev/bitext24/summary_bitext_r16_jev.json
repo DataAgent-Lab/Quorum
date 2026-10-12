@@ -1,0 +1,18 @@
+{
+ "protocol": "research provenance/bitext_24shot_protocol.md @ 9d6dc44 + A1 3d84cc3; AMENDMENT_A2 (this repo)",
+ "manifest_sha256": "1420b37975de445f374aef6aa6ba13d62e467ea1c802d3f67c4b1cd3def89f1b",
+ "model": "jev-1.13.0",
+ "served_models": [
+  "jev-1.13.0"
+ ],
+ "order_seed": 20261012,
+ "items": 5375,
+ "sent": 5375,
+ "answered": 5375,
+ "failed": 0,
+ "unsent": 0,
+ "attempts_total": 5375,
+ "retried_items": 0,
+ "code_sha256": "fef917f301d6395d372b005e5b31260dce1ebf97a69ebbe9c3be26d37ed3cd45",
+ "written_at": "2026-10-12T03:03:00Z"
+}
