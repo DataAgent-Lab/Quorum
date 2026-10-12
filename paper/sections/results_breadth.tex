@@ -1,4 +1,4 @@
-% DRAFT (LLM-drafted from claims ledger rows J1, J3, K5, L2, Z8; the author reviews and confirms).
+% DRAFT (LLM-drafted from claims ledger rows J1, J3, K5, L2, Z8 and the decision13 release; the author reviews and confirms).
 \section{Results II: breadth}
 \label{sec:res-breadth}
 
@@ -65,6 +65,70 @@ pre-registration commit and the single scored run.}
 
 \subsection{Beyond intent: thirteen code and workflow decision tasks}
 \label{sec:res-13task}
-\pending{The 13-task comparison of \pplx, \clef{} and \flash{} (Holm wins minus losses per model). Required before
-it enters: protocol and pre-registration location, dataset licences, per-item dumps for independent recomputation,
-and de-identification of task descriptions.}
+
+The protocol is not specific to intent classification. We applied it, unchanged in its rules, to a pre-registered
+model-selection study among the three open decision models on \dtTasks{} decision tasks (\dtTotalItems{} scored
+decisions): nine code and firmware development decisions (patch triage, duplicate bug reports, program equivalence,
+clone detection, vulnerability detection, and a synthetic vulnerability floor) and four business-workflow
+evaluations scored by their own harness (Table~\ref{tab:d13}). Every model received the same request bodies, checked
+by hash, on one GPU, through serving engines that had passed (or, for one model, narrowly failed and were labelled;
+\S\ref{sec:find-serving}) the parity gate. The decision rule, fixed before any call, counts each model's
+Holm-significant pairwise wins minus losses on accuracy (\dtTestsE{} tests for the code tasks, \dtTestsC{} for the
+workflows). \jev{} was not part of this study.
+\authorcheck{Add citations for the thirteen datasets, the paraphrase control and the workflow harness.}
+\authorcheck{Confirm the wording of the study's purpose (a deployment model choice) and that no task description
+identifies the setting.}
+
+\begin{table}[t]
+\centering\small
+\caption{Thirteen decision tasks: accuracy (\%) on the full sets. Bold: Holm-significantly better than both other
+models on that task. ``Refused'': items over \pplx's release limit, which count as wrong; ``trunc.'': items whose
+input the \clef{} models' release code truncates before answering; for the workflows, the last column counts the
+\clef{} models' refusals (their release code raises when the questions alone exceed its limit). $^\times$assumed exposed for all models (released
+only as a training split, or code history very likely in pre-training data). Workflow labels are a model consensus,
+not human labels.}
+\label{tab:d13}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+Task & Items & \pplx & \clef & \flash & Refused & Trunc. \\
+\midrule
+Patch triage (PatchNet)$^\times$ & \dtPatchnetN & \dtPatchnetPplxCell & \dtPatchnetClefCell & \dtPatchnetFlashCell & \dtPatchnetPplxUnans & \dtPatchnetClefTrunc \\
+Duplicate bug reports (TOSEM-DBRD) & \dtDbrdN & \dtDbrdPplxCell & \dtDbrdClefCell & \dtDbrdFlashCell & \dtDbrdPplxUnans & \dtDbrdClefTrunc \\
+Program equivalence (EquiBench) & \dtEquibenchN & \dtEquibenchPplxCell & \dtEquibenchClefCell & \dtEquibenchFlashCell & \dtEquibenchPplxUnans & \dtEquibenchClefTrunc \\
+Clone detection (POJ-104) & \dtPojN & \dtPojPplxCell & \dtPojClefCell & \dtPojFlashCell & \dtPojPplxUnans & \dtPojClefTrunc \\
+Vulnerable version (PrimeVul, paired) & \dtPrimevulPairN & \dtPrimevulPairPplxCell & \dtPrimevulPairClefCell & \dtPrimevulPairFlashCell & \dtPrimevulPairPplxUnans & \dtPrimevulPairClefTrunc \\
+Vulnerable function (PrimeVul) & \dtPrimevulFuncN & \dtPrimevulFuncPplxCell & \dtPrimevulFuncClefCell & \dtPrimevulFuncFlashCell & \dtPrimevulFuncPplxUnans & \dtPrimevulFuncClefTrunc \\
+Vulnerability reasoning (SV-TrustEval-C) & \dtSvtrustN & \dtSvtrustPplxCell & \dtSvtrustClefCell & \dtSvtrustFlashCell & \dtSvtrustPplxUnans & \dtSvtrustClefTrunc \\
+Vulnerable function (SecVulEval)$^\times$ & \dtSecvulN & \dtSecvulPplxCell & \dtSecvulClefCell & \dtSecvulFlashCell & \dtSecvulPplxUnans & \dtSecvulClefTrunc \\
+Synthetic floor (Juliet C/C++) & \dtJulietN & \dtJulietPplxCell & \dtJulietClefCell & \dtJulietFlashCell & \dtJulietPplxUnans & \dtJulietClefTrunc \\
+\midrule
+Invoice processing & \dtInvoiceN & \dtInvoicePplxCell & \dtInvoiceClefCell & \dtInvoiceFlashCell & \dtInvoicePplxErr & \dtInvoiceClefErr \\
+Customer service & \dtCustomerN & \dtCustomerPplxCell & \dtCustomerClefCell & \dtCustomerFlashCell & \dtCustomerPplxErr & \dtCustomerClefErr \\
+Security incidents & \dtSecurityN & \dtSecurityPplxCell & \dtSecurityClefCell & \dtSecurityFlashCell & \dtSecurityPplxErr & \dtSecurityClefErr \\
+Agent-trace observability & \dtTraceN & \dtTracePplxCell & \dtTraceClefCell & \dtTraceFlashCell & \dtTracePplxErr & \dtTraceClefErr \\
+\midrule
+Wins $-$ losses (all tasks) & & $\dtScorePplx$ & $\dtScoreClef$ & $\dtScoreFlash$ & & \\
+\quad without exposed tasks & & $\dtScoreNoExpPplx$ & $\dtScoreNoExpClef$ & $\dtScoreNoExpFlash$ & & \\
+\midrule
+Control: paraphrase (PAWS) & \dtPawsN & \dtPawsPplxAcc & \dtPawsClefAcc & \dtPawsFlashAcc & \dtPawsPplxUnans & \dtPawsClefTrunc \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Under the pre-registered rule \pplx{} ranks first ($\dtScorePplx$), \clef{} second ($\dtScoreClef$) and \flash{} third
+($\dtScoreFlash$), and the order holds without the two exposed tasks ($\dtScoreNoExpPplx$, $\dtScoreNoExpClef$,
+$\dtScoreNoExpFlash$). The aggregate hides a varied picture. No model is best everywhere: \clef{} is the only
+significant winner on program equivalence, and both \clef{} models beat \pplx{} on security incidents, while
+\pplx{} is significantly better than both others on \dtBestEPplx{} of the nine code tasks. Accuracy and calibration again rank the models differently:
+on the pre-declared calibration tie-break (Holm-significant ECE wins minus losses over the \dtEceTests{} tests on
+tasks whose per-item probabilities are public), \flash{}, last on accuracy, scores $\dtEceScoreFlash$, \clef{}
+$\dtEceScoreClef$ and \pplx{} $\dtEceScorePplx$. The paraphrase control, part of the training collection reported for \pplx{}
+\authorcheck{cite the card's training-data statement}, shows the expected exposure gap (\dtPawsPplxAcc\% vs.\ \dtPawsClefAcc\% and \dtPawsFlashAcc\%) and is
+kept out of the decision rule. Two results in the table are not about decision quality at all: they are decided by
+how each model handles inputs longer than its limit (\S\ref{sec:find-serving}).
+
+Per-item outputs (identifiers, labels and model outputs, no item text) are released for the nine tasks whose
+licences allow it; for one code task and three workflows that carry no data licence we release only the per-pair
+discordant counts, from which every accuracy test above is recomputed exactly. The calibration tie-break therefore
+covers the tasks with public per-item data only. The synthetic floor carries a known structural cue (benign
+variants are longer and have more functions) and never decides the ranking on its own.

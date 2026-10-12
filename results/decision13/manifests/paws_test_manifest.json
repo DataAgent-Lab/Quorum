@@ -1,0 +1,29 @@
+{
+ "source": "hf:google-research-datasets/paws@161ece9501cf0a11f3e48bd356eaa82de46d6a09 labeled_final/test-00000-of-00001.parquet",
+ "parquet_sha256": "ae342ff12bb84b84b95f468abf5db6cb7c7bd578271299fe9c99be75b8132f4d",
+ "licence": "card 'other': free use for any purpose, acknowledgement of Google appreciated, AS IS",
+ "exposure": "in tasksource + FLAN -> contamination control only",
+ "seed": null,
+ "items": 8000,
+ "paraphrase": 3536,
+ "identical_sentences": {
+  "paraphrase": 9,
+  "not": 4
+ },
+ "same_bag_of_words": {
+  "paraphrase": 105,
+  "not": 339
+ },
+ "distinct_ids": 8000,
+ "bytes_p50": 620,
+ "bytes_max": 822,
+ "question": {
+  "type": "noul",
+  "instructions": "Is sentence B a paraphrase of sentence A (same meaning)?",
+  "criteria": {
+   "true": "Yes: both sentences state the same meaning, even if the wording or word order differs.",
+   "false": "No: the meaning differs, even if the two sentences share most of their words."
+  }
+ },
+ "items_sha256": "24794a9fda855298800e9146081d9ad48835d22e46a086c636b276b8aef21cc0"
+}

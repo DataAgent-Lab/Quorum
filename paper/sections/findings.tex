@@ -1,4 +1,4 @@
-% DRAFT (LLM-drafted from claims ledger rows J2, F5, F10, F14, M1-M5, P6, P7; the author reviews and confirms).
+% DRAFT (LLM-drafted from claims ledger rows J2, F5, F10, F14, M1-M5, P6, P7 and the decision13 protocol; the author reviews and confirms).
 \section{Methodology findings}
 \label{sec:findings}
 
@@ -66,7 +66,50 @@ initialisation saw.
 
 \subsection{Serving engines and over-length requests}
 \label{sec:find-serving}
-\pending{De-identified findings from deployment work, approved by the author: one model failed the parity gate on
-one of \fsN{} items; a serving engine's input limit differed from the release code's and silently refused
-requests the release code accepts; over-length policies differ by model and flipped one task's ranking. Each needs
-its per-item evidence before it enters the text.}
+The thirteen-task study (\S\ref{sec:res-13task}) served the open models through a high-throughput engine instead of
+their release code, and five of its findings concern the serving layer, not the models.
+
+\paragraph{A parity gate catches small deviations, and someone must decide about them.} Before any scored call,
+each engine was compared item by item with the model's release code on the \dtGateItems{} Banking77 24-shot bodies,
+with thresholds fixed in advance (argmax agreement, accuracy difference, and maximum probability difference at most
+\dtGateThreshold). \pplx's and \flash's engines passed (maximum differences \fsPplxGateMaxDp{} and
+\dtGateFlashMaxDp). \clef's failed on the last criterion alone: one item differed by \dtGateClefMaxDp, with argmax
+agreement \dtGateClefAgree\% and no accuracy difference. The study recorded a decision to use the engine anyway, as
+an amendment before any further call, and labels every \clef{} result accordingly. A gate is only useful if its
+failure has a recorded consequence.
+
+\paragraph{The engine's input limit differed from the release code's.} The release code of \pplx{} refuses questions
+longer than \dtLimitPplxRelease{} tokens. Without an explicit limit, the engine accepted much longer prompts,
+answering items the release code refuses; once given the release limit, it refused prompts above
+\dtLimitPplxServed{} tokens, because a second check in its scheduler subtracts a few tokens of headroom. One item of
+\dtLimitAffectedTokens{} tokens was refused that the release code accepts. Boundary tests at coarse lengths did not
+see the gap; reconciling each refused item against the release tokenizer's count did. The item was re-scored
+alone under a pre-registered amendment.
+
+\paragraph{Over-length policies decide some rankings.} The models handle long inputs differently by design: \pplx{}
+refuses a question above its limit, while the \clef{} models truncate the input state to fit
+\dtLimitClefRelease{} tokens and refuse only when the questions alone do not fit. With refusals counted as wrong, as
+pre-registered, the policy decides two results in Table~\ref{tab:d13}. On program equivalence, \pplx{} refuses
+\dtEquibenchPplxUnans{} of \dtEquibenchN{} items and ranks last (\dtEquibenchPplxAcc\% vs.\ \dtEquibenchClefAcc\% for
+\clef); on the \dtEquibenchLflN{} items that \pplx{} answers and neither \clef{} model truncates, it ranks first
+(\dtEquibenchPplxLflAcc\% vs.\ \dtEquibenchClefLflAcc\% and \dtEquibenchFlashLflAcc\%). On invoice processing, every
+error of every model is a length refusal (\dtInvoicePplxErr{} of \dtInvoiceN{} decisions for \pplx{} and
+\dtInvoiceClefErr{} for each \clef{} model), so the \pplx{} advantage there measures which inputs fit, not which
+decisions are right; on the \dtInvoiceAllScoredN{} decisions all three models answered, \pplx{} still leads, but the
+sample is too small to test. Results under a ``refusal counts as wrong'' rule should be reported alongside the subset every
+model answered.
+
+\paragraph{Engine records must come from the running server.} A launcher wrote a hard-coded memory setting into
+every run's engine record, while the servers actually ran a different value, which the study established from the
+server logs and corrected by amendment. Records of what was served should be read back from the server, not copied
+from the command that started it.
+
+\paragraph{Concurrent serving moved probabilities slightly, and reproducibly.} The parity gates were measured one
+request at a time, while scored runs sent \dtConcInFlight{} requests at once. A pre-registered check re-ran the gate
+bodies under that load before each run window: argmax agreement with the one-at-a-time outputs was
+\dtConcClefAgree\% for every model, and the maximum probability difference was \dtConcClefMaxDp{} for \clef{},
+\dtConcFlashMaxDp{} for \flash{} and zero for \pplx{}. The repetitions in later windows reproduced the per-item
+probabilities exactly at stored precision; we did not establish why the engine is deterministic under concurrent
+load, and a check of this kind should be repeated rather than assumed.
+% Source of "reproduced exactly": a comparison of the per-window outputs on the run host
+% (not in the release); the per-window summary values are in results/decision13/concurrency_checks.json.

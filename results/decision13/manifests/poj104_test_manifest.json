@@ -1,0 +1,33 @@
+{
+ "source": "hf:google/code_x_glue_cc_clone_detection_poj104@701869dece36b32174ee48277eada423cdcf699c data/test-00000-of-00001.parquet",
+ "parquet_sha256": "4c1d6389d66a68c2b5ad4c345ac264b8f4062258aa870b74a3fd478b7cce4955",
+ "licence": "C-UDA (card: 'Computational Use of Data Agreement (C-UDA) License.')",
+ "seed": 20261008,
+ "programs": 12000,
+ "problems": 24,
+ "items": 12000,
+ "same_problem": 6000,
+ "pairing": "anchor = every test program in id order; even k -> same-problem partner, odd k -> other-problem partner; uniform rng.choice then rng.shuffle(A,B) with random.Random(seed)",
+ "duplicate_unordered_pairs": 3,
+ "leak_own_problem_number_in_code": 45,
+ "leak_other_problem_number_in_code_mean": 343.8,
+ "items_with_header_tag_comment": {
+  "same": 81,
+  "different": 75
+ },
+ "items_mixed_line_endings": {
+  "same": 269,
+  "different": 261
+ },
+ "bytes_p50": 1692,
+ "bytes_max": 8662,
+ "question": {
+  "type": "noul",
+  "instructions": "Do these two programs solve the same programming problem?",
+  "criteria": {
+   "true": "Yes: both programs are solutions to the same problem statement, even if written differently.",
+   "false": "No: they solve different problems, even if they look similar or use similar techniques."
+  }
+ },
+ "items_sha256": "0ab042fe9a70888f70d1ffbe75fba6297ee6bf08430a5d671cc64ccbe7c1da4f"
+}

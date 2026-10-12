@@ -1,0 +1,86 @@
+{
+ "set": "svtrusteval",
+ "model": "pplx_v11",
+ "limit": 0,
+ "items_sha256": "b7b822bb8c272432c589ea10e82878d6aa12e0d1121aad6d2dde0c3802e029ab",
+ "manifest_items_sha256": "b7b822bb8c272432c589ea10e82878d6aa12e0d1121aad6d2dde0c3802e029ab",
+ "engine": {
+  "name": "SGLang (pplx_v11)",
+  "image": "lmsysorg/sglang@sha256:868b0bd8eaf9b0b52c796a14a0ed55c04d6d2160eddaeb45d42c39a345a8b77f",
+  "patch": "sglang-pplx-v11-noncausal.patch",
+  "patch_sha256": "fa7f6afc0363bc370e4d7c9c2c055e29b82146d3004013a02a8fa29707a04167",
+  "flags": "--attention-backend triton --chunked-prefill-size -1 --disable-radix-cache --disable-prefill-cuda-graph --context-length 8193 --mem-fraction-static 0.75",
+  "device": "one NVIDIA GB300"
+ },
+ "concurrency": 16,
+ "wall_seconds": 764.7,
+ "ms_per_item": 1201.9,
+ "overall": {
+  "n": 10155,
+  "answered": 10152,
+  "unanswered": 3,
+  "accuracy": 0.651403,
+  "macro_f1": 0.481128,
+  "brier": 0.49088,
+  "ece10": 0.146753
+ },
+ "runner_sha256": "8e5e4c7fe3ee6b434973e13545933b13f5a041ced6e6e4a36b19b927560beee0",
+ "written_at": "2026-10-09T10:24:14Z",
+ "by_split": {
+  "Base_questions": {
+   "n": 754,
+   "answered": 754,
+   "unanswered": 0,
+   "accuracy": 0.624668,
+   "macro_f1": 0.597765,
+   "brier": 0.53614,
+   "ece10": 0.172105
+  },
+  "ControlFlow": {
+   "n": 1345,
+   "answered": 1345,
+   "unanswered": 0,
+   "accuracy": 0.781413,
+   "macro_f1": 0.667714,
+   "brier": 0.300609,
+   "ece10": 0.063035
+  },
+  "Counterfactual": {
+   "n": 3748,
+   "answered": 3748,
+   "unanswered": 0,
+   "accuracy": 0.674493,
+   "macro_f1": 0.672032,
+   "brier": 0.463127,
+   "ece10": 0.140961
+  },
+  "DataFlow": {
+   "n": 2430,
+   "answered": 2430,
+   "unanswered": 0,
+   "accuracy": 0.737037,
+   "macro_f1": 0.506575,
+   "brier": 0.389751,
+   "ece10": 0.098662
+  },
+  "GoalDriven": {
+   "n": 1159,
+   "answered": 1159,
+   "unanswered": 0,
+   "accuracy": 0.411562,
+   "macro_f1": 0.401621,
+   "brier": 0.762318,
+   "ece10": 0.249626
+  },
+  "Predictive": {
+   "n": 719,
+   "answered": 716,
+   "unanswered": 3,
+   "accuracy": 0.413074,
+   "macro_f1": 0.41347,
+   "brier": 0.849759,
+   "ece10": 0.32373
+  }
+ },
+ "served_model": "perplexity-ai/pplx-decider-v1.1-27b@3b45dead91dfa6d95aad6b95764a606fab2bf7a6"
+}

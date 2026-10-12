@@ -1,0 +1,31 @@
+{
+ "set": "poj104",
+ "model": "pplx_v11",
+ "limit": 0,
+ "items_sha256": "0ab042fe9a70888f70d1ffbe75fba6297ee6bf08430a5d671cc64ccbe7c1da4f",
+ "manifest_items_sha256": "0ab042fe9a70888f70d1ffbe75fba6297ee6bf08430a5d671cc64ccbe7c1da4f",
+ "engine": {
+  "name": "SGLang (pplx_v11)",
+  "image": "lmsysorg/sglang@sha256:868b0bd8eaf9b0b52c796a14a0ed55c04d6d2160eddaeb45d42c39a345a8b77f",
+  "patch": "sglang-pplx-v11-noncausal.patch",
+  "patch_sha256": "fa7f6afc0363bc370e4d7c9c2c055e29b82146d3004013a02a8fa29707a04167",
+  "flags": "--attention-backend triton --chunked-prefill-size -1 --disable-radix-cache --disable-prefill-cuda-graph --context-length 8193 --mem-fraction-static 0.75",
+  "device": "one NVIDIA GB300"
+ },
+ "concurrency": 16,
+ "wall_seconds": 826.7,
+ "ms_per_item": 1102.0,
+ "overall": {
+  "n": 12000,
+  "answered": 12000,
+  "unanswered": 0,
+  "accuracy": 0.987833,
+  "macro_f1": 0.987832,
+  "f1_positive": 0.987683,
+  "brier": 0.022516,
+  "ece10": 0.02087
+ },
+ "runner_sha256": "6d63dfb1272b3aedbad09a9451bc4aef384319d7061db58631fcbad12416d5fb",
+ "written_at": "2026-10-09T10:08:38Z",
+ "served_model": "perplexity-ai/pplx-decider-v1.1-27b@3b45dead91dfa6d95aad6b95764a606fab2bf7a6"
+}
