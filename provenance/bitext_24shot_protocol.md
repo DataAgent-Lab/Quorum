@@ -158,3 +158,27 @@ on one machine, while the open stack runs on another, so the arms could otherwis
    same code path as Banking77, and selection never touches test rows.
 5. The open stack's dump field `retrieved_idx` is therefore identical to the manifest by construction. The run asserts
    it.
+
+## Amendment A2 (2026-10-12, before any pplx-decider call): the exact pplx serving engine
+
+§8 says "the A7 parity-gated SGLang engine". The pplx arm runs on that engine's current serving configuration on one
+GB300. That configuration differs from the A7 run only in serving flags. It passed the same per-item parity gate.
+
+**Code.**
+- The same SGLang build (digest `868b0bd8…`, nightly-dev-cu13-20261007-f1065423).
+- The same noncausal patch (sha256 `fa7f6afc…`), now baked into the image instead of applied at start.
+- Attention flags unchanged: triton, no chunked prefill, no radix cache, no prefill CUDA graph.
+
+**Serving flags that differ from A7.**
+- `--context-length 16391`: the engine accepts ≤ 16,384 prompt tokens. Under A7 it was ≤ 8,192.
+- `--max-running-requests 16`, `--max-queued-requests 256`, `--mem-fraction-static 0.55`.
+
+**Gate on this exact configuration.** The b24 Banking77 bodies (3,080) were scored against the release-code dump at
+concurrency 1 and 16.
+- Both PASS: agreement 0.9994, max |Δp| 0.060.
+- Argmax agreement with the A7 engine's own concurrency-1 output is 1.0, with Δp 0.
+
+**Release rule.** It is applied as declared in §8: a question over 8,192 tokens (the engine reports `input_tokens`)
+is scored as unanswered. The larger window therefore cannot give pplx an answer its release code would refuse.
+
+**Concurrency.** Concurrency 2, as in §8.
