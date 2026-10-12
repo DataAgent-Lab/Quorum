@@ -159,7 +159,12 @@ on one machine, while the open stack runs on another, so the arms could otherwis
 5. The open stack's dump field `retrieved_idx` is therefore identical to the manifest by construction. The run asserts
    it.
 
-## Amendment A2 (2026-10-12, before any pplx-decider call): the exact pplx serving engine
+## Amendment A3 (2026-10-12, before any pplx-decider call): the exact pplx serving engine
+
+*Numbering note.* This was first committed as "Amendment A2" (34f5615). The paper side committed its own
+`docs/phases/2.0/bitext24/AMENDMENT_A2.md` (main f4ac106: the non-near-duplicate secondary subset, the floor row,
+the Jev sending rules, exposure disclosure). Both were made before any arm result was read. To keep one sequence,
+that file is **A2**, and this section is **A3**. The content is unchanged.
 
 §8 says "the A7 parity-gated SGLang engine". The pplx arm runs on that engine's current serving configuration on one
 GB300. That configuration differs from the A7 run only in serving flags. It passed the same per-item parity gate.
