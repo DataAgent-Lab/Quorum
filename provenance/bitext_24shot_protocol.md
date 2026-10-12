@@ -138,3 +138,23 @@ discarded.
 - TypeSafe MCA: Jev outputs are never used to tune or train anything, and Jev spend is not published.
 - The dataset licence (CDLA-Sharing-1.0) allows sharing derived data under the same terms. This repo stores only
   derived per-item outputs, hashes and code.
+
+## Amendment A1 (2026-10-12, before any code commit or model run): test-row retrieval is computed once and recorded
+
+**Why.** Retrieval must be the same in every arm, because "identical evidence" is the point of R16.
+`quorum/fewshot.py` `BM25.top` ranks with an unstable `np.argsort`. R6c measured the effect on Banking77: tie order
+differs across platforms (x86 vs aarch64), and 410–427 test items had a different retrieved set. The bodies are built
+on one machine, while the open stack runs on another, so the arms could otherwise see different examples.
+
+**Change.** Nothing else changes: items, pool, BM25 parameters and body format are as declared.
+1. `scripts/bitext24_bodies.py` computes the top 24 from `P` for every test row **once**. It uses the same BM25 scores
+   as `quorum/fewshot.py` (same tokenizer, k1 1.5, b 0.75). Ties are broken by a **stable** sort on pool position.
+2. It records the result per test item in the manifest as `retrieved_t_idx[24]` (indices into `T`, in rank order),
+   next to `sha256`, `bytes` and `examples_kept`.
+3. **Every arm consumes those recorded indices:**
+   - the decision models through the rebuilt, sha-checked bodies;
+   - the open stack's **test run** through a retrieval override that returns the recorded indices for test rows.
+4. The open stack's selection phase on `S` keeps the library's own retrieval. The selection scores therefore use the
+   same code path as Banking77, and selection never touches test rows.
+5. The open stack's dump field `retrieved_idx` is therefore identical to the manifest by construction. The run asserts
+   it.
