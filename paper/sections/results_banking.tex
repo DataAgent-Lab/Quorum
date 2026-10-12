@@ -18,7 +18,9 @@ Evidence & System & Acc.\ (\%) & ECE & Brier & Log loss \\
  & \jev{} (our replication) & \fsJevAAcc & \fsJevAEce & \fsJevABrier & -- \\
  & \orb{} with this retrieval & \fsParBestAcc & \fsParBestEce & \fsParBestBrier & \fsParBestLogLoss \\
 \midrule
-\multirow{3}{*}{our retrieval (\orb)} & \pplx$^\ddagger$ & \fsPplxBAcc & \fsPplxBEce & \fsPplxBBrier & \fsPplxBLogLoss \\
+\multirow{5}{*}{our retrieval (\orb)} & \flash & \fsFlashBAcc & \fsFlashBEce & \fsFlashBBrier & \fsFlashBLogLoss \\
+ & \clef & \fsClefBAcc & \fsClefBEce & \fsClefBBrier & \fsClefBLogLoss \\
+ & \pplx$^\ddagger$ & \fsPplxBAcc & \fsPplxBEce & \fsPplxBBrier & \fsPplxBLogLoss \\
  & \orb & \fsCleanAcc & \fsCleanEce & \fsCleanBrier & \fsCleanLogLoss \\
  & \jev & \fsJevBAcc & \fsJevBEce & \fsJevBBrier & -- \\
 \midrule
@@ -26,7 +28,6 @@ Evidence & System & Acc.\ (\%) & ECE & Brier & Log loss \\
  & \gj{}, zero-shot, descriptions & \zsBankingDescAcc & \multicolumn{3}{l}{see Appendix~\ref{app:jury}} \\
 \bottomrule
 \end{tabular}
-\pending{\clef{} and \flash{} with our retrieval (pre-registered amendment; GPU run pending).}
 \end{table}
 
 \subsection{Replicating the closed API}
@@ -54,9 +55,14 @@ single test run). The protocol shows that this advantage belongs to the evidence
   \fsParBestAcc\%, a tie with \jev{} (b/c $\fsParBestVsJevB/\fsParBestVsJevC$, $p=\fsParBestVsJevP$); the same model
   with its own retrieval is \fsCleanMinusParBestPt{} points higher (b/c $\fsCleanVsParBestB/\fsCleanVsParBestC$,
   $p=\fsCleanVsParBestP$).
-  \item \textbf{A stronger model gains less.} \pplx{} improves by \fsPplxBMinusPplxPt{} points with our retrieval,
-  which is not significant (b/c $\fsPplxBVsPplxB/\fsPplxBVsPplxC$, $p=\fsPplxBVsPplxP$).
-  \pending{\clef{} and \flash{} under our retrieval decide whether this pattern holds for the most accurate models.}
+  \item \textbf{The open decision models gain little or nothing.} With our retrieval instead of the
+  reproduction's, accuracy changes by $\fsPplxBMinusPplxPt$ points for \pplx{} (b/c
+  $\fsPplxBVsPplxB/\fsPplxBVsPplxC$, $p=\fsPplxBVsPplxP$), $\fsClefBMinusClefPt$ for \clef{} (b/c
+  $\fsClefBVsClefB/\fsClefBVsClefC$, $p=\fsClefBVsClefP$) and $\fsFlashBMinusFlashPt$ for \flash{} (b/c
+  $\fsFlashBVsFlashB/\fsFlashBVsFlashC$, $p=\fsFlashBVsFlashP$). None of the three changes is significant, unlike
+  the gains of \jev{} and \orb{} above. These comparisons were pre-registered as secondary and are not corrected
+  for multiplicity. A non-significant change does not show that the effect is zero, only that it is too small to
+  detect on this test set.
 \end{itemize}
 
 \paragraph{What in the rule matters (post hoc).} The two retrieval rules differ in three ways: a per-class cap of
@@ -89,6 +95,19 @@ $p=\fsPplxVsClefP$; \orb{} vs.\ \jev: $p=\fsParBestVsJevP$). Calibration orders 
 (Table~\ref{tab:main}). \flash{}, the most accurate, has the highest ECE (\fsFlashEce) and a higher log loss than
 \orb{} on identical evidence (difference \fsLlParMinusFlash, 95\% CI % numbers-ok: confidence level
  [\fsLlParMinusFlashLo, \fsLlParMinusFlashHi]).
+
+On our retrieval's bodies, all three open decision models are more accurate than both \orb{} and \jev{}. Against
+\orb, the b/c counts are $\fsFlashBVsCleanB/\fsFlashBVsCleanC$ for \flash{} ($p=\fsFlashBVsCleanP$),
+$\fsClefBVsCleanB/\fsClefBVsCleanC$ for \clef{} ($p=\fsClefBVsCleanP$) and $\fsPplxBVsCleanB/\fsPplxBVsCleanC$ for
+\pplx{} ($p=\fsPplxBVsCleanP$); against \jev{} they are $\fsFlashBVsJevBB/\fsFlashBVsJevBC$, $\fsClefBVsJevBB/\fsClefBVsJevBC$
+and $\fsPplxBVsJevBB/\fsPplxBVsJevBC$ ($p\le\fsClefBVsJevBP$). These comparisons were pre-registered as secondary and are
+not corrected for multiplicity. The three models cannot be separated from one another (post hoc pairwise tests, all
+$p\ge\fsPplxBVsFlashBP$).
+The significant lead of \flash{} over \pplx{} on the reproduction's bodies (b/c $\fsPplxVsFlashC/\fsPplxVsFlashB$,
+$p=\fsPplxVsFlashP$) does not carry over to ours (b/c $\fsPplxBVsFlashBC/\fsPplxBVsFlashBB$, $p=\fsPplxBVsFlashBP$).
+The calibration pattern is unchanged: \flash{} again has the highest ECE (\fsFlashBEce) and a higher log loss than
+\orb{} (difference \fsLlCleanMinusFlashB, CI [\fsLlCleanMinusFlashBLo, \fsLlCleanMinusFlashBHi]), while \clef's log
+loss is not distinguishable from \orb's (\fsLlCleanMinusClefB, CI [\fsLlCleanMinusClefBLo, \fsLlCleanMinusClefBHi]).
 \pplx{} matches the lowest ECE and has the lowest Brier score in both blocks. Against \jev{} on identical evidence,
 \orb{} has lower ECE (difference \fsSwapDiffEce, CI [\fsSwapDiffEceLo, \fsSwapDiffEceHi]) and a Brier score that is
 not distinguishable (\fsSwapDiffBrier, CI [\fsSwapDiffBrierLo, \fsSwapDiffBrierHi]). A system's accuracy rank is

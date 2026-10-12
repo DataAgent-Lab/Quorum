@@ -828,3 +828,12 @@ at 24 and 8 per class; recorded retrieval shared by all systems; R-format dumps;
 Runs after R16 and its single §9 run; the exploratory single-model numbers are not used as evidence.
 
 ===
+
+[DECISION #32 | auto-decided]
+R14 b24B complete for both Clefs: Clef 27B dump (research 6cb98df) verified here (0.9477; every summary value
+recomputed from the per-item file; vs Jev-B 75/35). Both b24B dumps added to numbers_24shot.py (existing values
+unchanged); Table 3 filled; retrieval bullet rewritten ("the open decision models gain little or nothing": none of
+the three retrieval effects is significant); §5.3 gains the our-retrieval paragraph (all three beat ours and Jev;
+not separable from one another, post hoc); intro findings 2 and 3 extended. Ledger K2/K3 updated.
+
+===

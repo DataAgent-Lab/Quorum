@@ -7,7 +7,7 @@ L2 (definitions), M2, M3 (accuracy parts), J1/J3 (from the pre-declared analysis
 
 Inputs
   results/predictions/banking77_*.jsonl.gz        our runs (clean, default, R5, R6, R6b, R6c, R9, R10) and the
-                                                  open decision models (R14 Clef, R15 pplx-decider)
+                                                  open decision models (R14 Clef incl. b24B, R15 pplx-decider)
   docs/phases/2.0/jev/24shot/arm{A,B}.jsonl.gz    Jev with the reproduction's (A) and our (B) retrieved examples
   docs/phases/2.0/jev/zeroshot/banking77_repro_definitions.jsonl.gz
   paper/generated/jev_swap_analysis.json          pre-declared analysis (F15), produced by jev_swap_analysis.py
@@ -51,7 +51,7 @@ OURS = {
     "SeedB": "24shot_r9_best_seed2000", "SeedC": "24shot_r9_best_seed3000",
     "DefSeedB": "24shot_r9_default_seed2000", "DefSeedC": "24shot_r9_default_seed3000",
     "Ft": "finetune_lora",
-    "Clef": "r14_clef_b24", "Flash": "r14_clef_flash_b24",
+    "Clef": "r14_clef_b24", "Flash": "r14_clef_flash_b24", "ClefB": "r14_clef_b24B", "FlashB": "r14_clef_flash_b24B",
     "Pplx": "r15_pplx_decider_b24", "PplxB": "r15_pplx_decider_b24B_sgl", "PplxDefs": "r15_pplx_decider_defs_sgl",
 }
 R5 = ["ReaderAlone", "KnnAlone", "BaseKnn", "BaseReaderAlone", "VoteMaj", "VoteWtd"]
@@ -206,6 +206,11 @@ def main():
     contrast("PplxVsParBest", "Pplx", "ParBest"); contrast("PplxVsClef", "Pplx", "Clef"); contrast("PplxVsFlash", "Pplx", "Flash")
     contrast("PplxBVsJevB", "PplxB", "JevB"); contrast("PplxBVsClean", "PplxB", "Clean"); contrast("PplxBVsPplx", "PplxB", "Pplx")
     contrast("PplxDefsVsJevDefs", "PplxDefs", "JevDefs")
+    # Clef and Clef-Flash on our retrieval (Jev Arm-B bodies; R14 amendment A4)
+    for m in ("ClefB", "FlashB"):
+        contrast(f"{m}VsJevB", m, "JevB"); contrast(f"{m}VsClean", m, "Clean"); contrast(f"{m}Vs{m[:-1]}", m, m[:-1])
+    contrast("FlashBVsClefB", "FlashB", "ClefB"); contrast("PplxBVsClefB", "PplxB", "ClefB")
+    contrast("PplxBVsFlashB", "PplxB", "FlashB")
 
     # R5 family (post hoc): clean vs each ablation variant, Holm over 6
     r5 = [contrast(f"CleanVs{m}", "Clean", m) for m in R5]
@@ -231,7 +236,8 @@ def main():
                         ("CleanMinusParBest", "Clean", "ParBest"), ("CleanMinusJevPub", "Clean", "JevPub"),
                         ("CleanMinusKnnAlone", "Clean", "KnnAlone"), ("CleanMinusBaseKnn", "Clean", "BaseKnn"),
                         ("CleanMinusJevB", "Clean", "JevB"), ("FlashMinusJevA", "Flash", "JevA"),
-                        ("PplxBMinusClean", "PplxB", "Clean"), ("CleanMinusCapUni", "Clean", "CapUni")]:
+                        ("PplxBMinusClean", "PplxB", "Clean"), ("CleanMinusCapUni", "Clean", "CapUni"),
+                        ("ClefBMinusClef", "ClefB", "Clef"), ("FlashBMinusFlash", "FlashB", "Flash")]:
         d = out[f"{a_}Acc"] - out[f"{b_}Acc"]; put(f"{key}Pt", d, f"{100 * d:.2f}")
 
     # dataset and pool facts (from the dumps' metadata and the dataset itself)
@@ -283,10 +289,11 @@ def main():
         d = int((sys_pred[m] != sys_pred["Clean"]).sum()); put(f"{m}Changed", d, str(d))
 
     # paired log-loss differences for the open models (unrounded probabilities; descriptive), ours - model
-    ll = {m: item_logloss(sys_prob[m], y) for m in ("Clean", "ParBest", "Flash", "Clef", "Pplx", "PplxB")}
+    ll = {m: item_logloss(sys_prob[m], y) for m in ("Clean", "ParBest", "Flash", "Clef", "Pplx", "PplxB", "ClefB", "FlashB")}
     for key, a_, b_ in [("LlCleanMinusFlash", "Clean", "Flash"), ("LlCleanMinusClef", "Clean", "Clef"),
                         ("LlParMinusFlash", "ParBest", "Flash"), ("LlParMinusClef", "ParBest", "Clef"),
-                        ("LlCleanMinusPplxB", "Clean", "PplxB")]:
+                        ("LlCleanMinusPplxB", "Clean", "PplxB"), ("LlCleanMinusClefB", "Clean", "ClefB"),
+                        ("LlCleanMinusFlashB", "Clean", "FlashB")]:
         d, l_, h_ = paired_boot(ll[a_] - ll[b_], rng)
         put(key, d, signed(d)); put(f"{key}Lo", l_, signed(l_)); put(f"{key}Hi", h_, signed(h_))
 
