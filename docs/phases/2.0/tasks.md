@@ -114,7 +114,8 @@
 - [ ] 🔲 blocked: T8.1 Author name(s), email, country, affiliation — **required at TACL submission** (BLOCKED #1).
 - [ ] 🔲 blocked: T8.2 Adapter access: reviewers cannot get it during review (no links allowed); ungate at/after acceptance? (BLOCKED #2).
 - [ ] 🔲 blocked: T8.3 System name in the review version (keep "Quorum" vs neutral name) + disclosure of the public repo/Space/HF pages as prior non-archival versions (BLOCKED #4).
-- [ ] 🔲 blocked: T8.4 Employer publication / IP clearance before choosing the affiliation line (BLOCKED #5).
+- [x] T8.4 Employer clearance (BLOCKED #5) — resolved 2026-10-12 by the user: independent work, not employer business (could be run alone on rented GPUs); affiliation DataAgent AI Lab, as an individual. Commit identities were already rewritten to the personal address on 2026-10-06 (provenance/commit_hash_map.md); pre-rewrite commits still resolve by old SHA on GitHub until GitHub Support purges them (user action).
+- [ ] T8.9 Anonymous supplementary archive for review (user: yes, 2026-10-12; TMLR limit 100 MB): de-identified snapshot of request manifests, per-item files, pre-registrations and generators; build and scan before submission.
 - [ ] T8.5 README corrections once evidence is in — push is must-ask: "Jev's own protocol", "on CPU in ~120 ms",
       "calibrated", "survives Bonferroni", "trained only on public intent data … Banking77 excluded" (CLINC/HWU/SNIPS
       + non-intent tasks are in the mixture), "full training pool" (9,079 for the study runs), 0.938 framing.

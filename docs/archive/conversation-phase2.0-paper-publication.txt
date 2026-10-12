@@ -837,3 +837,21 @@ the three retrieval effects is significant); §5.3 gains the our-retrieval parag
 not separable from one another, post hoc); intro findings 2 and 3 extended. Ledger K2/K3 updated.
 
 ===
+
+[DECISION #33 | user-decided]
+Commit attribution trailers (Co-Authored-By / Claude-Session) stay on Phase 2.0 commits; no history rewrite.
+
+===
+
+[DECISION #34 | user-decided]
+Review-guide decisions: (1) contributions agreed with the recommended change — the release moves to (iii), the two
+low-cost baselines become (iv), stated as reproducible reference points, not competitors; (2) title kept;
+(3) the third-party CLINC150 public/private leaderboard gap for Clef is not mentioned in the paper (undisclosed
+training data only); (4) an anonymised supplementary archive is submitted for review (task T8.9).
+Employer clearance (BLOCKED #5): the user states this is independent work, not employer business, and could be run
+alone on rented GPUs; affiliation DataAgent AI Lab, as an individual. The user asked for commits with the employer
+address to carry the personal identity: already done on 2026-10-06 (all 162 commits on GitHub main and all 180 local
+commits carry the personal address, checked 2026-10-12), but pre-rewrite commits still resolve by old SHA on GitHub
+(no forks, no PRs) → only GitHub Support can purge them; user action, request text drafted.
+
+===
