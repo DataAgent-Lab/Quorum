@@ -38,6 +38,10 @@ Not included: Clef 27B (GPU time, user decision) and Jev (3,080 calls × 11 pool
     with a different random draw. A label with fewer rows in P than the pool size keeps all of its rows; the pool
     sizes are recorded.
   - Each pool is stored as a sorted list of train indices.
+- **Pool sizes (computed before any call, from `train_pinned.json` and the selection split):** in P, labels have
+  23–175 rows. Exactly one label has fewer than 24 rows: `contactless_not_working` (23). So every `pc24_d` pool
+  has **1,847** rows, and that label keeps the same 23 rows in every draw. No label has fewer than 8 rows, so every
+  `pc8_d` pool has **616** rows (8 per label). The actual sizes are recorded in `manifest_meta.json`.
 
 ## 4. Retrieval and request bodies (built once, recorded, sha-checked)
 
@@ -72,6 +76,23 @@ A developer with 24 or 8 rows per label would not have 924 extra labelled rows t
 fitting data at all. This favours the open stack on the small pools, by an amount this protocol does not measure,
 and the write-up must say so next to every small-pool result.
 
+**Pool-fit sensitivity arm (descriptive, measures that limitation).** "Open stack, pool-fit" runs the same selected
+candidate (M2, `weighted_prob_mean`, descriptions, 1 order) on the 10 small pools, with its fitted parameters
+(member temperatures, weights, final temperature) **re-fitted on the pool itself, with no use of the selection
+split**:
+- Each pool row is scored by the reader and kNN members with **leave-one-out retrieval**: the BM25 top 24 (same
+  scores, stable ties) from the pool minus that row's own position.
+- The parameters are fitted on all pool rows exactly as the clean run's final refit
+  (`clean_24shot.py` `fit_params` with `weighted_prob_mean`, then `fit_temperature` of the combined
+  distribution): what a developer holding only the pool could do.
+- The test pass is the unchanged arm's test pass (same recorded retrieval, same member logits); only the fitted
+  parameters differ.
+- It is in **no** Holm family. Reported per pool: accuracy, ECE-10, Brier, and the difference from the unchanged
+  arm. The `full` pool has no pool-fit cell (fitting on 9,079 rows is the full-data case already covered by S).
+
+One confound remains in both arms and must be named in the write-up: the **candidate itself** (member set, rule,
+option text, orders) was chosen on the 924-row selection split with full-P retrieval.
+
 ## 6. Scoring
 
 - Per item: the predicted label is the argmax of the full probability vector over the 77 labels (open stack: of
@@ -81,7 +102,8 @@ and the write-up must say so next to every small-pool result.
   item near either limit (`b24B` max prompt 3,996 Clef tokens); the counts are reported.
 - A failed item counts as wrong. One scored run per system × pool; no re-runs of completed cells.
 - Per-item dumps (R-format): `results/poolsize/predictions/<system>_<pool>.jsonl.gz` with
-  `{idx, gold, pred, probs[77], unanswered, input_tokens}` (open stack: no `input_tokens`, plus `retrieved_idx`).
+  `{idx, gold, pred, probs[77], unanswered, input_tokens}` (open stack: no `input_tokens`, plus `retrieved_idx`;
+  the pool-fit arm as `open_poolfit_<pool>`, with its fitted parameters in the summary).
 
 ## 7. Pre-declared analyses (all reported, whatever the outcome)
 
@@ -92,11 +114,16 @@ and the write-up must say so next to every small-pool result.
    order of the 3 systems. For each pool size: mean, min and max accuracy across the 5 draws per system; in how
    many draws the rank order equals the `full` order; and for each pair, in how many draws the Holm-significant
    winner is each system (or none).
+   **Ties:** two systems tie in a pool when their correct counts are equal. A pool whose order contains a tie is
+   its own outcome ("tie"): it is counted neither as matching nor as differing from the `full` order, and is
+   reported as such. If `full` itself contains a tie, the comparison is reported the same way.
 3. **Size effect per system (descriptive).** For each system and draw: accuracy `pc24_d` − `full` and `pc8_d` −
    `full`, with the across-draw mean, min and max. No test is run on these; draws are not independent of `full`.
 4. **Calibration (descriptive).** ECE-10 (probability of the predicted label) and Brier (summed over the 77
    labels) per system × pool. No log loss across engines that round.
-5. **Descriptive.** Pool sizes, examples kept, unanswered / truncated counts, and per system the agreement of the
+5. **Pool-fit sensitivity (descriptive, §5).** Per small pool: the pool-fit arm's accuracy, ECE-10 and Brier, and
+   its difference from the unchanged open-stack arm; across draws, mean, min and max. In no Holm family.
+6. **Descriptive.** Pool sizes, examples kept, unanswered / truncated counts, and per system the agreement of the
    `full` cell with that system's existing `b24B` / clean-run cell (same pool, retrieval with stable instead of
    library tie order), as a consistency check only.
 
@@ -111,11 +138,11 @@ No pooled test across draws, no names-only arm, no Jev arm.
 4. Smokes: the first 8 rows of the 924-row selection split (in no pool, never test rows) as queries, retrieving
    from `pc8_d1`; outputs discarded.
 5. Runs, after R16 and its single §9 run. GB10 queue: Clef-Flash then the open stack, pool order `full`,
-   `pc24_d1..5`, `pc8_d1..5`. pplx on the GB300 serving engine in the same pool order.
+   `pc24_d1..5`, `pc8_d1..5`; the open stack computes its pool-fit arm in the same pass. pplx on the GB300 serving engine in the same pool order.
 6. The analysis runs once, after all 33 cells exist.
 
 Estimated cost (measured rates): Clef-Flash ~80 min per pool (~15 h); open stack ~31 min per pool (~6 h); pplx
-~10 min per pool (~2 h).
+~10 min per pool (~2 h); open-stack pool-fit reader + kNN passes over the pool rows (~2 h).
 
 ## 9. Constraints carried
 
