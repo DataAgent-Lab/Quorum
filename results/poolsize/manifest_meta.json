@@ -1,0 +1,193 @@
+{
+ "protocol": "provenance/banking77_pool_size_protocol.md",
+ "dataset": "legacy-datasets/banking77",
+ "dataset_revision": "f54121560de48f2852f90be299010d1d6dc612ec",
+ "n_test": 3080,
+ "pools_sha256": "447a12c229531132ac820c0aabe1d58df079425f45297a99cd445e438dc6635b",
+ "pools": {
+  "full": {
+   "rows": 9079,
+   "per_label_min": 23,
+   "per_label_max": 175,
+   "manifest_sha256": "e3108af3d52b4f32ddaa9a5b81c14e37b94f2ae57b89b8356ac59589e3be18ef",
+   "examples_kept": {
+    "min": 24,
+    "all_24": 3080
+   },
+   "bytes": {
+    "min": 10056,
+    "median": 10713,
+    "max": 14461
+   },
+   "seconds": 25.0
+  },
+  "pc24_d1": {
+   "rows": 1847,
+   "per_label_min": 23,
+   "per_label_max": 24,
+   "manifest_sha256": "8da13003ef99ce2d6de6b9f6cfd67564fb4281024cf6806a81b076fff668c9b2",
+   "examples_kept": {
+    "min": 24,
+    "all_24": 3080
+   },
+   "bytes": {
+    "min": 10082,
+    "median": 10787,
+    "max": 13524
+   },
+   "seconds": 4.7
+  },
+  "pc24_d2": {
+   "rows": 1847,
+   "per_label_min": 23,
+   "per_label_max": 24,
+   "manifest_sha256": "f98baf9ba1d3b63398f16e5c903bbdde1f09b6c6560dad3c2a355fdb2040c5b4",
+   "examples_kept": {
+    "min": 24,
+    "all_24": 3080
+   },
+   "bytes": {
+    "min": 10062,
+    "median": 10763,
+    "max": 13331
+   },
+   "seconds": 4.7
+  },
+  "pc24_d3": {
+   "rows": 1847,
+   "per_label_min": 23,
+   "per_label_max": 24,
+   "manifest_sha256": "22182452708868a84e8913be1dd52e30bb4dcf21b510d9e848154570b5051d26",
+   "examples_kept": {
+    "min": 24,
+    "all_24": 3080
+   },
+   "bytes": {
+    "min": 10046,
+    "median": 10786,
+    "max": 13506
+   },
+   "seconds": 4.7
+  },
+  "pc24_d4": {
+   "rows": 1847,
+   "per_label_min": 23,
+   "per_label_max": 24,
+   "manifest_sha256": "45e4c153a6cdbfb90511a64067096093e04ef200c0d4d42084c1d77f2e0517e8",
+   "examples_kept": {
+    "min": 24,
+    "all_24": 3080
+   },
+   "bytes": {
+    "min": 10084,
+    "median": 10809,
+    "max": 13603
+   },
+   "seconds": 4.8
+  },
+  "pc24_d5": {
+   "rows": 1847,
+   "per_label_min": 23,
+   "per_label_max": 24,
+   "manifest_sha256": "055a84a654929141ba0fd4d59ee2bb60340d7f5328ef0ca93a67bc5677dcda54",
+   "examples_kept": {
+    "min": 24,
+    "all_24": 3080
+   },
+   "bytes": {
+    "min": 10064,
+    "median": 10793,
+    "max": 13729
+   },
+   "seconds": 4.7
+  },
+  "pc8_d1": {
+   "rows": 616,
+   "per_label_min": 8,
+   "per_label_max": 8,
+   "manifest_sha256": "f163159dd41f3ce665504049c77e292953b70a6a967da940f0b8d93d2f00226c",
+   "examples_kept": {
+    "min": 24,
+    "all_24": 3080
+   },
+   "bytes": {
+    "min": 10201,
+    "median": 10833,
+    "max": 12737
+   },
+   "seconds": 1.7
+  },
+  "pc8_d2": {
+   "rows": 616,
+   "per_label_min": 8,
+   "per_label_max": 8,
+   "manifest_sha256": "b404cf10e5f81e58e206f10ccec1e4656dba390536b58646e09db7f6fa8d0de6",
+   "examples_kept": {
+    "min": 24,
+    "all_24": 3080
+   },
+   "bytes": {
+    "min": 10114,
+    "median": 10887,
+    "max": 12859
+   },
+   "seconds": 1.7
+  },
+  "pc8_d3": {
+   "rows": 616,
+   "per_label_min": 8,
+   "per_label_max": 8,
+   "manifest_sha256": "e450579e2af8d88499747792384376e5b18f0d5637bdaa17b4d81258e23478f5",
+   "examples_kept": {
+    "min": 24,
+    "all_24": 3080
+   },
+   "bytes": {
+    "min": 10189,
+    "median": 10911,
+    "max": 13233
+   },
+   "seconds": 1.8
+  },
+  "pc8_d4": {
+   "rows": 616,
+   "per_label_min": 8,
+   "per_label_max": 8,
+   "manifest_sha256": "da970247bb1cdf8faaa2b193af06b1c7289893881c1184d605e500f1f48ec175",
+   "examples_kept": {
+    "min": 24,
+    "all_24": 3080
+   },
+   "bytes": {
+    "min": 10147,
+    "median": 10898,
+    "max": 13686
+   },
+   "seconds": 1.7
+  },
+  "pc8_d5": {
+   "rows": 616,
+   "per_label_min": 8,
+   "per_label_max": 8,
+   "manifest_sha256": "237f13d102fad67a980d4cf37bdbffcad3e40a02d364718445b1cc8cbba0b0b8",
+   "examples_kept": {
+    "min": 24,
+    "all_24": 3080
+   },
+   "bytes": {
+    "min": 10200,
+    "median": 10838,
+    "max": 13460
+   },
+   "seconds": 1.7
+  }
+ },
+ "code_sha256": {
+  "scripts/poolsize_bodies.py": "11783f185ad625d6e933fb78d15d61093eaebaa512ece667785991fbd3e6157c",
+  "scripts/bitext24_bodies.py": "7f50a470a1f3bdeccc37b5ba1cbc845461432906aaa1ace097dec522fb7c2afd",
+  "scripts/r14_clef.py": "024630ecbbb1f2183c15183f44624c74b7803a9d854fd11586f1598b33ff0752",
+  "quorum/fewshot.py": "c79778c1cba86ce815c449f5afc7994115d2f796a21e110190a8f9ccccc36f26"
+ },
+ "instruction": "the reproduction's (read at run time, not stored)",
+ "written_at": "2026-10-12T05:44:28Z"
+}
