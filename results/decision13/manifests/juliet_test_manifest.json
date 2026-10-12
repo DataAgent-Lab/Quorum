@@ -1,0 +1,142 @@
+{
+ "source": "NIST SARD suite 112 juliet-test-suite-for-c-cplusplus-v1-3.zip",
+ "zip_sha256": "ada9d7e1c323d283446df3f55bdee0d00bda1fed786785fe98764d58688f38eb",
+ "licence": "US public domain (17 USC 105); CC0 1.0 for foreign rights (SARD suite 112 page)",
+ "synthetic_floor_not_headline": true,
+ "test_cases": 64123,
+ "items": 128186,
+ "vulnerable": 64099,
+ "not_vulnerable": 64087,
+ "stats": {
+  "case_skipped_file_missing_from_zip": 24,
+  "case_missing_a_side": 12
+ },
+ "items_in_hf_test_split": 35119,
+ "items_identical_pair_flagged": 40,
+ "leak_rows_before_strip": {
+  "bad_or_good_token": {
+   "vulnerable": 64099,
+   "not_vulnerable": 64087
+  },
+  "g2b_b2g": {
+   "vulnerable": 2432,
+   "not_vulnerable": 58925
+  },
+  "cwe": {
+   "vulnerable": 64099,
+   "not_vulnerable": 64087
+  },
+  "flaw_or_fix_word": {
+   "vulnerable": 64099,
+   "not_vulnerable": 64087
+  },
+  "source_sink_label": {
+   "vulnerable": 64013,
+   "not_vulnerable": 64001
+  },
+  "omit_or_includemain": {
+   "vulnerable": 0,
+   "not_vulnerable": 0
+  },
+  "testcase_filename": {
+   "vulnerable": 64013,
+   "not_vulnerable": 64001
+  },
+  "comment": {
+   "vulnerable": 64099,
+   "not_vulnerable": 64087
+  },
+  "benign_word": {
+   "vulnerable": 1603,
+   "not_vulnerable": 22879
+  }
+ },
+ "leak_rows_after_strip": {
+  "bad_or_good_token": {
+   "vulnerable": 0,
+   "not_vulnerable": 0
+  },
+  "g2b_b2g": {
+   "vulnerable": 0,
+   "not_vulnerable": 0
+  },
+  "cwe": {
+   "vulnerable": 0,
+   "not_vulnerable": 0
+  },
+  "flaw_or_fix_word": {
+   "vulnerable": 0,
+   "not_vulnerable": 0
+  },
+  "source_sink_label": {
+   "vulnerable": 0,
+   "not_vulnerable": 0
+  },
+  "omit_or_includemain": {
+   "vulnerable": 0,
+   "not_vulnerable": 0
+  },
+  "testcase_filename": {
+   "vulnerable": 0,
+   "not_vulnerable": 0
+  },
+  "comment": {
+   "vulnerable": 0,
+   "not_vulnerable": 0
+  },
+  "benign_word": {
+   "vulnerable": 0,
+   "not_vulnerable": 0
+  }
+ },
+ "residual_structure": {
+  "n_files": {
+   "vulnerable": {
+    "p50": 1,
+    "mean": 1.55,
+    "max": 5
+   },
+   "not_vulnerable": {
+    "p50": 1,
+    "mean": 1.57,
+    "max": 5
+   }
+  },
+  "n_funcs": {
+   "vulnerable": {
+    "p50": 2,
+    "mean": 1.7,
+    "max": 6
+   },
+   "not_vulnerable": {
+    "p50": 2,
+    "mean": 2.83,
+    "max": 12
+   }
+  },
+  "bytes": {
+   "vulnerable": {
+    "p50": 1189,
+    "mean": 1640.26,
+    "max": 8226
+   },
+   "not_vulnerable": {
+    "p50": 1518,
+    "mean": 1866.9,
+    "max": 12761
+   }
+  }
+ },
+ "bytes_p50": 1382,
+ "bytes_max": 12761,
+ "bytes_total": 224783191,
+ "question": {
+  "type": "noul",
+  "instructions": "Does this code contain a security vulnerability?",
+  "criteria": {
+   "true": "Yes: the code contains a security weakness (for example a memory-safety error, a missing or wrong check, injection, an unsafe resource, API or concurrency use) that can be triggered when it runs.",
+   "false": "No: the code as written does not contain such a weakness."
+  }
+ },
+ "items_sha256": "e65b4d1bee813f507f4d403dc61719b60a4ce8b890f9816a1a57e8aece7c8bd2"
+}

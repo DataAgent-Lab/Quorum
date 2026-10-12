@@ -1,0 +1,31 @@
+{
+ "set": "primevul_func",
+ "model": "clef",
+ "limit": 0,
+ "items_sha256": "7ca8734adfbfe654ced322d6deea9edc59616065a1b572ffb1ee66b6c3fee963",
+ "manifest_items_sha256": "7ca8734adfbfe654ced322d6deea9edc59616065a1b572ffb1ee66b6c3fee963",
+ "engine": {
+  "name": "SGLang (clef)",
+  "image": "lmsysorg/sglang@sha256:868b0bd8eaf9b0b52c796a14a0ed55c04d6d2160eddaeb45d42c39a345a8b77f",
+  "patch": "sglang-pr42721-d1cea71-python.patch",
+  "patch_sha256": "b33f25a8bb48db78794ff8a419ffb6549ad9f62fb307bef3b6690c6070fd8116",
+  "flags": "--context-length 16385 --mem-fraction-static 0.75",
+  "device": "one NVIDIA GB300"
+ },
+ "concurrency": 16,
+ "wall_seconds": 142.5,
+ "ms_per_item": 2004.1,
+ "overall": {
+  "n": 1128,
+  "answered": 1128,
+  "unanswered": 0,
+  "accuracy": 0.515071,
+  "macro_f1": 0.489809,
+  "f1_positive": 0.376283,
+  "brier": 0.62838,
+  "ece10": 0.223172
+ },
+ "runner_sha256": "674bad1f37798d4ea957cbca0be0f88587a8f8f210a54d291640c4414448d5c9",
+ "written_at": "2026-10-09T13:40:23Z",
+ "served_model": "Cloudflare/clef@2f3de3dd85f379784083b0814d997ab627200f0c"
+}

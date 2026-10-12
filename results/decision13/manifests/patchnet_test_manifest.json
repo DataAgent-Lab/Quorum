@@ -1,0 +1,19 @@
+{
+ "source": "zenodo:3965234 test.pkl",
+ "pkl_sha256": "22c99fad5cb43b3e8f6e816de850d48839e432dcb971d1b3f6ceb9a8d2bd7ea4",
+ "items": 10896,
+ "stable": 5832,
+ "items_with_removed_lines": 2871,
+ "cc_stable_left_after_strip": 0,
+ "bytes_p50": 1932,
+ "bytes_max": 19852,
+ "question": {
+  "type": "noul",
+  "instructions": "Is this Linux kernel patch a bug fix that is suitable for the stable kernel releases?",
+  "criteria": {
+   "true": "Yes: it fixes a real bug (crash, data corruption, security issue, hang, wrong behaviour) in a way small and safe enough for stable releases.",
+   "false": "No: it is a feature, cleanup, refactor, documentation or other change that does not belong in stable releases."
+  }
+ },
+ "items_sha256": "8e0ecce4be948adb34b52a89ea54b518da265ed0f83d20307293d565e4c3158a"
+}

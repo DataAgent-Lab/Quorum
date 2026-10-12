@@ -1,0 +1,134 @@
+{
+ "source": "hf:arag0rn/SecVulEval@bde3e7c3225cc61c9ad727133737255428a2ea3d data/train-00000-of-00001.parquet",
+ "parquet_sha256": "56593aaee0b84611cc85d59ffd716a63f0639960c4815e9e678ed15ad06180c2",
+ "licence": "MIT per card metadata only (card License line is an unfilled placeholder; no LICENSE file)",
+ "items": 25440,
+ "vulnerable": 10998,
+ "not_vulnerable": 14442,
+ "vulnerable_without_fixed_pair": 974,
+ "leak_check": {
+  "comments_removed": {
+   "vulnerable": 1077,
+   "not_vulnerable": 1666
+  },
+  "rows_with_term_before": {
+   "cve": {
+    "vulnerable": 6,
+    "not_vulnerable": 22
+   },
+   "cwe": {
+    "vulnerable": 0,
+    "not_vulnerable": 0
+   },
+   "vuln": {
+    "vulnerable": 5,
+    "not_vulnerable": 12
+   },
+   "fix": {
+    "vulnerable": 430,
+    "not_vulnerable": 605
+   },
+   "patch": {
+    "vulnerable": 46,
+    "not_vulnerable": 71
+   },
+   "security_exploit": {
+    "vulnerable": 74,
+    "not_vulnerable": 132
+   },
+   "overflow": {
+    "vulnerable": 298,
+    "not_vulnerable": 540
+   },
+   "bad_good": {
+    "vulnerable": 338,
+    "not_vulnerable": 477
+   },
+   "sanitiz": {
+    "vulnerable": 40,
+    "not_vulnerable": 67
+   }
+  },
+  "rows_with_term_after": {
+   "cve": {
+    "vulnerable": 0,
+    "not_vulnerable": 1
+   },
+   "cwe": {
+    "vulnerable": 0,
+    "not_vulnerable": 0
+   },
+   "vuln": {
+    "vulnerable": 0,
+    "not_vulnerable": 2
+   },
+   "fix": {
+    "vulnerable": 143,
+    "not_vulnerable": 192
+   },
+   "patch": {
+    "vulnerable": 21,
+    "not_vulnerable": 41
+   },
+   "security_exploit": {
+    "vulnerable": 37,
+    "not_vulnerable": 56
+   },
+   "overflow": {
+    "vulnerable": 193,
+    "not_vulnerable": 335
+   },
+   "bad_good": {
+    "vulnerable": 221,
+    "not_vulnerable": 307
+   },
+   "sanitiz": {
+    "vulnerable": 36,
+    "not_vulnerable": 53
+   }
+  },
+  "vuln_fixed_pairs": 10024,
+  "pairs_term_one_side_before": {
+   "bad_good:only_fixed": 19,
+   "bad_good:only_vulnerable": 8,
+   "cve:only_fixed": 6,
+   "fix:only_fixed": 22,
+   "fix:only_vulnerable": 15,
+   "overflow:only_fixed": 104,
+   "overflow:only_vulnerable": 11,
+   "patch:only_fixed": 1,
+   "sanitiz:only_fixed": 7,
+   "sanitiz:only_vulnerable": 1,
+   "security_exploit:only_fixed": 18,
+   "security_exploit:only_vulnerable": 3,
+   "vuln:only_fixed": 3,
+   "vuln:only_vulnerable": 1
+  },
+  "pairs_term_one_side_after": {
+   "bad_good:only_fixed": 13,
+   "bad_good:only_vulnerable": 6,
+   "fix:only_fixed": 4,
+   "fix:only_vulnerable": 6,
+   "overflow:only_fixed": 54,
+   "overflow:only_vulnerable": 8,
+   "patch:only_fixed": 2,
+   "sanitiz:only_fixed": 6,
+   "sanitiz:only_vulnerable": 1,
+   "security_exploit:only_fixed": 4,
+   "security_exploit:only_vulnerable": 2
+  }
+ },
+ "bytes_p50": 1809,
+ "bytes_p99": 34610,
+ "bytes_max": 243292,
+ "bytes_total": 93405383,
+ "question": {
+  "type": "noul",
+  "instructions": "Does this function contain a security vulnerability?",
+  "criteria": {
+   "true": "Yes: the function contains a security weakness (for example a memory-safety error, a missing or wrong check, injection, an unsafe resource, API or concurrency use) that can be triggered when it runs.",
+   "false": "No: the function as written does not contain such a weakness."
+  }
+ },
+ "items_sha256": "eb48e4d5f39c6ab624d1a0831735c47b072ca92ac9309e7ee575e9034f375c4f"
+}

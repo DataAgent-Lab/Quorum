@@ -1,0 +1,83 @@
+{
+ "check": "amendment 2: Banking77 b24 bodies (3,080) at 16 in flight vs the same engine one at a time; >= 99.5 % argmax agreement and max |dp| <= 0.10 -> 16 in flight",
+ "per_model": {
+  "pplx_v11": {
+   "block E (all sets except Juliet)": {
+    "items": 3080,
+    "argmax_agreement": 1.0,
+    "max_abs_dp": 0.0,
+    "concurrency": 16
+   },
+   "Juliet": {
+    "items": 3080,
+    "argmax_agreement": 1.0,
+    "max_abs_dp": 0.0,
+    "concurrency": 16
+   },
+   "block C, first run": {
+    "items": 3080,
+    "argmax_agreement": 1.0,
+    "max_abs_dp": 0.0,
+    "concurrency": 16
+   },
+   "block C, second run (amendment 9)": {
+    "items": 3080,
+    "argmax_agreement": 1.0,
+    "max_abs_dp": 0.0,
+    "concurrency": 16
+   }
+  },
+  "clef_flash": {
+   "block E (all sets except Juliet)": {
+    "items": 3080,
+    "argmax_agreement": 1.0,
+    "max_abs_dp": 0.00037067000000000003,
+    "concurrency": 16
+   },
+   "Juliet": {
+    "items": 3080,
+    "argmax_agreement": 1.0,
+    "max_abs_dp": 0.00037067000000000003,
+    "concurrency": 16
+   },
+   "block C, first run": {
+    "items": 3080,
+    "argmax_agreement": 1.0,
+    "max_abs_dp": 0.00037067000000000003,
+    "concurrency": 16
+   },
+   "block C, second run (amendment 9)": {
+    "items": 3080,
+    "argmax_agreement": 1.0,
+    "max_abs_dp": 0.00037067000000000003,
+    "concurrency": 16
+   }
+  },
+  "clef": {
+   "block E (all sets except Juliet)": {
+    "items": 3080,
+    "argmax_agreement": 1.0,
+    "max_abs_dp": 0.002313400000000021,
+    "concurrency": 16
+   },
+   "Juliet": {
+    "items": 3080,
+    "argmax_agreement": 1.0,
+    "max_abs_dp": 0.002313400000000021,
+    "concurrency": 16
+   },
+   "block C, first run": {
+    "items": 3080,
+    "argmax_agreement": 1.0,
+    "max_abs_dp": 0.002313400000000021,
+    "concurrency": 16
+   },
+   "block C, second run (amendment 9)": {
+    "items": 3080,
+    "argmax_agreement": 1.0,
+    "max_abs_dp": 0.002313400000000021,
+    "concurrency": 16
+   }
+  }
+ }
+}

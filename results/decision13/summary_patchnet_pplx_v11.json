@@ -1,0 +1,31 @@
+{
+ "set": "patchnet",
+ "model": "pplx_v11",
+ "limit": 0,
+ "items_sha256": "8e0ecce4be948adb34b52a89ea54b518da265ed0f83d20307293d565e4c3158a",
+ "manifest_items_sha256": "8e0ecce4be948adb34b52a89ea54b518da265ed0f83d20307293d565e4c3158a",
+ "engine": {
+  "name": "SGLang (pplx_v11)",
+  "image": "lmsysorg/sglang@sha256:868b0bd8eaf9b0b52c796a14a0ed55c04d6d2160eddaeb45d42c39a345a8b77f",
+  "patch": "sglang-pplx-v11-noncausal.patch",
+  "patch_sha256": "fa7f6afc0363bc370e4d7c9c2c055e29b82146d3004013a02a8fa29707a04167",
+  "flags": "--attention-backend triton --chunked-prefill-size -1 --disable-radix-cache --disable-prefill-cuda-graph --mem-fraction-static 0.75",
+  "device": "one NVIDIA GB300"
+ },
+ "concurrency": 16,
+ "wall_seconds": 578.9,
+ "ms_per_item": 849.8,
+ "overall": {
+  "n": 10896,
+  "answered": 10896,
+  "unanswered": 0,
+  "accuracy": 0.8125,
+  "macro_f1": 0.808561,
+  "f1_positive": 0.836022,
+  "brier": 0.295105,
+  "ece10": 0.102843
+ },
+ "runner_sha256": "f39e3fadff2734890d1b9fd0ae4b871a961d28d4b38b8301a9302004fa0448f1",
+ "written_at": "2026-10-09T08:54:01Z",
+ "served_model": "perplexity-ai/pplx-decider-v1.1-27b@3b45dead91dfa6d95aad6b95764a606fab2bf7a6"
+}

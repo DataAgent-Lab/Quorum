@@ -1,0 +1,158 @@
+{
+ "source": "hf:LLMs4CodeSecurity/SV-TrustEval-C-1.0@a9a71254099b64ecacd85e32d655ca9fd5e40e4d",
+ "parquet_sha256": {
+  "Base_questions": "a812caa7e81a090c9ed7df761941030bc2f7a0676869b95fbd566c4d6a3ac991",
+  "ControlFlow": "5ec8add1447e4bce6cd34cea7d54df53349028a56c8127038897200cd0b4a992",
+  "DataFlow": "c99d089c773f2c0fd19c9e1d0f4fa65b14262d46c0b5b485a6ad9c1e75782af3",
+  "Counterfactual": "fdf24d39154042ec975a11c09e410fc27845b7c8e3f11c655dafce56d0075ce2",
+  "GoalDriven": "e92d32dbf736af2a654d11592d1d5653d0e5cff58c714104784dbf1bed1e1e9c",
+  "Predictive": "aab77d73e7f549432bbfdca2f8a5039efd08c4f7bff88d0e746891abeead089f"
+ },
+ "licence": "MIT (HF card front matter + badge; authors' repo LICENSE @5bb1585)",
+ "items": 10155,
+ "per_split": {
+  "Base_questions": {
+   "items": 754,
+   "answers": {
+    "A": 377,
+    "B": 377
+   }
+  },
+  "ControlFlow": {
+   "items": 1345,
+   "answers": {
+    "B": 652,
+    "A": 474,
+    "C": 219
+   }
+  },
+  "DataFlow": {
+   "items": 2430,
+   "answers": {
+    "B": 986,
+    "A": 916,
+    "C": 302,
+    "A, C": 226
+   }
+  },
+  "Counterfactual": {
+   "items": 3748,
+   "answers": {
+    "C": 1297,
+    "A": 1286,
+    "B": 1165
+   }
+  },
+  "GoalDriven": {
+   "items": 1159,
+   "answers": {
+    "C": 299,
+    "B": 289,
+    "D": 286,
+    "A": 285
+   }
+  },
+  "Predictive": {
+   "items": 719,
+   "answers": {
+    "D": 189,
+    "C": 185,
+    "B": 180,
+    "A": 165
+   }
+  }
+ },
+ "multi_letter_gold": 226,
+ "leak_check": {
+  "Base_questions": {
+   "case_id_suffix_x_answer": {
+    "bad|A": 377,
+    "bad|B": 377
+   },
+   "code_rows_with_term_by_answer": {
+    "cwe_in_code": {
+     "A": 1,
+     "B": 1
+    }
+   }
+  },
+  "ControlFlow": {
+   "case_id_suffix_x_answer": {
+    "bad|A": 474,
+    "bad|B": 652,
+    "bad|C": 219
+   },
+   "code_rows_with_term_by_answer": {
+    "cwe_in_code": {
+     "A": 0,
+     "B": 2,
+     "C": 0
+    }
+   }
+  },
+  "DataFlow": {
+   "case_id_suffix_x_answer": {
+    "bad|A": 916,
+    "bad|A, C": 226,
+    "bad|B": 986,
+    "bad|C": 302
+   },
+   "code_rows_with_term_by_answer": {
+    "cwe_in_code": {
+     "A": 1,
+     "A, C": 0,
+     "B": 4,
+     "C": 0
+    }
+   }
+  },
+  "Counterfactual": {
+   "case_id_suffix_x_answer": {
+    "bad|A": 1286,
+    "bad|B": 1165,
+    "bad|C": 1297
+   },
+   "code_rows_with_term_by_answer": {
+    "bad_good": {
+     "A": 7,
+     "B": 7,
+     "C": 9
+    },
+    "cwe_in_code": {
+     "A": 2,
+     "B": 2,
+     "C": 2
+    }
+   }
+  },
+  "GoalDriven": {
+   "case_id_suffix_x_answer": {
+    "bad|A": 285,
+    "bad|B": 289,
+    "bad|C": 299,
+    "bad|D": 286
+   },
+   "code_rows_with_term_by_answer": {
+    "cwe_in_code": {
+     "A": 1,
+     "B": 0,
+     "C": 1,
+     "D": 0
+    }
+   }
+  },
+  "Predictive": {
+   "case_id_suffix_x_answer": {
+    "bad|A": 165,
+    "bad|B": 180,
+    "bad|C": 185,
+    "bad|D": 189
+   },
+   "code_rows_with_term_by_answer": {}
+  }
+ },
+ "bytes_p50": 2608,
+ "bytes_max": 48349,
+ "question": "per item: the benchmark's own question text and options (type choice, qid 'answer')",
+ "items_sha256": "b7b822bb8c272432c589ea10e82878d6aa12e0d1121aad6d2dde0c3802e029ab"
+}

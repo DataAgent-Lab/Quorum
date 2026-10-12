@@ -1,0 +1,118 @@
+{
+ "source": "PrimeVul v0 primevul_test_paired.jsonl (authors' Drive, file id 1rNDKb65Yn1rCBURzHeBcH4jVVdQ1oD4r)",
+ "source_sha256": "54a16a5ab663d11d1ffa5f48a98b0f996e82ee85f48a2b999334f6c1a7d96e41",
+ "licence": "MIT (DLVulDet/PrimeVul LICENSE @6f54687)",
+ "pairs": 564,
+ "leak_check": {
+  "comments_removed": {
+   "vulnerable": 127,
+   "patched": 144
+  },
+  "rows_with_term_before": {
+   "cve": {
+    "vulnerable": 1,
+    "patched": 3
+   },
+   "cwe": {
+    "vulnerable": 0,
+    "patched": 0
+   },
+   "vuln": {
+    "vulnerable": 0,
+    "patched": 1
+   },
+   "fix": {
+    "vulnerable": 46,
+    "patched": 51
+   },
+   "patch": {
+    "vulnerable": 4,
+    "patched": 4
+   },
+   "security_exploit": {
+    "vulnerable": 5,
+    "patched": 6
+   },
+   "overflow": {
+    "vulnerable": 29,
+    "patched": 34
+   },
+   "bad_good": {
+    "vulnerable": 25,
+    "patched": 29
+   },
+   "sanitiz": {
+    "vulnerable": 5,
+    "patched": 5
+   }
+  },
+  "rows_with_term_after": {
+   "cve": {
+    "vulnerable": 0,
+    "patched": 0
+   },
+   "cwe": {
+    "vulnerable": 0,
+    "patched": 0
+   },
+   "vuln": {
+    "vulnerable": 0,
+    "patched": 0
+   },
+   "fix": {
+    "vulnerable": 12,
+    "patched": 11
+   },
+   "patch": {
+    "vulnerable": 2,
+    "patched": 2
+   },
+   "security_exploit": {
+    "vulnerable": 3,
+    "patched": 3
+   },
+   "overflow": {
+    "vulnerable": 17,
+    "patched": 17
+   },
+   "bad_good": {
+    "vulnerable": 13,
+    "patched": 16
+   },
+   "sanitiz": {
+    "vulnerable": 3,
+    "patched": 3
+   }
+  },
+  "pairs_term_one_side_before": {
+   "bad_good:only_patched": 4,
+   "cve:only_patched": 2,
+   "fix:only_patched": 6,
+   "fix:only_vulnerable": 1,
+   "overflow:only_patched": 6,
+   "overflow:only_vulnerable": 1,
+   "security_exploit:only_patched": 1,
+   "vuln:only_patched": 1
+  },
+  "pairs_term_one_side_after": {
+   "bad_good:only_patched": 3,
+   "fix:only_vulnerable": 1,
+   "overflow:only_patched": 1,
+   "overflow:only_vulnerable": 1
+  }
+ },
+ "vulnerable": 564,
+ "patched": 564,
+ "items": 1128,
+ "bytes_p50": 2922,
+ "bytes_max": 142130,
+ "question": {
+  "type": "noul",
+  "instructions": "Does this function contain a security vulnerability?",
+  "criteria": {
+   "true": "Yes: the function contains a security weakness (for example a memory-safety error, a missing or wrong check, injection, an unsafe resource, API or concurrency use) that can be triggered when it runs.",
+   "false": "No: the function as written does not contain such a weakness."
+  }
+ },
+ "items_sha256": "7ca8734adfbfe654ced322d6deea9edc59616065a1b572ffb1ee66b6c3fee963"
+}

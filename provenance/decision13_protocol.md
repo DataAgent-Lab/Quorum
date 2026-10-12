@@ -472,6 +472,8 @@ ported unchanged in logic. Two consequences of publishing only redistributable p
   n, accuracies and hashes are published (`results/decision13/restricted_aggregates.json`). Their accuracy tests are
   recomputed from those counts, so the accuracy Holm families and the §7 primary score are reproduced exactly.
 - DBRD's three calibration tests need per-item probabilities. The published ECE-10 Holm family therefore covers the
-  redistributable decision sets only; its adjusted p-values and the ECE wins-minus-losses count can differ from the
-  study's 27-test family. The ECE count is the §7.3 tie-breaker only, and it was not reached (no two models were
-  within 1 of each other).
+  redistributable decision sets only (24 tests instead of the study's 27). Checked against the study's own analysis:
+  every other raw and Holm-adjusted p-value is identical (DBRD's three bootstrap p were 0, so dropping them leaves the
+  Holm multipliers of the rest unchanged); only the ECE wins-minus-losses count differs, because it omits DBRD's
+  three tests. The ECE count is the §7.3 tie-breaker only, and it was not reached (no two models were within 1 of
+  each other on the primary score).
