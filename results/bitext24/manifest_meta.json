@@ -1,0 +1,31 @@
+{
+ "protocol_commit": "9d6dc44ef099a555d9b7bbd0b1778c46105a25f7",
+ "amendment_A1": "3d84cc3a4f13ce52355d46ae3b76134a0edf8ada",
+ "dataset": "Bitext/Bitext-customer-support-llm-chatbot-training-dataset",
+ "dataset_revision": "430d1a89bd93bd1fa23c16f29dd53e73f0087443",
+ "n_test": 5375,
+ "pool_size": 21173,
+ "selection_size": 324,
+ "instruction": "Which ONE intent best describes the customer message? The labeled examples show messages with their intents. Every message belongs to exactly one of the listed intents.",
+ "byte_limit": 30000,
+ "examples_kept": {
+  "min": 24,
+  "median": 24,
+  "all_24": 5375
+ },
+ "bytes": {
+  "min": 3187,
+  "median": 3975,
+  "max": 4867
+ },
+ "manifest_sha256": "1420b37975de445f374aef6aa6ba13d62e467ea1c802d3f67c4b1cd3def89f1b",
+ "manifest_content_sha256": "0f296974e762f0c5617207caeb7b6a299ac815ca99cb056a2b780a1de144539d",
+ "code_sha256": {
+  "scripts/bitext24_bodies.py": "7f50a470a1f3bdeccc37b5ba1cbc845461432906aaa1ace097dec522fb7c2afd",
+  "quorum/fewshot.py": "c79778c1cba86ce815c449f5afc7994115d2f796a21e110190a8f9ccccc36f26",
+  "quorum/data.py": "b2bfa9259d40e45a2aabf7bad7cfea77e8ed343de2d535f7adb731346ae029e4",
+  "examples/bitext_descriptions.py": "e5e7c33b04a7fa4b6c7eeeb8eaa72f0dac6fc6439ea060dc8fecd88ffb2a7feb"
+ },
+ "seconds": 190.8,
+ "written_at": "2026-10-12T02:47:56Z"
+}
