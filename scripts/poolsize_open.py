@@ -10,6 +10,10 @@ candidate with its parameters re-fitted on the pool's own rows (leave-one-out re
 
 It reuses `scripts/clean_24shot.py` (imported, never edited). The zero-shot member is not loaded: the selected
 candidate (M2) does not use it.
+
+Stored probabilities are `combine()` of the temperature-scaled members, WITHOUT the final temperature, in both arms
+(the convention of the clean run's stored probabilities). The pool-fit arm's final temperature is fitted and recorded,
+not applied, so its ECE is not a temperature-scaled ECE.
 """
 import argparse, gzip, hashlib, importlib.util, json, sys, time
 from pathlib import Path
@@ -144,7 +148,7 @@ def phase_run(smoke=False):
             (PB.OUT / "manifest_meta.json").read_text())["pools"][name]["manifest_sha256"]}
         if not done_u:
             write_cell("open", name, test, gold, C.combine(Ls, prm, "weighted_prob_mean"), ret,
-                       {**base, "fitted": prm_rec, "fitted_on": "selection split (unchanged clean refit)",
+                       {**base, "fitted": prm_rec, "fitted_on": "selection split (unchanged clean refit); final temperature recorded, not applied",
                         "seconds": round(time.time() - t0, 1)})
         if want_fit and not done_f:
             t1 = time.time(); rows = [train[i] for i in pool]; y = np.array([r["label"] for r in rows])
@@ -152,7 +156,8 @@ def phase_run(smoke=False):
             fit = fit_on(member_Ls("pool_loo", rows, eng, opts), y)
             pf = {"T": [fit["temperatures"][n] for n in C.MEMBER_SETS["M2"]], "w": fit["weights"]}
             write_cell("open_poolfit", name, test, gold, C.combine(Ls, pf, "weighted_prob_mean"), ret,
-                       {**base, "fitted": fit, "fitted_on": f"the pool's own {len(rows)} rows, leave-one-out retrieval",
+                       {**base, "fitted": fit, "fitted_on": f"the pool's own {len(rows)} rows, leave-one-out retrieval; final temperature fitted and recorded, "
+                                    "not applied (as the clean run's stored probabilities)",
                         "seconds": round(time.time() - t1, 1)})
     print("POOLSIZE_OPEN_DONE", flush=True)
 
