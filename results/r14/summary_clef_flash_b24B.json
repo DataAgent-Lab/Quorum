@@ -1,0 +1,37 @@
+{
+ "model": "Cloudflare/clef-flash",
+ "revision": "17f0b0ad64efb65d273590632833508766b2aae6",
+ "setting": "b24B",
+ "limit": 0,
+ "batch_size": 8,
+ "dtype": "bf16",
+ "custom_code_sha256": "0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3",
+ "zs_instruction": "Which ONE intent best describes `message`? Every message belongs to exactly one of the listed categories.",
+ "repro_instruction": "Which ONE banking intent best describes `customer_message`? Choose its main requested action or problem. Use category meanings and any labeled examples to distinguish similar intents. Match meaning, not shared keywords. Examples are references, not the message to classify. Every message belongs to exactly one of these 77 categories.",
+ "results": {
+  "banking77": {
+   "accuracy": 0.9526,
+   "correct": 2934,
+   "macro_f1": 0.9523,
+   "log_loss": 0.4133,
+   "brier": 0.1358,
+   "ece": 0.1911,
+   "prompt_tokens_max": 3996,
+   "seconds": 4774.0,
+   "ms_per_item": 1550.0,
+   "mcnemar_vs_jev_armB": {
+    "b": 78,
+    "c": 23,
+    "p_two_sided_exact": 3.552056811614334e-08
+   }
+  }
+ },
+ "code_sha256": "024630ecbbb1f2183c15183f44624c74b7803a9d854fd11586f1598b33ff0752",
+ "versions": {
+  "torch": "2.9.0+cu129",
+  "transformers": "5.17.0"
+ },
+ "device": "NVIDIA GB10",
+ "written_at": "2026-10-12T03:50:41Z",
+ "datasets": "all"
+}

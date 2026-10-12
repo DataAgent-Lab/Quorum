@@ -812,3 +812,19 @@ in main.bib; new test, 11/11). Sections awaiting runs or approvals carry red PEN
 confirm carry blue author notes.
 
 ===
+
+[DECISION #30 | auto-decided]
+R16 Bitext: paper-side amendment A2 (non-near-duplicate secondary subset of 2,484 items, BM25 top-1 floor row, seeded
+Jev order and cap rule, Jev prediction = choice, exposure disclosure) committed before any scored Jev call (f4ac106);
+Jev arm run on the sha-checked bodies, 5,375/5,375 answered, 0 failed (1624980); run log with the research session's
+early sight of the pplx summary (9fa2994). Thirteen-task block verified independently (all Holm values and scores
+match) and drafted into §6.3/§7.7 (f3a32eb). Clef-Flash b24B verified (0.9526; bodies sha-checked against Jev Arm B).
+
+===
+
+[DECISION #31 | user-decided (in the research session)]
+Pool-size curve: GO without Clef 27B — the open stack, pplx v1.1 and Clef-Flash; full pool + 5 stratified draws each
+at 24 and 8 per class; recorded retrieval shared by all systems; R-format dumps; pre-declared analysis; no Jev arm.
+Runs after R16 and its single §9 run; the exploratory single-model numbers are not used as evidence.
+
+===
