@@ -1,0 +1,755 @@
+{
+ "protocol_commit": "9d6dc44ef099a555d9b7bbd0b1778c46105a25f7",
+ "code": {
+  "git_head": "86034c63cce79af81a41cea2b804bbb04d65fcdc",
+  "tracked_files_modified": "unknown (no git binary; rely on sha256)",
+  "sha256": {
+   "scripts/bitext24_open.py": "11ff75ad4cae4e827dbdba94cadf472b2073e9e164259a3033409c2d2f939868",
+   "scripts/bitext24_bodies.py": "7f50a470a1f3bdeccc37b5ba1cbc845461432906aaa1ace097dec522fb7c2afd",
+   "scripts/clean_24shot.py": "27a7e97adf38a904a0a426ae017e873b2a9b57b63bcc15fc3d0030bbdb3c132a",
+   "quorum/fewshot.py": "c79778c1cba86ce815c449f5afc7994115d2f796a21e110190a8f9ccccc36f26",
+   "quorum/prompting.py": "fd38c3ca6209d1972a2e71233ad1792c0a662de756b20b9c9b9e77c9231480dd",
+   "quorum/ensemble.py": "3e17bcb786f20cf91f1448ceed0c561df1f4dfe613e5736b610e280944c9f48b",
+   "quorum/data.py": "b2bfa9259d40e45a2aabf7bad7cfea77e8ed343de2d535f7adb731346ae029e4",
+   "examples/bitext_descriptions.py": "e5e7c33b04a7fa4b6c7eeeb8eaa72f0dac6fc6439ea060dc8fecd88ffb2a7feb"
+  }
+ },
+ "n_selection": 324,
+ "prompt_lengths_selection": [
+  {
+   "option_text": "names",
+   "orders": 7,
+   "n_prompts": 2268,
+   "mean": 616.5,
+   "p50": 607,
+   "p95": 732,
+   "max": 877,
+   "over_limit": 0,
+   "limit": 4096
+  },
+  {
+   "option_text": "descriptions",
+   "orders": 7,
+   "n_prompts": 2268,
+   "mean": 670.5,
+   "p50": 661,
+   "p95": 786,
+   "max": 931,
+   "over_limit": 0,
+   "limit": 4096
+  }
+ ],
+ "zero_shot_nli_dtype": "fp32",
+ "revisions": {
+  "Qwen/Qwen3-4B": {
+   "refs_main": "1cfa9a7208912126459214e8b04321603b3df60c",
+   "cached_snapshots": [
+    "1cfa9a7208912126459214e8b04321603b3df60c"
+   ]
+  },
+  "DataAgent/Quorum-Reader-Qwen3-4B-Adapter": {
+   "refs_main": null,
+   "cached_snapshots": [
+    "e0765b768e04ff8dc83a8682963349bd6291ffa3"
+   ]
+  },
+  "BAAI/bge-large-en-v1.5": {
+   "refs_main": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+   "cached_snapshots": [
+    "d4aa6901d3a41ba39fb536a557fa166f842b0e09"
+   ]
+  },
+  "Jaehun/PrismNLI-0.4B": {
+   "refs_main": "02b9102b34d5dce1bf29c4e6903fea33e1a0ddeb",
+   "cached_snapshots": [
+    "02b9102b34d5dce1bf29c4e6903fea33e1a0ddeb"
+   ]
+  },
+  "BAAI/bge-base-en-v1.5": {
+   "refs_main": "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
+   "cached_snapshots": [
+    "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a"
+   ]
+  },
+  "Bitext/Bitext-customer-support-llm-chatbot-training-dataset": {
+   "refs_main": "430d1a89bd93bd1fa23c16f29dd53e73f0087443",
+   "cached_snapshots": [
+    "430d1a89bd93bd1fa23c16f29dd53e73f0087443"
+   ]
+  }
+ },
+ "selection_rule": "max out-of-fold correct; ties -> fewer members, fewer orders, names before descriptions, rule order logprob_mean > prob_mean > rank_mean > weighted_prob_mean",
+ "n_candidates": 48,
+ "candidates": [
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "logprob_mean",
+   "option_text": "names",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "prob_mean",
+   "option_text": "names",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "rank_mean",
+   "option_text": "names",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "weighted_prob_mean",
+   "option_text": "names",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "logprob_mean",
+   "option_text": "descriptions",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "prob_mean",
+   "option_text": "descriptions",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "rank_mean",
+   "option_text": "descriptions",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "weighted_prob_mean",
+   "option_text": "descriptions",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "logprob_mean",
+   "option_text": "names",
+   "orders": 3,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "prob_mean",
+   "option_text": "names",
+   "orders": 3,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "weighted_prob_mean",
+   "option_text": "names",
+   "orders": 3,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "logprob_mean",
+   "option_text": "descriptions",
+   "orders": 3,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "prob_mean",
+   "option_text": "descriptions",
+   "orders": 3,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "weighted_prob_mean",
+   "option_text": "descriptions",
+   "orders": 3,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "logprob_mean",
+   "option_text": "names",
+   "orders": 7,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "prob_mean",
+   "option_text": "names",
+   "orders": 7,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "weighted_prob_mean",
+   "option_text": "names",
+   "orders": 7,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "logprob_mean",
+   "option_text": "descriptions",
+   "orders": 7,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "prob_mean",
+   "option_text": "descriptions",
+   "orders": 7,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "weighted_prob_mean",
+   "option_text": "descriptions",
+   "orders": 7,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "logprob_mean",
+   "option_text": "names",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "prob_mean",
+   "option_text": "names",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "weighted_prob_mean",
+   "option_text": "names",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "logprob_mean",
+   "option_text": "descriptions",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "prob_mean",
+   "option_text": "descriptions",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "weighted_prob_mean",
+   "option_text": "descriptions",
+   "orders": 1,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "logprob_mean",
+   "option_text": "names",
+   "orders": 3,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "prob_mean",
+   "option_text": "names",
+   "orders": 3,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "weighted_prob_mean",
+   "option_text": "names",
+   "orders": 3,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "logprob_mean",
+   "option_text": "descriptions",
+   "orders": 3,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "prob_mean",
+   "option_text": "descriptions",
+   "orders": 3,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "weighted_prob_mean",
+   "option_text": "descriptions",
+   "orders": 3,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "logprob_mean",
+   "option_text": "names",
+   "orders": 7,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "prob_mean",
+   "option_text": "names",
+   "orders": 7,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "weighted_prob_mean",
+   "option_text": "names",
+   "orders": 7,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "logprob_mean",
+   "option_text": "descriptions",
+   "orders": 7,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "prob_mean",
+   "option_text": "descriptions",
+   "orders": 7,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "weighted_prob_mean",
+   "option_text": "descriptions",
+   "orders": 7,
+   "oof_correct": 324,
+   "oof_accuracy": 1.0,
+   "insample_correct": 324
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "rank_mean",
+   "option_text": "names",
+   "orders": 3,
+   "oof_correct": 323,
+   "oof_accuracy": 0.9969,
+   "insample_correct": 323
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "rank_mean",
+   "option_text": "descriptions",
+   "orders": 3,
+   "oof_correct": 323,
+   "oof_accuracy": 0.9969,
+   "insample_correct": 323
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "rank_mean",
+   "option_text": "names",
+   "orders": 7,
+   "oof_correct": 323,
+   "oof_accuracy": 0.9969,
+   "insample_correct": 323
+  },
+  {
+   "member_set": "M2",
+   "members": [
+    "reader",
+    "knn"
+   ],
+   "rule": "rank_mean",
+   "option_text": "descriptions",
+   "orders": 7,
+   "oof_correct": 323,
+   "oof_accuracy": 0.9969,
+   "insample_correct": 323
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "rank_mean",
+   "option_text": "names",
+   "orders": 1,
+   "oof_correct": 322,
+   "oof_accuracy": 0.9938,
+   "insample_correct": 322
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "rank_mean",
+   "option_text": "descriptions",
+   "orders": 1,
+   "oof_correct": 322,
+   "oof_accuracy": 0.9938,
+   "insample_correct": 322
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "rank_mean",
+   "option_text": "descriptions",
+   "orders": 3,
+   "oof_correct": 322,
+   "oof_accuracy": 0.9938,
+   "insample_correct": 322
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "rank_mean",
+   "option_text": "descriptions",
+   "orders": 7,
+   "oof_correct": 322,
+   "oof_accuracy": 0.9938,
+   "insample_correct": 322
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "rank_mean",
+   "option_text": "names",
+   "orders": 3,
+   "oof_correct": 321,
+   "oof_accuracy": 0.9907,
+   "insample_correct": 321
+  },
+  {
+   "member_set": "M3",
+   "members": [
+    "reader",
+    "knn",
+    "zs"
+   ],
+   "rule": "rank_mean",
+   "option_text": "names",
+   "orders": 7,
+   "oof_correct": 321,
+   "oof_accuracy": 0.9907,
+   "insample_correct": 321
+  }
+ ],
+ "selected": {
+  "member_set": "M2",
+  "members": [
+   "reader",
+   "knn"
+  ],
+  "rule": "logprob_mean",
+  "option_text": "names",
+  "orders": 1,
+  "oof_correct": 324,
+  "oof_accuracy": 1.0,
+  "insample_correct": 324
+ },
+ "refit_on_full_selection_split": {
+  "temperatures": {
+   "reader": 0.06464907022803366,
+   "knn": 0.38902859729781203
+  },
+  "weights": null,
+  "final_temperature": 0.2986061160304285
+ },
+ "written_at": "2026-10-12T12:25:30Z"
+}

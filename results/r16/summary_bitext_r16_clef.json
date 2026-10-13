@@ -1,0 +1,34 @@
+{
+ "protocol_commit": "9d6dc44ef099a555d9b7bbd0b1778c46105a25f7",
+ "amendment_A1": "3d84cc3a4f13ce52355d46ae3b76134a0edf8ada",
+ "manifest_sha256": "1420b37975de445f374aef6aa6ba13d62e467ea1c802d3f67c4b1cd3def89f1b",
+ "model": "Cloudflare/clef",
+ "revision": "2f3de3dd85f379784083b0814d997ab627200f0c",
+ "engine": {
+  "name": "release code",
+  "batch": 4
+ },
+ "custom_code_sha256": "0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3",
+ "code_sha256": {
+  "scripts/r16_bitext_arms.py": "0c47afde9ca02751784cc145ebc7d80d777c538c271f9136b1c85dffa0e96d55",
+  "scripts/bitext24_bodies.py": "7f50a470a1f3bdeccc37b5ba1cbc845461432906aaa1ace097dec522fb7c2afd",
+  "scripts/r14_clef.py": "024630ecbbb1f2183c15183f44624c74b7803a9d854fd11586f1598b33ff0752"
+ },
+ "label_order": "raw intent names, sorted (= dataset label ids)",
+ "results": {
+  "accuracy": 0.9963,
+  "correct": 5355,
+  "macro_f1": 0.9963,
+  "log_loss": 0.0649,
+  "brier": 0.0101,
+  "ece": 0.0549,
+  "unanswered": 0,
+  "prompt_tokens": {
+   "median": 1156,
+   "max": 1441
+  },
+  "seconds": 10001.0,
+  "ms_per_item": 1860.6
+ },
+ "written_at": "2026-10-12T11:56:09Z"
+}
