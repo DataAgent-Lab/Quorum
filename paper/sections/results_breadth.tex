@@ -57,9 +57,75 @@ are unexposed for every member, and loses on \zxCleanNliLosses. Appendix~\ref{ap
 
 \subsection{A second 24-shot dataset}
 \label{sec:res-bitext}
-\pending{Bitext customer support at 24 shots: our selection and retrieval pre-registered; request-body manifest;
-\orb, the three open decision models and one \jev{} arm on identical bodies. Results enter only after the
-pre-registration commit and the single scored run.}
+
+\begin{table}[t]
+\centering\small
+\caption{Bitext customer support, 24 shots, on identical evidence: every system received the same 24 retrieved
+examples, and the four decision models received byte-identical request bodies. Full set: our \btTestPct\% test split
+(\btN{} items). Subset: the \btNSub{} test items that neither duplicate nor nearly duplicate a pool utterance
+(secondary analysis, fixed before any result was read). Err.: number of wrong predictions. The floor row predicts
+the label of the single most similar retrieved example. $^\ddagger$scored by a parity-gated serving engine.}
+\label{tab:bitext}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+ & \multicolumn{4}{c}{Full set} & \multicolumn{2}{c}{Subset} \\
+\cmidrule(lr){2-5}\cmidrule(l){6-7}
+System & Acc.\ (\%) & Err. & ECE & Brier & Acc.\ (\%) & Err. \\
+\midrule
+\flash & \btFlashAcc & \btFlashErr & \btFlashEce & \btFlashBrier & \btFlashSubAcc & \btFlashSubErr \\
+\clef & \btClefAcc & \btClefErr & \btClefEce & \btClefBrier & \btClefSubAcc & \btClefSubErr \\
+\pplx$^\ddagger$ & \btPplxAcc & \btPplxErr & \btPplxEce & \btPplxBrier & \btPplxSubAcc & \btPplxSubErr \\
+\jev & \btJevAcc & \btJevErr & \btJevEce & \btJevBrier & \btJevSubAcc & \btJevSubErr \\
+\orb & \btOpenAcc & \btOpenErr & \btOpenEce & \btOpenBrier & \btOpenSubAcc & \btOpenSubErr \\
+\midrule
+floor: label of the top retrieved example & \btFloorAcc & & & & \btFloorSubAcc & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+To test whether the Banking77 picture holds on a second dataset, we pre-registered a 24-shot comparison of all five
+systems on Bitext customer support \citep{bitext-2023-customer-support}. Bitext has no official test split, so the
+test set is our own stratified \btTestPct\% split (\btN{} items, \btK{} intents); a fresh selection split of
+\btSelN{} utterances was held out for choosing the \orb{} configuration, and the remaining \btPoolN{} utterances form
+the retrieval pool. The 24 examples for each test item were retrieved once with BM25 (ties broken by pool position)
+and recorded, so every system saw the same examples in the same order. All \btN{} decision-model bodies kept all 24
+examples and were checked against a hash manifest before they were sent; the longest prompt (\btMaxPromptTokens{}
+tokens) is far below every model's length limit, and no item was refused, failed or left unsent. On the selection
+split, \btSelTied{} of the \btCandidates{} \orb{} candidates were tied at a perfect score, and the pre-declared
+tie-break chose the simplest of them (reader and nearest-neighbour vote, label names, one example order). Each
+system was scored once, and the analysis script was committed before any result was read.
+
+\paragraph{The dataset is close to its ceiling.} A text-only audit of the split, run before any model was scored,
+found \btExactDup{} test items whose normalised text also occurs in the pool and \btNearDup{} (\btNearDupPct\%) with
+a TF-IDF cosine of at least 0.8 to a pool utterance. % numbers-ok: the pre-registered threshold
+Copying the label of the top retrieved example is already correct on \btFloorAcc\% of the test set. Because
+full-set differences could therefore rest on very few items, we added a secondary analysis, fixed before any result
+was read, on the \btNSub{} test items with neither kind of duplicate.
+
+\paragraph{Results.} Every system reaches at least \btFlashSubAcc\% on both sets (Table~\ref{tab:bitext}); the five
+systems differ by at most \btFlashErr{} errors in \btN. Four of the ten pairwise tests are significant after Holm
+correction, the same four in both sets: \jev{} and \pplx{} are each more accurate than both \clef{} models (full set, b/c and
+$p_\text{Holm}$: \jev{} vs.\ \clef{} $\btJevVsClefB/\btJevVsClefC$, $\btJevVsClefPHolm$; \jev{} vs.\ \flash{}
+$\btJevVsFlashB/\btJevVsFlashC$, $\btJevVsFlashPHolm$; \pplx{} vs.\ \clef{} $\btClefVsPplxC/\btClefVsPplxB$,
+$\btClefVsPplxPHolm$; \pplx{} vs.\ \flash{} $\btFlashVsPplxC/\btFlashVsPplxB$, $\btFlashVsPplxPHolm$). \orb{} cannot be separated from any decision model
+(all $p_\text{Holm}\ge\btOpenVsPplxPHolm$). The ordering of the decision models is dataset-specific: on Banking77
+both \clef{} models were more accurate than \jev{} on identical bodies (\S\ref{sec:res-calibration}), and on Bitext
+\jev{} is more accurate than both. On calibration, against \orb, \clef{}
+and \flash{} have higher ECE (differences \btClefEceDiff{} and \btFlashEceDiff, CIs [\btClefEceDiffLo,
+\btClefEceDiffHi] and [\btFlashEceDiffLo, \btFlashEceDiffHi]) and higher Brier scores; \pplx{} has a lower Brier
+score (\btPplxBrierDiff, CI [\btPplxBrierDiffLo, \btPplxBrierDiffHi]); \jev's ECE is slightly higher on the full set
+(\btJevEceDiff, CI [\btJevEceDiffLo, \btJevEceDiffHi]) but not on the subset.
+
+\paragraph{What this dataset can show.} Bitext adds a second dataset on which the protocol separates the decision
+models from one another, but near the ceiling it cannot separate our baseline from them. It also carries exposure
+we cannot remove. The test split is ours, not the dataset's. \jev{} received these test texts, without labels, in
+our zero-shot run (\S\ref{sec:res-zeroshot}). The one-line label descriptions used as criteria in every decision-model
+body were written before this study and had already been evaluated zero-shot on this split; they were not revised.
+The selected \orb{} configuration uses label names and not these descriptions, and our reader's adapter was not
+trained on Bitext. \clef's and \pplx's training data
+do not document Bitext (Table~\ref{tab:exposure}). Finally, after the analysis script was committed, the operator
+saw the headline summaries of two arms before the joint analysis run; nothing was changed afterwards, and the run log
+records both events.
 
 \subsection{Beyond intent: thirteen code and workflow decision tasks}
 \label{sec:res-13task}

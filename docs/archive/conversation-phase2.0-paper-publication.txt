@@ -855,3 +855,11 @@ commits carry the personal address, checked 2026-10-12), but pre-rewrite commits
 (no forks, no PRs) → only GitHub Support can purge them; user action, request text drafted.
 
 ===
+
+[DECISION #35 | auto-decided]
+R16 Bitext complete: five arms + the single §9 run (research f41ce62, 3a1a2b8) copied into main with the R16 protocol
+and scripts; independent generator paper/scripts/numbers_bitext24.py reproduces analysis.json exactly. §6.2 written
+(Table 5: full set + A2 subset + floor row; ceiling audit; Holm results; calibration; exposure and early-sight
+disclosures); abstract, introduction, limitations and data paragraphs updated. Ledger B1; run log extended.
+
+===
