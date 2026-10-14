@@ -1,0 +1,1 @@
+{"base_tokens": 364.0, "tokens_per_utt": 10.226447413497773, "utts": {"1000": 62, "4000": 356, "8000": 747, "16000": 1529, "24000": 2311, "31500": 3045, "33000": 3191, "40000": 3876}, "network": "client on a GCP VM in asia-east1 (Taiwan), public internet"}
