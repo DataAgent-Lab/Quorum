@@ -38,7 +38,8 @@ WORKFLOWS = [("invoice_processing", "Invoice"), ("customer_service", "Customer")
 GATE = {"Items": 3080, "ClefMaxDp": 0.1045, "ClefAgree": 0.99773, "ClefItemsAbove": 1, "Threshold": 0.10,
         "FlashMaxDp": 0.039}                                          # §2a, amendment 1
 LIMITS = {"PplxRelease": 8192, "PplxServed": 8186, "ClefRelease": 16384, "AffectedItems": 1,
-          "AffectedTokens": 8189}                                     # amendments 4-6
+          "AffectedTokens": 8189,                                     # amendments 4-6
+          "ClefHosted": 65536, "FlashHosted": 24576}                  # vendor's hosted-service model pages, 2026-10-14
 
 
 def pct(x, d=1):

@@ -863,3 +863,13 @@ and scripts; independent generator paper/scripts/numbers_bitext24.py reproduces 
 disclosures); abstract, introduction, limitations and data paragraphs updated. Ledger B1; run log extended.
 
 ===
+
+[DECISION #36 | auto-decided]
+Clef context limit (research-session caveat, sources fetched 2026-10-14): the 16,384 tokens we scored is the release
+code's encode_record default (the SGLang recipe linked from the card uses the same), not the model's limit; the
+vendor's hosted service advertises 65,536 (Clef) and 24,576 (Clef-Flash). The paper never claimed 64k; §7.7 now calls
+16,384 the release default and states that results at the hosted windows are not measured and could differ (invoice
+processing in particular). Hosted limits added to numbers_decision13.py as transcribed constants; no existing value
+changed. Unverified and not claimed: training length; whether the hosted model is the same checkpoint.
+
+===

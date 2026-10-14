@@ -182,5 +182,7 @@
  "LimitPplxServed": 8186,
  "LimitClefRelease": 16384,
  "LimitAffectedItems": 1,
- "LimitAffectedTokens": 8189
+ "LimitAffectedTokens": 8189,
+ "LimitClefHosted": 65536,
+ "LimitFlashHosted": 24576
 }

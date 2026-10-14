@@ -88,7 +88,8 @@ alone under a pre-registered amendment.
 
 \paragraph{Over-length policies decide some rankings.} The models handle long inputs differently by design: \pplx{}
 refuses a question above its limit, while the \clef{} models truncate the input state to fit
-\dtLimitClefRelease{} tokens and refuse only when the questions alone do not fit. With refusals counted as wrong, as
+\dtLimitClefRelease{} tokens, the default of their release code (the serving recipe linked from the model card uses
+the same), and refuse only when the questions alone do not fit. With refusals counted as wrong, as
 pre-registered, the policy decides two results in Table~\ref{tab:d13}. On program equivalence, \pplx{} refuses
 \dtEquibenchPplxUnans{} of \dtEquibenchN{} items and ranks last (\dtEquibenchPplxAcc\% vs.\ \dtEquibenchClefAcc\% for
 \clef); on the \dtEquibenchLflN{} items that \pplx{} answers and neither \clef{} model truncates, it ranks first
@@ -96,7 +97,9 @@ pre-registered, the policy decides two results in Table~\ref{tab:d13}. On progra
 error of every model is a length refusal (\dtInvoicePplxErr{} of \dtInvoiceN{} decisions for \pplx{} and
 \dtInvoiceClefErr{} for each \clef{} model), so the \pplx{} advantage there measures which inputs fit, not which
 decisions are right; on the \dtInvoiceAllScoredN{} decisions all three models answered, \pplx{} still leads, but the
-sample is too small to test. Results under a ``refusal counts as wrong'' rule should be reported alongside the subset every
+sample is too small to test. The \clef{} limit is a default of the release code, not of the models: the vendor's
+hosted service advertises \dtLimitClefHosted{} tokens for \clef{} and \dtLimitFlashHosted{} for \flash. Results at
+those windows are not measured here and could differ, on invoice processing in particular. Results under a ``refusal counts as wrong'' rule should be reported alongside the subset every
 model answered.
 
 \paragraph{Engine records must come from the running server.} A launcher wrote a hard-coded memory setting into
