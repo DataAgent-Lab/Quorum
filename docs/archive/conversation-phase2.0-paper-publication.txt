@@ -873,3 +873,13 @@ processing in particular). Hosted limits added to numbers_decision13.py as trans
 changed. Unverified and not claimed: training length; whether the hosted model is the same checkpoint.
 
 ===
+
+[DECISION #37 | auto-decided]
+Pool-size curve complete (research 047d708 cells, 91a5dda single §7 run): 43/43 cells, protocol, scripts and results
+copied into main; verified (all bodies rebuilt with matching sha; pools, retrieval and every analysis value
+recomputed independently). §5.2 pending box replaced by Table 4 and two paragraphs: ranking unchanged at every pool
+size, gaps widen (open stack loses most); pool-fit sensitivity; the full-pool pplx–Clef-Flash difference is
+reported as borderline because b24B (different tie order only) did not separate them. Introduction findings 2–3 and
+the limitations updated; abstract unchanged (author may add one clause). Ledger P1, run log.
+
+===

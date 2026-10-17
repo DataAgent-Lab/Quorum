@@ -44,11 +44,15 @@ open decision models (\S\ref{sec:res-13task}).
   published API result ($p=\fsCleanVsJevP$), but at equal retrieval the two tie ($p=\fsCleanVsJevBP$), and under the
   reproduction's rule our baseline also ties it ($p=\fsParBestVsJevP$). A post hoc factorial analysis attributes the
   gain mainly to the absence of a per-class cap in retrieval. The three open decision models gain little or nothing
-  from the same change; none of their changes is significant (\S\ref{sec:res-retrieval}).
+  from the same change; none of their changes is significant. Shrinking the pool the examples are retrieved from,
+  down to 8 per class, lowers every system tested, \orb{} most, but does not change their ranking
+  (\S\ref{sec:res-retrieval}).
   \item \textbf{Accuracy and calibration rank models differently.} On identical evidence the most accurate model
   (\flash, \fsFlashAcc\%) has the highest calibration error (ECE \fsFlashEce), while a 27B open model (\pplx)
-  matches the best ECE and has the lowest Brier score. Both calibration patterns hold under either retrieval rule,
-  although on our retrieval the three open models' accuracies cannot be separated (\S\ref{sec:res-calibration}).
+  matches the best ECE and has the lowest Brier score. Both calibration patterns hold under either retrieval rule
+  and at every pool size. On our retrieval the open decision models' accuracies are close: post hoc tests do not
+  separate them, and a pre-registered re-run whose bodies differ only in the BM25 tie-break separates \flash{} from
+  \pplx{} narrowly ($p_\text{Holm}=\psFullPplxVsFlashPHolm$; \S\ref{sec:res-calibration}, \S\ref{sec:res-retrieval}).
   \item \textbf{Metric and reproducibility pitfalls change conclusions.} Rounding of returned probabilities to
   two decimals makes log loss unusable against one API (\S\ref{sec:find-rounding}); platform-dependent tie-breaking
   in BM25 changes the retrieved examples for \fsStableSetDiff{} of \fsN{} test items yet only \fsStableChanged{}

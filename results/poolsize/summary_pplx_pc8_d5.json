@@ -1,0 +1,46 @@
+{
+ "protocol": "provenance/banking77_pool_size_protocol.md",
+ "pool": "pc8_d5",
+ "pool_rows": 616,
+ "manifest_sha256": "237f13d102fad67a980d4cf37bdbffcad3e40a02d364718445b1cc8cbba0b0b8",
+ "model": "perplexity-ai/pplx-decider-v1.1-27b",
+ "revision": "3b45dead91dfa6d95aad6b95764a606fab2bf7a6",
+ "engine": {
+  "name": "SGLang (patched, noncausal) serving configuration of R16 amendment A3 (provenance/bitext_24shot_protocol.md)",
+  "image_base": "lmsysorg/sglang@sha256:868b0bd8eaf9b0b52c796a14a0ed55c04d6d2160eddaeb45d42c39a345a8b77f",
+  "patch": "sglang-pplx-v11-noncausal.patch",
+  "patch_sha256": "fa7f6afc0363bc370e4d7c9c2c055e29b82146d3004013a02a8fa29707a04167",
+  "flags": "--attention-backend triton --chunked-prefill-size -1 --disable-radix-cache --disable-prefill-cuda-graph --context-length 16391 --max-running-requests 16 --max-queued-requests 256 --mem-fraction-static 0.55",
+  "device": "one NVIDIA GB300",
+  "parity_gate": {
+   "set": "b24 banking77 (3,080) vs release-code dump",
+   "c1": "PASS agree 0.9994 max|dp| 0.060",
+   "c16": "PASS agree 0.9994 max|dp| 0.060",
+   "vs_A7_engine_c1": "agreement 1.0, dp 0"
+  },
+  "concurrency": 2
+ },
+ "custom_code_sha256": null,
+ "code_sha256": {
+  "scripts/poolsize_arms.py": "5d63cea69e794879bbea32e17c9a3e26f55456c19e1a4af1ceda8e23ecf1fecb",
+  "scripts/poolsize_bodies.py": "11783f185ad625d6e933fb78d15d61093eaebaa512ece667785991fbd3e6157c",
+  "scripts/r14_clef.py": "024630ecbbb1f2183c15183f44624c74b7803a9d854fd11586f1598b33ff0752"
+ },
+ "label_order": "dataset label ids",
+ "results": {
+  "accuracy": 0.9019,
+  "correct": 2778,
+  "macro_f1": 0.9011,
+  "log_loss": 0.3853,
+  "brier": 0.154,
+  "ece": 0.0291,
+  "unanswered": 0,
+  "truncated_at_16384": null,
+  "prompt_tokens": {
+   "median": 2462,
+   "max": 3033
+  },
+  "seconds": 917.8
+ },
+ "written_at": "2026-10-13T14:37:03Z"
+}

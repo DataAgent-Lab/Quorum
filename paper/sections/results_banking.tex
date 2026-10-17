@@ -74,9 +74,53 @@ $p_\text{Holm}=\fsBiEffNocapPHolm$); the pool has no effect (b/c $\fsPoolEffB/\f
 retriever returns fewer distinct classes per query (\fsCleanClasses{} vs.\ \fsCapUniClasses), i.e.\ more
 neighbours from the most likely class. Because this analysis is post hoc and covers one dataset, we report it as a
 mechanism to test, not as a general rule.
-\pending{Pre-registered pool-size curve (approved; runs after the Bitext block): full pool and five random draws
-each at 24 and 8 examples per class, for \orb, \pplx{} and \flash{} on identical recorded retrieval. An exploratory
-single-model version exists and is not used as evidence.}
+\begin{table}[t]
+\centering\small
+\caption{Banking77, 24 shots retrieved from pools of decreasing size (pre-registered). Within a pool every system
+received byte-identical request bodies. Small pools: mean accuracy over \psDraws{} random draws, with the range in
+brackets and the mean drop from the full pool. The pool-fit row re-fits \orb's parameters on the pool itself
+(descriptive; no test). $^\ddagger$scored by a parity-gated serving engine.}
+\label{tab:poolsize}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+ & \multicolumn{1}{c}{full pool} & \multicolumn{3}{c}{per class, mean over draws} \\
+\cmidrule(lr){2-2}\cmidrule(l){3-5}
+System & \psPoolFull{} rows & 24 (\psPoolTwentyFour{} rows) & 8 (\psPoolEight{} rows) & drop at 8 \\
+\midrule
+\flash & \psFlashFullAcc & \psFlashTwentyFourAcc{} [\psFlashTwentyFourAccMin, \psFlashTwentyFourAccMax] & \psFlashEightAcc{} [\psFlashEightAccMin, \psFlashEightAccMax] & \psFlashEightDrop \\
+\pplx$^\ddagger$ & \psPplxFullAcc & \psPplxTwentyFourAcc{} [\psPplxTwentyFourAccMin, \psPplxTwentyFourAccMax] & \psPplxEightAcc{} [\psPplxEightAccMin, \psPplxEightAccMax] & \psPplxEightDrop \\
+\orb & \psOpenFullAcc & \psOpenTwentyFourAcc{} [\psOpenTwentyFourAccMin, \psOpenTwentyFourAccMax] & \psOpenEightAcc{} [\psOpenEightAccMin, \psOpenEightAccMax] & \psOpenEightDrop \\
+\orb, pool-fit & -- & \psFitTwentyFourAcc & \psFitEightAcc & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Smaller pools lower every system but do not change the ranking (pre-registered).} A developer often has
+far fewer labelled examples than our pool of \psPoolFull. We therefore repeated the equal-evidence comparison for
+\orb, \pplx{} and \flash{} with the 24 examples retrieved from smaller pools: \psDraws{} random draws of 24 examples
+per class (\psPoolTwentyFour{} rows, because one class has fewer than 24) and, nested in each draw, 8 per class
+(\psPoolEight{} rows). Retrieval was computed once per pool and recorded, and each system received the same bodies
+(Table~\ref{tab:poolsize}). The order \flash{} > \pplx{} > \orb{} held in every draw at both sizes, and every pair
+differed significantly in every pool (Holm within each pool size: all $p_\text{Holm}\le\psTwentyFourMaxPHolm$ at 24
+and $\le\psEightMaxPHolm$ at 8 per class). The gaps widen as the pool shrinks: from the full pool to 8 per class,
+\orb{} loses \psOpenEightDrop{} points on average, \pplx{} \psPplxEightDrop{} and \flash{} only \psFlashEightDrop.
+The calibration pattern of \S\ref{sec:res-calibration} holds at every size: \flash's ECE ranges from
+\psFlashEceMinAll{} to \psFlashEceMaxAll, against at most \psPplxEceMaxAll{} for \pplx{} and \psOpenEceMaxAll{} for
+\orb.
+
+Two qualifications apply. First, \orb's parameters, and the choice of its configuration, were fitted on a separate
+selection split of \fsSelN{} rows with retrieval from the full pool, which a developer holding only 24 or 8 examples per
+class would not have; the decision models use no fitting data. This favours \orb{} on the small pools. Re-fitting
+its parameters on the pool itself changes its accuracy by $\psFitTwentyFourDiff$ points on average at 24 per class
+(range $\psFitTwentyFourDiffMin$ to $\psFitTwentyFourDiffMax$) and by $\psFitEightDiff$ at 8 (range
+$\psFitEightDiffMin$ to $\psFitEightDiffMax$), and changes no ranking; the configuration choice itself remains a
+confound. Second, the full-pool comparison of \pplx{} and \flash{} is borderline. On the full pool \flash{} leads
+(b/c $\psFullPplxVsFlashB/\psFullPplxVsFlashC$, $p_\text{Holm}=\psFullPplxVsFlashPHolm$), whereas on the bodies
+of \S\ref{sec:res-calibration}, which differ only in how BM25 breaks score ties, the same pair was not separable
+($p=\fsPplxBVsFlashBP$). The full-pool cells agree with those earlier cells on \psPplxFullAgree\% (\pplx) and
+\psFlashFullAgree\% (\flash) of predictions. The draws are not independent of the full pool and cover one dataset, so
+we run no test across draws. One cell's accuracy was seen in a run log before the analysis ran; the analysis code had
+been committed before any cell was run.
 
 \paragraph{What in \orb{} matters (post hoc).} Most of \orb's accuracy comes from retrieval and the nearest-neighbour
 vote: the vote alone reaches \fsKnnAloneAcc\%, itself a tie with the published \jev{} result
