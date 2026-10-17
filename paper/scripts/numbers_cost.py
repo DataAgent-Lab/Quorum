@@ -12,12 +12,12 @@ Inputs
 Every median, p95, minimum and maximum is recomputed from the per-item timings and asserted equal to the recorded
 summary within 0.15 ms (the per-item times are stored rounded to 0.1 ms; the summary used unrounded times); the
 reported values are the recorded ones; throughput is recomputed from items and seconds; the code hashes recorded in the file are checked against
-this repository's files; the argmax sanity checks are carried through.
+this repository's files (current or any committed version); the argmax sanity checks are carried through.
 
     python paper/scripts/numbers_cost.py
 """
 from __future__ import annotations
-import gzip, hashlib, json, sys
+import gzip, hashlib, json, subprocess, sys
 from pathlib import Path
 import numpy as np
 
@@ -27,6 +27,16 @@ from numbers_24shot import thousands  # noqa: E402
 
 GEN = ROOT / "paper" / "generated"
 SYS = {"Open": "open", "Flash": "clef_flash", "Clef": "clef", "Pplx": "pplx"}
+
+
+def versions(f):
+    """sha256 of the file now and of every committed version (a later docstring edit must not fail the check)."""
+    hs = {hashlib.sha256((ROOT / f).read_bytes()).hexdigest()}
+    revs = subprocess.run(["git", "log", "--format=%H", "--", f], cwd=ROOT, capture_output=True, text=True).stdout.split()
+    for rev in revs:
+        blob = subprocess.run(["git", "show", f"{rev}:{f}"], cwd=ROOT, capture_output=True).stdout
+        hs.add(hashlib.sha256(blob).hexdigest())
+    return hs
 
 
 def stats(ms):
@@ -50,8 +60,8 @@ def main():
         r = d["systems"][s]
         ctx = ctx or r["context"]; assert r["context"] == ctx, m
         assert int(r["idle_check"]["gpu_util_pct_before_load"]) == 0, m
-        for f, h in r["code_sha256"].items():
-            assert hashlib.sha256((ROOT / f).read_bytes()).hexdigest() == h, (m, f)
+        for f, h in r["code_sha256"].items():                 # needs the repository's history (not in the supplement)
+            assert not (ROOT / ".git").exists() or h in versions(f), (m, f)
         b1 = r["batch1"]
         if m == "Open":
             rd, kn = b1["reader"], b1["knn"]

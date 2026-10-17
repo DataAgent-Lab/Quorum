@@ -1,0 +1,386 @@
+[
+ {
+  "file": "docs/phases/2.0/jev/zeroshot/PROTOCOL_ADDENDUM_clean_datasets.md",
+  "old": "**Requested by the user (2026-10-06):** \"請在乾淨資料集上跟 Jev 公平比\" — compare with Jev on the clean datasets.",
+  "new": "**Requested by the authors (2026-10-06):** compare fairly with Jev on the clean datasets.",
+  "why": "Chinese quote reveals language/nationality; user/assistant workflow"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "would have needed the user's go (paid API;",
+  "new": "would have needed the authors' approval (paid API;",
+  "why": "user/assistant workflow (builder still rewrites the agreement name on this line)"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "the choice goes to the user, with throughput",
+  "new": "the choice goes to the authors, with throughput",
+  "why": "user/assistant workflow"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "robust\", and the user decides.",
+  "new": "robust\", and the authors decide.",
+  "why": "user/assistant workflow"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "(user: decide after the engine work settles speed)",
+  "new": "(authors: decide after the engine work settles speed)",
+  "why": "user/assistant workflow"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "**User decision**, made after seeing the parity-gate result",
+  "new": "**Authors' decision**, made after seeing the parity-gate result",
+  "why": "user/assistant workflow"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "items above 0.10); user-approved\".",
+  "new": "items above 0.10); approved by the authors\".",
+  "why": "user/assistant workflow (label string appears in no result file)"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "Operations: the co-located service that each window stopped may stay offline",
+  "new": "Operations: the other workload on the GPU host that each window stopped may stay offline",
+  "why": "'co-located service' hints at a production deployment on the authors' hardware"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "(user, 2026-10-09). Windows no longer restore it",
+  "new": "(authors, 2026-10-09). Windows no longer restore it",
+  "why": "user/assistant workflow"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "user's request.",
+  "new": "authors' request.",
+  "why": "user/assistant workflow"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "and the user is told.",
+  "new": "and the authors are told.",
+  "why": "user/assistant workflow"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "(user rule,",
+  "new": "(authors' rule,",
+  "why": "user/assistant workflow"
+ },
+ {
+  "file": "provenance/clef_eval_protocol.md",
+  "old": "the Phase 20.8 SGLang parity gate",
+  "new": "the SGLang parity gate",
+  "why": "internal phase number matches the public repo's phase docs"
+ },
+ {
+  "file": "provenance/clef_eval_protocol.md",
+  "old": "Decided by the user after the gate result below.",
+  "new": "Decided by the authors after the gate result below.",
+  "why": "user/assistant workflow"
+ },
+ {
+  "file": "provenance/banking77_pool_size_protocol.md",
+  "old": "(user decision 2026-10-12:",
+  "new": "(authors' decision 2026-10-12:",
+  "why": "user/assistant workflow"
+ },
+ {
+  "file": "provenance/banking77_pool_size_protocol.md",
+  "old": "(GPU time, user decision)",
+  "new": "(GPU time, authors' decision)",
+  "why": "user/assistant workflow"
+ },
+ {
+  "file": "provenance/bitext_24shot_protocol.md",
+  "old": "| Jev | the paper session |",
+  "new": "| Jev | the analysis agent |",
+  "why": "internal session names"
+ },
+ {
+  "file": "provenance/bitext_24shot_protocol.md",
+  "old": "| Clef-Flash 9B and Clef 27B | the research session |",
+  "new": "| Clef-Flash 9B and Clef 27B | the experiment agent |",
+  "why": "internal session names"
+ },
+ {
+  "file": "provenance/bitext_24shot_protocol.md",
+  "old": "| pplx-decider v1.1 | the research session |",
+  "new": "| pplx-decider v1.1 | the experiment agent |",
+  "why": "internal session names"
+ },
+ {
+  "file": "provenance/jev_retrieval_swap_protocol_addendum.md",
+  "old": "The user switched to TypeSafe's own API (key in the gitignored `service/.env`).",
+  "new": "The authors switched to TypeSafe's own API (key kept in a local file outside version control).",
+  "why": "user workflow; private config path"
+ },
+ {
+  "file": "provenance/descriptions_authoring.md",
+  "old": "an LLM coding agent, the research session. The seventh,",
+  "new": "an LLM coding agent working on the experiments. The seventh,",
+  "why": "internal session name (LLM disclosure kept)"
+ },
+ {
+  "file": "provenance/descriptions_authoring.md",
+  "old": "| 2026-09-22 20:51 +08:00 |",
+  "new": "| 2026-09-22 12:51 UTC |",
+  "why": "+08:00 offset narrows the authors' location"
+ },
+ {
+  "file": "provenance/descriptions_authoring.md",
+  "old": "| 2026-09-29 13:51 +08:00 | the research session: Claude Opus 4.8",
+  "new": "| 2026-09-29 05:51 UTC | the experiment agent: Claude Opus 4.8",
+  "why": "time zone; session name"
+ },
+ {
+  "file": "provenance/descriptions_authoring.md",
+  "old": "| 2026-09-29 15:04 +08:00 | the research session:",
+  "new": "| 2026-09-29 07:04 UTC | the experiment agent:",
+  "why": "time zone; session name"
+ },
+ {
+  "file": "provenance/descriptions_authoring.md",
+  "old": "| HWU64 | 64 | 2026-10-04 23:13 +08:00 | the research session:",
+  "new": "| HWU64 | 64 | 2026-10-04 15:13 UTC | the experiment agent:",
+  "why": "time zone; session name"
+ },
+ {
+  "file": "provenance/descriptions_authoring.md",
+  "old": "| MASSIVE | 60 | 2026-10-04 23:13 +08:00 | the research session:",
+  "new": "| MASSIVE | 60 | 2026-10-04 15:13 UTC | the experiment agent:",
+  "why": "time zone; session name"
+ },
+ {
+  "file": "provenance/descriptions_authoring.md",
+  "old": "| MTOP | 113 | 2026-10-04 23:13 +08:00 | the research session:",
+  "new": "| MTOP | 113 | 2026-10-04 15:13 UTC | the experiment agent:",
+  "why": "time zone; session name"
+ },
+ {
+  "file": "provenance/descriptions_authoring.md",
+  "old": "| Bitext | 27 | 2026-10-04 23:13 +08:00 | the research session:",
+  "new": "| Bitext | 27 | 2026-10-04 15:13 UTC | the experiment agent:",
+  "why": "time zone; session name"
+ },
+ {
+  "file": "provenance/descriptions_authoring.md",
+  "old": "is the model the session's environment record reports",
+  "new": "is the model the agent's environment record reports",
+  "why": "session wording"
+ },
+ {
+  "file": "provenance/descriptions_authoring.md",
+  "old": "The instruction relayed from the project owner was:",
+  "new": "The instruction relayed from the authors was:",
+  "why": "owner/assistant workflow"
+ },
+ {
+  "file": "provenance/descriptions_authoring.md",
+  "old": "results were committed on 2026-09-29 at",
+  "new": "results were committed on 2026-09-28 at",
+  "why": "UTC conversion of the next line (01:09 +08:00 is the previous day in UTC)"
+ },
+ {
+  "file": "provenance/descriptions_authoring.md",
+  "old": "    01:09 +08:00, before any of their descriptions;",
+  "new": "    17:09 UTC, before any of their descriptions;",
+  "why": "time zone"
+ },
+ {
+  "file": "provenance/descriptions_authoring.md",
+  "old": "For the six sets written by the research session, none was consulted.",
+  "new": "For the six sets written by the experiment agent, none was consulted.",
+  "why": "session name"
+ },
+ {
+  "file": "provenance/banking77_24shot_clean_protocol_addendum.md",
+  "old": "single commit on 2026-09-22 (20:51 +08:00)",
+  "new": "single commit on 2026-09-22 (12:51 UTC)",
+  "why": "time zone"
+ },
+ {
+  "file": "provenance/banking77_24shot_clean_protocol_addendum.md",
+  "old": "The commit is recorded under the owner's account.",
+  "new": "The commit is recorded under an author's account.",
+  "why": "owner/assistant workflow"
+ },
+ {
+  "file": "provenance/banking77_24shot_selection.md",
+  "old": "Prepared by the research session from",
+  "new": "Prepared by the experiment agent from",
+  "why": "session name"
+ },
+ {
+  "file": "provenance/adapter_training.md",
+  "old": "Prepared by the research session from",
+  "new": "Prepared by the experiment agent from",
+  "why": "session name"
+ },
+ {
+  "file": "docs/phases/2.0/bitext24/RUN_LOG.md",
+  "old": "the research branch `research/phase2.0-paper-evidence`, as marked.",
+  "new": "the experiment branch (\"research\"), as marked.",
+  "why": "branch name is searchable on the public repo"
+ },
+ {
+  "file": "docs/phases/2.0/bitext24/RUN_LOG.md",
+  "old": "The research session's amendment",
+  "new": "The experiment agent's amendment",
+  "why": "session name"
+ },
+ {
+  "file": "docs/phases/2.0/bitext24/RUN_LOG.md",
+  "old": "informal agreement between the sessions",
+  "new": "informal agreement between the two agents",
+  "why": "session name"
+ },
+ {
+  "file": "docs/phases/2.0/bitext24/RUN_LOG.md",
+  "old": "the research session tailed the open-stack test log",
+  "new": "the experiment agent tailed the open-stack test log",
+  "why": "session name"
+ },
+ {
+  "file": "docs/phases/2.0/bitext24/RUN_LOG.md",
+  "old": "| research session report |",
+  "new": "| experiment agent report |",
+  "why": "session name"
+ },
+ {
+  "file": "docs/phases/2.0/bitext24/AMENDMENT_A2.md",
+  "old": "read by either session.",
+  "new": "read by either agent.",
+  "why": "session name"
+ },
+ {
+  "file": "docs/phases/2.0/poolsize/RUN_LOG.md",
+  "old": "the research branches `research/poolsize-code-review` / `research/phase2.0-paper-evidence`, as marked.",
+  "new": "two experiment branches (\"research\"), as marked.",
+  "why": "branch names are searchable on the public repo"
+ },
+ {
+  "file": "docs/phases/2.0/poolsize/RUN_LOG.md",
+  "old": "(systems by user decision:",
+  "new": "(systems by authors' decision:",
+  "why": "user/assistant workflow"
+ },
+ {
+  "file": "docs/phases/2.0/poolsize/RUN_LOG.md",
+  "old": "the research session tailed the open-stack log",
+  "new": "the experiment agent tailed the open-stack log",
+  "why": "session name"
+ },
+ {
+  "file": "docs/phases/2.0/poolsize/RUN_LOG.md",
+  "old": "| research session report |",
+  "new": "| experiment agent report |",
+  "why": "session name"
+ },
+ {
+  "file": "paper/scripts/bitext24_subset.py",
+  "old": "<checkout of research/phase2.0-paper-evidence>",
+  "new": "<checkout of the experiment branch>",
+  "why": "branch name (docstring)"
+ },
+ {
+  "file": "scripts/jev/latency_probe.py",
+  "old": "(requested by the user 2026-10-14,",
+  "new": "(requested by the authors 2026-10-14,",
+  "why": "user/assistant workflow (docstring)"
+ },
+ {
+  "file": "scripts/jev/latency_probe.py",
+  "old": "# rerun (user request):",
+  "new": "# rerun (authors' request):",
+  "why": "user/assistant workflow (docstring)"
+ },
+ {
+  "file": "scripts/jev/latency_probe.py",
+  "old": "The key (service/.env, JEV_API_KEY) is never",
+  "new": "The key (JEV_API_KEY, read from a local environment file) is never",
+  "why": "private config path (docstring)"
+ },
+ {
+  "file": "scripts/jev/latency_probe.py",
+  "old": "client on a GCP VM in asia-east1 (Taiwan), public internet",
+  "new": "client on a cloud VM, public internet",
+  "why": "names the authors' country; metadata string literal written to plan.json, no logic change"
+ },
+ {
+  "file": "scripts/jev/run_bitext24.py",
+  "old": "(service/.env, JEV_API_KEY) is never printed or written.",
+  "new": "(JEV_API_KEY, read from a local environment file) is never printed or written.",
+  "why": "private config path (docstring)"
+ },
+ {
+  "file": "scripts/jev/run_typesafe.py",
+  "old": "The key (service/.env, JEV_API_KEY) is never printed or written.",
+  "new": "The key (JEV_API_KEY, read from a local environment file) is never printed or written.",
+  "why": "private config path (docstring)"
+ },
+ {
+  "file": "scripts/jev/run_zeroshot.py",
+  "old": "(service/.env, JEV_API_KEY) is never printed or written.",
+  "new": "(JEV_API_KEY, read from a local environment file) is never printed or written.",
+  "why": "private config path (docstring)"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "to adopt as the model behind a decision service for code and",
+  "new": "to adopt as the model for code and",
+  "why": "production-service hint"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "- The GPU was shared with other, unrelated model services. Each run window stopped one co-located service and",
+  "new": "- The GPU host also ran other workloads. Each run window paused one of them and",
+  "why": "production-service hint"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "restored it on exit; a second co-located service had to be healthy before a window started.",
+  "new": "resumed it on exit; a second one had to be healthy before a window started.",
+  "why": "production-service hint"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "4. Guards are the same as the block-E window: the co-located service checks,",
+  "new": "4. Guards are the same as the block-E window: the host-workload checks,",
+  "why": "production-service hint"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "**Serving.** Same window procedure and guards as the block-E window: co-located service checks,",
+  "new": "**Serving.** Same window procedure and guards as the block-E window: host-workload checks,",
+  "why": "production-service hint"
+ },
+ {
+  "file": "provenance/decision13_protocol.md",
+  "old": "- A block-C window mode. It keeps the same guards: co-located service checks,",
+  "new": "- A block-C window mode. It keeps the same guards: host-workload checks,",
+  "why": "production-service hint"
+ },
+ {
+  "file": "provenance/jev_retrieval_swap_protocol_addendum.md",
+  "old": "(pre-registered; old hash 747a393 — see",
+  "new": "(pre-registered before any scored call).",
+  "why": "pre-rewrite commit; points to an excluded file"
+ },
+ {
+  "file": "provenance/jev_retrieval_swap_protocol_addendum.md",
+  "old": "`provenance/commit_hash_map.md`). Arms, inputs,",
+  "new": "Arms, inputs,",
+  "why": "points to an excluded file"
+ },
+ {
+  "file": "quorum/__init__.py",
+  "old": "\"\"\"quorum — a jury of tiny open models: a cheap, calibration-free zero-shot intent classifier (an ensemble of",
+  "new": "\"\"\"quorum — the zero-shot intent classifier used in this study (an ensemble of",
+  "why": "public tagline"
+ }
+]

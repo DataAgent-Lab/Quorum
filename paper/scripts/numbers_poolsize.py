@@ -175,8 +175,12 @@ def main():
     for m, s in SYS.items():
         for p in POOLS:
             C[(m, p)] = cell(f"results/poolsize/predictions/{s}_{p}.jsonl.gz")
-    for p in POOLS[1:]:
+    # the pool-fit cells are left out of the anonymous supplement (size); without them §7.5 is skipped
+    fit = all((ROOT / f"results/poolsize/predictions/open_poolfit_{p}.jsonl.gz").exists() for p in POOLS[1:])
+    for p in POOLS[1:] if fit else []:
         C[("Fit", p)] = cell(f"results/poolsize/predictions/open_poolfit_{p}.jsonl.gz")
+    if not fit:
+        print("pool-fit cells not present: §7.5 (Fit macros) skipped")
     y = C[("Open", "full")]["y"]
     assert all((c_["y"] == y).all() for c_ in C.values())
     for (m, p), c_ in C.items():
@@ -265,7 +269,7 @@ def main():
         put(f"{m}EceMinAll", min(eces), num(min(eces), 3)); put(f"{m}EceMaxAll", max(eces), num(max(eces), 3))
 
     # --- pool-fit (§7.5)
-    for f in ("pc24", "pc8"):
+    for f in ("pc24", "pc8") if fit else ():
         ps = [p for p in POOLS if p.startswith(f + "_")]; d = []
         for p in ps:
             a, u = C[("Fit", p)], C[("Open", p)]; ref = an["pool_fit"][p]

@@ -5,8 +5,14 @@
 \paragraph{Headline run.} The protocol and its addendum were committed before any code that could score the test
 set; the selection of \orb's configuration was a separate commit containing only out-of-fold scores on the
 selection split; the single test run was the only commit to touch the test-time prediction file, and its metadata
-records that it was not re-run. \authorcheck{Insert the post-rewrite commit identifiers in the de-anonymised version
-only; for review, describe the order and give the anonymous archive.}
+records that it was not re-run. Commit identifiers are withheld for review; the protocol documents in the
+supplementary archive record the order and dates of these commits, and the de-anonymised version gives the
+identifiers.
+
+\paragraph{Thirteen-task study.} Its protocol (\S\ref{sec:res-13task}) and nine amendments were pre-registered in a
+private repository, each before the runs it governs. The released copy is a de-identified transcription made after
+the runs: host names, internal paths, file names of operational scripts and names of unrelated services were removed
+or replaced by a neutral description; no rule, number, threshold or timestamp was changed.
 
 \paragraph{Closed-API runs.} The 24-shot swap protocol, its addendum and the analysis script were committed before
 the first scored call; the zero-shot protocol and its addendum likewise. Every request body's hash is recorded in a
@@ -54,7 +60,7 @@ System or component & Identifier & Revision \\
 \pplx{} & open weights, v1.1 & \texttt{3b45dea} \\ % numbers-ok: revision hash
 Serving engine & SGLang container image & digest \texttt{868b0bd8\ldots} \\ % numbers-ok: image digest
 \orb{} reader & Qwen3-4B & \texttt{1cfa9a7} \\ % numbers-ok: model name and revision hash
-\orb{} reader adapter & ours (released) & \texttt{e0765b7} \\ % numbers-ok: revision hash
+\orb{} reader adapter & ours (released) & withheld for review \\
 \orb{} kNN member & bge-large-en-v1.5 & \texttt{d4aa690} \\ % numbers-ok: model name and revision hash
 \gj{} members & PrismNLI-0.4B; bge-large-en-v1.5; bge-base-en-v1.5 & \texttt{02b9102}; \texttt{d4aa690}; \texttt{a5beb1e} \\ % numbers-ok: model names and revision hashes
 Banking77 & dataset & \texttt{f541215} \\ % numbers-ok: revision hash

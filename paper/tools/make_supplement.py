@@ -11,8 +11,10 @@ definitions are never stored), the closed API's spend ledgers, and run logs that
 
 Anonymisation is a text substitution applied to every text file and to the contents of every gzip file: the
 system's public name and package name become "R24", the adapter's Hub identifier becomes an anonymous placeholder,
-git commit identifiers stored under git/commit keys are blanked,
-and three phrases that hint at the authors' setting are neutralised. Recorded sha256 values of code files therefore
+git commit identifiers are blanked (under git/commit keys, and any
+identifier of a commit of this repository, before or after its history rewrite, written in prose),
+and the wording listed in supplement_edits.json (an outside reader's review: roles, sessions, time zones,
+branches, private paths) is replaced. Recorded sha256 values of code files therefore
 refer to the original files, which the de-anonymised release provides. Every file is then scanned for the local
 anonymity terms (paper/tools/anonymity_terms.local), the public name, the account names and links that identify
 the authors; any hit stops the build.
@@ -30,7 +32,8 @@ PY = str(ROOT / ".venv" / "bin" / "python")
 GENERATORS = [("paper/scripts/numbers_bitext24.py", []), ("paper/scripts/numbers_decision13.py", []),
               ("paper/scripts/numbers_poolsize.py", []), ("paper/scripts/zero_shot_tables.py", []),
               ("paper/scripts/numbers_zeroshot_compare.py", []), ("paper/scripts/jev_zeroshot_analysis.py", []),
-              ("paper/scripts/calibration_confirm.py", []), ("paper/scripts/calibration_confirm.py", ["--tag", "clean_c"])]
+              ("paper/scripts/calibration_confirm.py", []), ("paper/scripts/calibration_confirm.py", ["--tag", "clean_c"]),
+              ("paper/scripts/numbers_cost.py", [])]
 NEEDS_REPRO = ["paper/scripts/numbers_24shot.py", "paper/scripts/jev_swap_analysis.py"]   # --repro-csv
 STATIC = ["provenance/*.md", "paper/scripts/*.py", "paper/tools/checks.py", "scripts/*.py", "scripts/decision13/**/*",
           "scripts/jev/*.py", "quorum/*.py", "examples/*_descriptions.py", "results/**/manifest*.json*",
@@ -39,8 +42,8 @@ STATIC = ["provenance/*.md", "paper/scripts/*.py", "paper/tools/checks.py", "scr
           "docs/phases/2.0/jev/train_pinned.json", "docs/phases/2.0/jev/*/PROTOCOL*.md",
           "docs/phases/2.0/bitext24/*.md", "docs/phases/2.0/bitext24/subset_a2.json", "docs/phases/2.0/poolsize/*.md",
           "LICENSE", "requirements*.txt", "paper/generated/*"]
-EXCLUDE = re.compile(r"(ledger|smoke_ledger|\.env|node_modules|__pycache__|\.pyc$|latency/|predictions\.csv|"
-                     r"repro_|/cache/|commit_hash_map|paper/tools/checks\.py|pyproject\.toml|_mnli_snli\.)", re.I)
+EXCLUDE = re.compile(r"(ledger|smoke_ledger|\.env|node_modules|__pycache__|\.pyc$|latency/(?!calls_distinct\.jsonl\.gz)|predictions\.csv|"
+                     r"repro_|/cache/|commit_hash_map|paper/tools/checks\.py|pyproject\.toml|results/.*_mnli_snli\.|results/.*_r15_pplx_decider_zs_sgl\.|results/.*open_poolfit_)", re.I)
 REPL = [(re.compile(r"DataAgent[\w-]*/[\w.-]+", re.I), "anonymous/reader-adapter"),
         (re.compile(r"Copyright \(c\) (\d{4}) .+"), r"Copyright (c) \1 Anonymous authors"),
         (re.compile(r"github\.com/A-baoYang/Quorum", re.I), "anonymous.repository"),
@@ -51,13 +54,18 @@ REPL = [(re.compile(r"DataAgent[\w-]*/[\w.-]+", re.I), "anonymous/reader-adapter
         # wording that hints at the authors' setting (the datasets are not firmware) or their agreement with the vendor
         (re.compile(r"code and firmware dev/test decisions"), "code decisions"),
         (re.compile(r"code/firmware decision sets"), "code decision sets"),
-        (re.compile(r"TypeSafe MCA"), "the provider's terms")]
+        (re.compile(r"TypeSafe MCA"), "the provider's terms"),
+        # the released adapter's Hub revision and weights hash lead to its (named) repository; withheld for review
+        (re.compile(r"e0765b76?[0-9a-f]*…?"), "[revision]"), (re.compile(r"6ef3f783[0-9a-f]*…?"), "[sha256]")]
 STRIP = {"member_probs", "reader_probs", "knn_probs", "perm_reader_probs",   # per-member vectors; no generator reads them
          "text"}                                                               # item text: no generator reads it
 # (file pattern, scan pattern) pairs that are dataset content, not identifying text
 ALLOW = [(re.compile(r"results/predictions/massive_"), r"\bDell\b")]   # MASSIVE utterances mention the brand
 SCAN_EXTRA = [r"quorum", r"dataagent", r"a-?bao-?yang", r"/home/", r"/root/", r"\bsession_01", r"firmware",
-              r"\bMCA\b"]   # personal terms: the local list
+              r"\bMCA\b", r"\+08:00", r"taiwan", r"asia-east", r"research session", r"service/\.env",
+              r"research/[\w.-]+", r"[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]"]   # last: CJK text
+EDITS = ROOT / "paper" / "tools" / "supplement_edits.json"   # per-file exact rewordings (an outside reader's review)
+HEX = re.compile(r"(?<![0-9a-fA-F])[0-9a-f]{7,40}(?![0-9a-fA-F])")   # personal terms: the local list
 
 
 def scan_patterns():
@@ -97,9 +105,26 @@ def trace():
     print(f"traced {len(files)} repo files -> {TRACE.relative_to(ROOT)}")
 
 
+def commit_prefixes():
+    """Every commit identifier that resolves on the public repository: all local commits and the pre-rewrite ones."""
+    full = set(subprocess.run(["git", "rev-list", "--all"], cwd=ROOT, capture_output=True, text=True).stdout.split())
+    full |= set(re.findall(r"`([0-9a-f]{40})`", (ROOT / "provenance" / "commit_hash_map.md").read_text()))
+    return {h[:n] for h in full for n in range(7, 41)}
+
+
+COMMITS: set = set()
+
+
 def anonymise(text: str) -> str:
     for pat, rep in REPL:
         text = pat.sub(rep, text)
+    return HEX.sub(lambda m: "[commit]" if m.group(0) in COMMITS else m.group(0), text)
+
+
+def reword(f: str, text: str, edits: dict) -> str:
+    for e in edits.get(f, []):
+        assert text.count(e["old"]) == 1, (f, e["old"])        # stale edit list: fail loudly
+        text = text.replace(e["old"], e["new"])
     return text
 
 
@@ -109,6 +134,11 @@ def build():
         files |= {str(p.relative_to(ROOT)) for p in ROOT.glob(g) if p.is_file()}
     tracked = set(subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True).stdout.split())
     files = sorted(f for f in files if f in tracked and not EXCLUDE.search(f))
+    COMMITS.update(commit_prefixes())
+    edits = {}
+    for e in json.loads(EDITS.read_text()):
+        edits.setdefault(e["file"], []).append(e)
+    assert set(edits) <= set(files), set(edits) - set(files)
     pats, hits, total, per_dir = scan_patterns(), [], 0, {}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     part = OUT.with_suffix(".partial")                           # written to disk as it goes (memory), renamed at the end
@@ -120,11 +150,13 @@ def build():
                 if f.endswith(".jsonl.gz") and any(f'"{k}"' in txt for k in STRIP):   # size limit (README)
                     txt = "".join(json.dumps({k: v for k, v in json.loads(l).items() if k not in STRIP}) + "\n"
                                   for l in txt.splitlines() if l.strip())
-                txt = anonymise(txt)
-                body = gzip.compress(txt.encode(), compresslevel=9, mtime=0); check = txt
+                new = anonymise(txt)                     # unchanged content keeps its original bytes (recorded hashes)
+                body = data if new == gzip.decompress(data).decode("utf-8", "replace") else \
+                    gzip.compress(new.encode(), compresslevel=9, mtime=0)
+                check = new
             else:
                 try:
-                    check = anonymise(data.decode("utf-8")); body = check.encode()
+                    check = anonymise(reword(f, data.decode("utf-8"), edits)); body = check.encode()
                 except UnicodeDecodeError:
                     check, body = "", data
             for p in pats:
@@ -165,10 +197,13 @@ per-member probability vectors (`member_probs` of the zero-shot jury; `reader_pr
 `perm_reader_probs` of the 24-shot stack); the combined probabilities, predictions and every other field are
 unchanged; item texts are omitted too (no generator reads them; the scripts load the datasets themselves). No
 generator in `paper/scripts/` reads the per-member vectors except the combiner ablation of Appendix A
-(`combiner_ablation.py`), which is reproducible from the full release. The per-item files of the SNLI/MNLI jury
-(Appendix A only) are omitted for size; its accuracies and temperature result are in `paper/generated/`. Identifiers that would reveal the authors, and three phrases that describe their setting (a
-word in two task-group names, the name of their agreement with the API provider), were replaced;
-sha256 values recorded for code files refer to the original files, which the de-anonymised release provides.
+(`combiner_ablation.py`), which is reproducible from the full release. Three groups of per-item files are omitted
+to stay within the size limit; their results are in `paper/generated/` and the de-anonymised release has the files:
+the SNLI/MNLI jury (Appendix A), pplx-decider's zero-shot runs (one column of the zero-shot table in Section 6.1), and the
+re-fitted open stack of the pool-size study (the pool-fit row of the pool-size table in Section 5.2;
+`numbers_poolsize.py` skips that part when the files are absent). For anonymous review, some wording in these documents was changed: role and session names, time zones, branch
+names, an agreement name and similar details; commit identifiers read `[commit]`. No number, rule or result was
+altered; the de-anonymised release keeps the originals, and the sha256 values recorded for code files refer to them.
 """
 
 if __name__ == "__main__":
