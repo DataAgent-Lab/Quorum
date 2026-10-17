@@ -1,7 +1,40 @@
-% DRAFT placeholder.
+% DRAFT (LLM-drafted from R17, results/paper/latency_r17.json, ledger E2; the author reviews and confirms).
 \section{Cost and latency}
 \label{sec:cost}
-\pending{Latency and throughput of the three open decision models and \orb{} on one hardware type (de-identified
-deployment measurements, author approval required); \orb{} GPU latency from our measurements; CPU latency not yet
-measured. The closed API's latency is not comparable and is not reported as a comparison. No spend figures for the
-closed API are published.}
+
+\begin{table}[t]
+\centering\small
+\caption{Latency on one \ctGpu{} GPU (bf16, release code, nothing else on the GPU), over the first \ctN{}
+Banking77 24-shot request bodies of \S\ref{sec:res-retrieval}, after a discarded warm-up. Batch-1 latency is the
+time from input to probabilities per request; throughput uses batch \ctBatch. Single run; descriptive.}
+\label{tab:cost}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+System & load (s) & batch 1: median (p95), ms & items/s at batch \ctBatch & peak GPU memory, GB \\
+\midrule
+\orb{} (reader + kNN) & \ctOpenLoad & \ctOpenMedian{} (\ctOpenPninetyfive) & \ctOpenThr & \ctOpenMemOne{} / \ctOpenMemEight \\
+\flash & \ctFlashLoad & \ctFlashMedian{} (\ctFlashPninetyfive) & \ctFlashThr & \ctFlashMemOne{} / \ctFlashMemEight \\
+\pplx & \ctPplxLoad & \ctPplxMedian{} (\ctPplxPninetyfive) & \ctPplxThr & \ctPplxMemOne{} / \ctPplxMemEight \\
+\clef & \ctClefLoad & \ctClefMedian{} (\ctClefPninetyfive) & \ctClefThr & \ctClefMemOne{} / \ctClefMemEight \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We timed the three open decision models and \orb{} the same way on one GPU type, each with its release code and on
+identical requests (Table~\ref{tab:cost}); the longest of these prompts had \ctPromptTokMax{} tokens. At batch 1,
+\orb{} answers in a median of \ctOpenMedian{} ms (reader \ctOpenReaderMedian{} ms, nearest-neighbour vote
+\ctOpenKnnMedian{} ms), \ctFlashTimesOpen{} times faster than \flash, \ctPplxTimesOpen{} times faster than \pplx{}
+and \ctClefTimesOpen{} times faster than \clef. At batch \ctBatch{} it processes about \ctOpenPerHour{} requests per
+hour, against \ctFlashPerHour{}, \ctPplxPerHour{} and \ctClefPerHour{}. It also needs less memory: below
+\ctOpenMemEight{} GB at batch \ctBatch, against \ctPplxMemEight{} and \ctClefMemEight{} GB for the two 27B models.
+BM25 retrieval adds about \ctOpenBmMs{} ms per request on the CPU for every system and is not included, because all
+timed runs replayed the recorded retrieval. As a check, the timed predictions equal those of the scored runs on all \ctN{} items for every system and batch
+size, except one near-tied item for \clef{} at batch 1 (\ctClefAgreeOne\%), which depends on the batch composition.
+
+These figures put the accuracy differences of \S\ref{sec:res-calibration} in context: on equal evidence the open
+decision models are more accurate than \orb, and they cost three to ten times more GPU time per request on this % numbers-ok: rounded range of the TimesOpen macros above
+hardware. They are single-run measurements on a unified-memory host with the release code; a serving engine,
+another GPU or another batch policy changes them, and \orb's CPU latency was not measured. The closed API answered
+requests of the same size (\ctJevFourKTokLo--\ctJevFourKTokHi{} tokens) in a median of \ctJevFourKMedian{} ms,
+measured end to end from our client over the public internet; that figure includes the network and comes from
+undisclosed hardware, so it is not comparable with Table~\ref{tab:cost}. We report no spend for the closed API.

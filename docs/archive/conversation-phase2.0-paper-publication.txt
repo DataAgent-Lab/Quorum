@@ -883,3 +883,13 @@ reported as borderline because b24B (different tie order only) did not separate 
 the limitations updated; abstract unchanged (author may add one clause). Ledger P1, run log.
 
 ===
+
+[DECISION #38 | user-decided]
+User: abstract states the pool-size result (yes); cost section as recommended — open decision models and R24 on one
+GPU type, at most one sentence on Jev's measured API latency marked not comparable; start the five open tasks.
+R17 latency requested and delivered (research fe76f6c), verified (statistics recomputed from per-item times, code
+hashes match), §8 written with Table 9 (ledger E2). References verified and added; appendices completed; AI-integrity
+checks merged into the build; task list v3; supplement builder in progress (anonymity scan clean; size being reduced
+to the 100 MB limit by dropping per-member probability vectors no generator reads).
+
+===

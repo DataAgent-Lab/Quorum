@@ -10,7 +10,7 @@
 Full draft, 21 pages, every number from a generator (`paper/generated/`). Build checks: layout-tmlr, numbers,
 anonymity, and the AI-integrity checks (cites, artifacts, hidden, disclosure) all PASS; the online reference check
 passes (scholarly entries match their records; web entries checked by hand). All pre-registered experiments are in.
-Open: the cost section (latency run R17 requested), three author-only checks, the supplement archive, the review
+Open: three author-only checks, the supplement archive, the review
 rounds, and the user's must-ask items (T8).
 
 ## T0 — Venue, toolchain, day-1 requests
@@ -36,10 +36,9 @@ rounds, and the user's must-ask items (T8).
       (pplx's released data builder includes the PAWS train split; stated in Table 1 and §6.3). Qwen3 probe: not run.
 - [ ] T2.9 Description authoring log: confirm from the log that descriptions were written once from label names
       and never revised after seeing test results (the paper states this).
-- [~] T2.10 Latency: GPU numbers for R24 exist (R8, ledger E1); one-hardware latency for the three open models and
-      R24 requested from the research session as R17 (2026-10-17, user decision: report open models + R24 on one GPU
-      type; at most one sentence on Jev's measured API latency, marked not comparable). CPU latency not measured and
-      not claimed.
+- [x] T2.10 Latency: R17 delivered and verified 2026-10-17 (ledger E2); §8 written (open models + R24 on one GB10;
+      one sentence on Jev's measured API latency, marked not comparable — user decision). CPU latency not measured
+      and not claimed.
 - [~] T2.16 Tie-break: R6c reported (§7). Remaining: library root fix after the evidence freeze.
 
 ## T3 — Literature and bibliography
@@ -81,4 +80,4 @@ rounds, and the user's must-ask items (T8).
 - [x] T8.8 Jev retrieval swap (ledger F15). T8.10 Pool-size curve (ledger P1, 2026-10-17).
 - [~] T8.9 Anonymous supplement (≤100 MB): `paper/tools/make_supplement.py` (trace the generators' inputs,
       anonymise, scan, zip into `paper/build/`); rebuild and re-scan right before submission.
-- [ ] T8.11 Cost section: replace the pending box when R17 arrives (verify, generator, text).
+- [x] T8.11 Cost section written from R17 (2026-10-17).
