@@ -4,17 +4,18 @@
 
 \begin{table}[t]
 \centering\small
-\caption{Systems compared. ``Scoring'' records how each system's probabilities were obtained.
-\authorcheck{Confirm model sizes and licences against the cards before submission.}}
+\caption{Systems compared. ``Scoring'' records how each system's probabilities were obtained. Sizes and training
+data as stated by the model cards and, for \clef{} and \flash, the release announcement
+\citep{cloudflare-2026-clef-card,cloudflare-2026-clef-flash-card,chen-etal-2026-clef-blog,perplexity-2026-pplx-decider-card}.}
 \label{tab:systems}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}p{3.4cm}>{\raggedright\arraybackslash}p{4.6cm}>{\raggedright\arraybackslash}p{4.6cm}@{}}
 \toprule
 System & Kind & Scoring & Training data (benchmarks) \\
 \midrule
 \jev{} & closed API, version pinned & vendor API, probabilities rounded to 0.01 & undisclosed \\ % numbers-ok: API rounding resolution
-\clef{} & open weights, 27B backbone & release code, bf16 & ``internal synthetic'', undisclosed \\
-\flash{} & open weights, 9B backbone & release code, bf16 & ``internal synthetic'', undisclosed \\
-\pplx{} & open weights, 27B & release code; one engine behind a parity gate & manifest lists MASSIVE, MTOP, SNIPS \\
+\clef{} & open weights, 27B backbone & release code, bf16 & ``internal synthetic'', sources not named \\
+\flash{} & open weights, 9B backbone & release code, bf16 & ``internal synthetic'', sources not named \\
+\pplx{} & open weights, 27B & release code; one engine behind a parity gate & manifest lists MASSIVE, MTOP, SNIPS; data builder includes PAWS (train split) \\
 \midrule
 \orb{} (ours) & open, 4B reader + 0.3B kNN & our code & reader adapter: other tasks, Banking77 excluded \\
 \gj{} (ours) & open, three sub-1B encoders & our code & see Table~\ref{tab:exposure} \\
@@ -65,8 +66,7 @@ for both its zero-shot and its 24-shot results (\S\ref{sec:res-bitext}).
 \begin{table}[t]
 \centering\small
 \caption{Documented exposure of zero-shot systems to each dataset's training data. C = clean in every disclosed
-training list; X = training split present; I = indirect (HWU64 and MASSIVE share utterances); ? = undisclosed.
-\authorcheck{Check against the audit file before submission.}}
+training list; X = training split present; I = indirect (HWU64 and MASSIVE share utterances); ? = undisclosed.}
 \label{tab:exposure}
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{@{}lccccccc@{}}

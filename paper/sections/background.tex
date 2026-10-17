@@ -7,9 +7,10 @@ the request contains an instruction, a list of options (names, optionally with d
 (labelled examples, context); the response is a choice and a probability for every option. \jev{} is a closed API of
 this kind that advertises calibrated probabilities \citep{typesafe-2026-jev}; its responses round each probability
 to two decimals (\S\ref{sec:find-rounding}). \clef{} and \flash{} are open-weight decision models built on 27B and
-9B language-model backbones with a scoring head \authorcheck{cite cards; confirm backbone names as stated on the
-cards}; \pplx{} is an open-weight 27B decision model that scores options with non-causal attention over the request
-\authorcheck{cite card}. A community reproduction evaluated \jev{} on Banking77 with a pinned request format,
+9B backbones (Qwen3.8-27B and Qwen3.5-9B) with a joint head that scores every option of every question in one
+forward pass \citep{cloudflare-2026-clef-card,cloudflare-2026-clef-flash-card}; \pplx{} is an open-weight 27B
+decision model on the same 27B backbone whose full-attention layers run without the causal mask
+\citep{perplexity-2026-pplx-decider-card}. A community reproduction evaluated \jev{} on Banking77 with a pinned request format,
 retrieved examples and published per-item predictions \citep{smith-2026-jev-banking77}; several open clones and
 community benchmarks followed \citep{cai-2026-open-jev,mehra-2026-jevbench,abdelstark-2026-jev-benchmarks}, none of
 them on identical evidence.
@@ -37,5 +38,3 @@ pre-registration \citep{van-miltenburg-etal-2021-preregistering} and model selec
 \citep{magar-schwartz-2022-data,sainz-etal-2023-nlp}. What is new here is applying these practices together to a
 product class whose members are evaluated by their vendors with their own evidence, and measuring how much each
 uncontrolled factor moves the result.
-\authorcheck{Missing references to add and verify: the Clef and pplx-decider model cards; Holm (1979); Brier
-(1950); a serving-engine reference for SGLang.}

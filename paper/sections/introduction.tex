@@ -7,8 +7,8 @@ one of 77 banking intents, pick the tool an agent should call, or choose the nex
 of systems targets exactly this setting. We call them \emph{decision models}: given an instruction, a closed list of
 options (optionally with descriptions) and optional evidence such as labelled examples, they return a probability
 distribution over the options. Some are offered as closed APIs that advertise calibrated probabilities
-\citep{typesafe-2026-jev}; others are released with open weights \authorcheck{cite the Clef and pplx-decider model
-cards}. All of them report results on public benchmarks.
+\citep{typesafe-2026-jev}; others are released with open weights
+\citep{cloudflare-2026-clef-card,perplexity-2026-pplx-decider-card}. All of them report results on public benchmarks.
 
 Those results are hard to compare. A decision model's accuracy depends not only on the model but on everything that
 goes into the request: the instruction, the wording of the options and, in the few-shot setting, which labelled

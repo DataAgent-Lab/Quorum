@@ -56,8 +56,7 @@ smoke-test slice can overstate or understate; all numbers in this paper use full
 \label{sec:find-exposure}
 We selected PrismNLI-0.4B as \gj's NLI member because its card describes training on synthetic NLI data. The card
 also states that training starts from an earlier zero-shot classifier \citep{jung-2025-prismnli-card}, whose own
-training mix includes the Banking77 and MASSIVE training splits \citep{laurer-etal-2023-less}
-\authorcheck{cite the pinned dataset list of the earlier classifier}. Our zero-shot numbers on those two datasets
+training mix includes the Banking77 and MASSIVE training splits \citep{laurer-2024-zeroshot-v2-card,laurer-2024-zeroshot-datasets}. Our zero-shot numbers on those two datasets
 are therefore exposed, and HWU64 is indirectly exposed because it shares utterances with MASSIVE. We replaced the
 member with one whose training data are documented and exclude all seven benchmarks; the jury's internal findings
 hold (\S\ref{sec:res-zeroshot}), but its absolute accuracy is lower on most datasets, including some that were never
@@ -66,8 +65,8 @@ initialisation saw.
 
 \subsection{Serving engines and over-length requests}
 \label{sec:find-serving}
-The thirteen-task study (\S\ref{sec:res-13task}) served the open models through a high-throughput engine instead of
-their release code, and five of its findings concern the serving layer, not the models.
+The thirteen-task study (\S\ref{sec:res-13task}) served the open models through a high-throughput engine, SGLang
+\citep{zheng-etal-2024-sglang}, instead of their release code, and five of its findings concern the serving layer, not the models.
 
 \paragraph{A parity gate catches small deviations, and someone must decide about them.} Before any scored call,
 each engine was compared item by item with the model's release code on the \dtGateItems{} Banking77 24-shot bodies,

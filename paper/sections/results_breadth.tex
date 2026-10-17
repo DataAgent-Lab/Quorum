@@ -138,8 +138,13 @@ evaluations scored by their own harness (Table~\ref{tab:d13}). Every model recei
 by hash, on one GPU, through serving engines that had passed (or, for one model, narrowly failed and were labelled;
 \S\ref{sec:find-serving}) the parity gate. The decision rule, fixed before any call, counts each model's
 Holm-significant pairwise wins minus losses on accuracy (\dtTestsE{} tests for the code tasks, \dtTestsC{} for the
-workflows). \jev{} was not part of this study.
-\authorcheck{Add citations for the thirteen datasets, the paraphrase control and the workflow harness.}
+workflows). \jev{} was not part of this study. The code sets are PatchNet \citep{hoang-etal-2021-patchnet},
+TOSEM-DBRD \citep{zhang-etal-2023-dbrd}, EquiBench \citep{wei-etal-2025-equibench}, POJ-104 % numbers-ok: dataset name
+\citep{mou-etal-2016-tbcnn} in its CodeXGLUE release \citep{lu-etal-2021-codexglue}, PrimeVul
+\citep{ding-etal-2025-primevul}, SV-TrustEval-C \citep{li-etal-2025-svtrusteval}, SecVulEval
+\citep{ahmed-etal-2025-secvuleval} and the Juliet C/C++ suite \citep{nist-2017-juliet}; the paraphrase control is PAWS
+\citep{zhang-etal-2019-paws}; the workflows are WorkflowEvals tasks run with their own harness
+\citep{typesafe-2026-workflowevals,typesafe-2026-evalsafe-invoice}.
 \authorcheck{Confirm the wording of the study's purpose (a deployment model choice) and that no task description
 identifies the setting.}
 
@@ -186,8 +191,9 @@ significant winner on program equivalence, and both \clef{} models beat \pplx{} 
 \pplx{} is significantly better than both others on \dtBestEPplx{} of the nine code tasks. Accuracy and calibration again rank the models differently:
 on the pre-declared calibration tie-break (Holm-significant ECE wins minus losses over the \dtEceTests{} tests on
 tasks whose per-item probabilities are public), \flash{}, last on accuracy, scores $\dtEceScoreFlash$, \clef{}
-$\dtEceScoreClef$ and \pplx{} $\dtEceScorePplx$. The paraphrase control, part of the training collection reported for \pplx{}
-\authorcheck{cite the card's training-data statement}, shows the expected exposure gap (\dtPawsPplxAcc\% vs.\ \dtPawsClefAcc\% and \dtPawsFlashAcc\%) and is
+$\dtEceScoreClef$ and \pplx{} $\dtEceScorePplx$. The paraphrase control, whose training split is part of the data
+builder released with \pplx{} (its test split, which we score, is held out there;
+\citealp{perplexity-2026-pplx-decider-card}), shows the expected exposure gap (\dtPawsPplxAcc\% vs.\ \dtPawsClefAcc\% and \dtPawsFlashAcc\%) and is
 kept out of the decision rule. Two results in the table are not about decision quality at all: they are decided by
 how each model handles inputs longer than its limit (\S\ref{sec:find-serving}).
 
