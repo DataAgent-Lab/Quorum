@@ -3,9 +3,10 @@
 Each is a plain one-line rephrasing of the intent name (anyone can write these; nothing is taken
 from the dataset). Pass them as `label_texts` (keys = the class names you pass as `labels`).
 Measured on the full Banking77 test (3,080), same 3-model ensemble: names 0.7555 -> descriptions
-0.7737 (+0.018). Reproducible in this repo. (Jev, an independent reproduction, scores ~0.801 zero-shot;
-these descriptions narrow the gap but do NOT overtake it — Quorum beats Jev at the 24-shot budget, not
-zero-shot. See docs/phases/1.1/ and the README.)
+0.7737 (+0.018). Reproducible in this repo. Not fully held out: the NLI member's base model saw the Banking77
+train split; with an NLI member never trained on it, 0.716. Jev, measured through its API with these same
+descriptions, scores 0.803 — Quorum does NOT overtake it zero-shot (only a 4B 24-shot pipeline ties it).
+See docs/phases/1.1/ and the README.
 
 Run:  python examples/banking77_descriptions.py
 """

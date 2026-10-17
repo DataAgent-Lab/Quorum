@@ -2,10 +2,10 @@
 
 The idea: no single small open model is a great zero-shot intent classifier, but a *geometric-mean ensemble*
 of a few complementary ones — one NLI model and two sentence embedders — reliably beats its own best member,
-runs on CPU in milliseconds, and needs no training and no per-task calibration.
+runs on a CPU, and needs no training and no per-task calibration.
 
 Members (all public, all sub-1B):
-  * NLI      : `Jaehun/PrismNLI-0.4B`   (~0.4B, trained on synthetic NLI only)
+  * NLI      : `Jaehun/PrismNLI-0.4B`   (~0.4B; its base model, deberta-v3-large-zeroshot-v2.0, saw the Banking77/MASSIVE train splits)
   * embedder : `BAAI/bge-large-en-v1.5` (~0.34B)
   * embedder : `BAAI/bge-base-en-v1.5`  (~0.11B)
 
