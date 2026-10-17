@@ -1,0 +1,35 @@
+{
+ "protocol": "provenance/banking77_pool_size_protocol.md",
+ "pool": "pc8_d3",
+ "pool_rows": 616,
+ "manifest_sha256": "e450579e2af8d88499747792384376e5b18f0d5637bdaa17b4d81258e23478f5",
+ "model": "Cloudflare/clef-flash",
+ "revision": "17f0b0ad64efb65d273590632833508766b2aae6",
+ "engine": {
+  "name": "release code",
+  "batch": 8
+ },
+ "custom_code_sha256": "0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3",
+ "code_sha256": {
+  "scripts/poolsize_arms.py": "5d63cea69e794879bbea32e17c9a3e26f55456c19e1a4af1ceda8e23ecf1fecb",
+  "scripts/poolsize_bodies.py": "11783f185ad625d6e933fb78d15d61093eaebaa512ece667785991fbd3e6157c",
+  "scripts/r14_clef.py": "024630ecbbb1f2183c15183f44624c74b7803a9d854fd11586f1598b33ff0752"
+ },
+ "label_order": "dataset label ids",
+ "results": {
+  "accuracy": 0.9403,
+  "correct": 2896,
+  "macro_f1": 0.94,
+  "log_loss": 0.3786,
+  "brier": 0.1289,
+  "ece": 0.1322,
+  "unanswered": 0,
+  "truncated_at_16384": 0,
+  "prompt_tokens": {
+   "median": 3202,
+   "max": 3703
+  },
+  "seconds": 4832.0
+ },
+ "written_at": "2026-10-14T00:23:41Z"
+}
