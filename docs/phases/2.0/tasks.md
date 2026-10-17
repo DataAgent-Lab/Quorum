@@ -70,14 +70,17 @@ rounds, and the user's must-ask items (T8).
 - [x] T8.1 Author identity (user, 2026-10-05/12): JiunYi Yang, Taiwan, DataAgent AI Lab, as an individual; the
       email goes only into the submission system.
 - [ ] 🔲 T8.2 Adapter access during review (reviewers cannot follow links); ungate at/after acceptance?
-- [ ] 🔲 T8.3 Review-version naming (the draft uses R24 / GeoJury) and disclosure of the public repository, Space and
-      Hub pages as prior non-archival versions.
-- [x] T8.4 Employer clearance — resolved 2026-10-12 (user). Pre-rewrite commits still resolve by old SHA on GitHub
-      until GitHub Support purges them (user action; request text drafted).
+- [x] T8.3 Review version (user, 2026-10-17): keep the anonymous names (R24 / GeoJury); no statement about the public
+      repository, Space or Hub pages and no link to them. TMLR does not require disclosing prior non-archival
+      versions (author guide: only "not linking to another version that includes the authors' names"; editorial
+      policy: reviewers do not search for authors), and acceptance rests on evidence and interest only. The
+      repository stays public as it is; the de-anonymised version links it.
+- [x] T8.4 Employer clearance — resolved 2026-10-12 (user). Pre-rewrite commits still resolve by old SHA on GitHub;
+      the user decided on 2026-10-17 not to request a GitHub Support purge (clearance is resolved; the purge is slow).
 - [ ] T8.5 README corrections once evidence is in — push is must-ask.
 - [ ] T8.6 arXiv endorser — user action; posting is must-ask.
 - [ ] T8.7 Submission to TMLR — must-ask, after the checks above pass.
 - [x] T8.8 Jev retrieval swap (ledger F15). T8.10 Pool-size curve (ledger P1, 2026-10-17).
 - [~] T8.9 Anonymous supplement (≤100 MB): `paper/tools/make_supplement.py` (trace the generators' inputs,
-      anonymise, scan, zip into `paper/build/`); rebuild and re-scan right before submission.
+      anonymise, scan, zip into `paper/supplement/`, gitignored); rebuild and re-scan right before submission.
 - [x] T8.11 Cost section written from R17 (2026-10-17).

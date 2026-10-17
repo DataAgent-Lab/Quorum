@@ -893,3 +893,17 @@ checks merged into the build; task list v3; supplement builder in progress (anon
 to the 100 MB limit by dropping per-member probability vectors no generator reads).
 
 ===
+
+[DECISION #39 | user-decided]
+User (2026-10-17): (1) review version keeps the anonymous names and makes no statement about, and no link to, the
+public repository, Space or Hub pages; checked against TMLR's author guide (submissions anonymised, do not link a
+non-anonymous version; disclosure of prior non-archival versions not required) and acceptance criteria (evidence
+and interest only); the repository stays public. (2) No GitHub Support purge request for pre-rewrite SHAs. (3) The
+study-purpose wording of §6.3 was rewritten by a subagent playing a researcher from an unrelated field: "code and
+firmware development decisions" (none of the sets is firmware) became "choosing which model to adopt for code and
+workflow decisions: nine software-engineering decisions on source code and bug reports"; author check removed.
+The supplement copies neutralise the same word in two pre-registration/README lines and the vendor agreement's name
+in three protocols (repository files unchanged; the supplement README says so). (4) Supplement: build ran to
+completion under a 3 GB cap, anonymity scan clean, 143.9 MB; per user, the appendix-only SNLI/MNLI jury files are
+omitted, and item text (read by no generator) is stripped; main-text per-item data alone is estimated at about
+112 MB, so a further choice is the user's.

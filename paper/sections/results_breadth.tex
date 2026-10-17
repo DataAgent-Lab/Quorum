@@ -132,9 +132,10 @@ records both events.
 
 The protocol is not specific to intent classification. We applied it, unchanged in its rules, to a pre-registered
 model-selection study among the three open decision models on \dtTasks{} decision tasks (\dtTotalItems{} scored
-decisions): nine code and firmware development decisions (patch triage, duplicate bug reports, program equivalence,
-clone detection, vulnerability detection, and a synthetic vulnerability floor) and four business-workflow
-evaluations scored by their own harness (Table~\ref{tab:d13}). Every model received the same request bodies, checked
+decisions), choosing which model to adopt for code and workflow decisions: nine software-engineering decisions on
+source code and bug reports (patch triage, duplicate bug reports, program equivalence, clone detection,
+vulnerability detection, and a synthetic vulnerability floor) and four business-workflow evaluations scored by
+their own harness (Table~\ref{tab:d13}). Every model received the same request bodies, checked
 by hash, on one GPU, through serving engines that had passed (or, for one model, narrowly failed and were labelled;
 \S\ref{sec:find-serving}) the parity gate. The decision rule, fixed before any call, counts each model's
 Holm-significant pairwise wins minus losses on accuracy (\dtTestsE{} tests for the code tasks, \dtTestsC{} for the
@@ -145,8 +146,6 @@ TOSEM-DBRD \citep{zhang-etal-2023-dbrd}, EquiBench \citep{wei-etal-2025-equibenc
 \citep{ahmed-etal-2025-secvuleval} and the Juliet C/C++ suite \citep{nist-2017-juliet}; the paraphrase control is PAWS
 \citep{zhang-etal-2019-paws}; the workflows are WorkflowEvals tasks run with their own harness
 \citep{typesafe-2026-workflowevals,typesafe-2026-evalsafe-invoice}.
-\authorcheck{Confirm the wording of the study's purpose (a deployment model choice) and that no task description
-identifies the setting.}
 
 \begin{table}[t]
 \centering\small

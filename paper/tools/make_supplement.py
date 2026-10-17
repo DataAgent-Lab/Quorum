@@ -11,7 +11,8 @@ definitions are never stored), the closed API's spend ledgers, and run logs that
 
 Anonymisation is a text substitution applied to every text file and to the contents of every gzip file: the
 system's public name and package name become "R24", the adapter's Hub identifier becomes an anonymous placeholder,
-and git commit identifiers stored under git/commit keys are blanked. Recorded sha256 values of code files therefore
+git commit identifiers stored under git/commit keys are blanked,
+and three phrases that hint at the authors' setting are neutralised. Recorded sha256 values of code files therefore
 refer to the original files, which the de-anonymised release provides. Every file is then scanned for the local
 anonymity terms (paper/tools/anonymity_terms.local), the public name, the account names and links that identify
 the authors; any hit stops the build.
@@ -37,20 +38,26 @@ STATIC = ["provenance/*.md", "paper/scripts/*.py", "paper/tools/checks.py", "scr
           "results/**/selection*.json", "results/decision13/*.md", "results/decision13/*.json",
           "docs/phases/2.0/jev/train_pinned.json", "docs/phases/2.0/jev/*/PROTOCOL*.md",
           "docs/phases/2.0/bitext24/*.md", "docs/phases/2.0/bitext24/subset_a2.json", "docs/phases/2.0/poolsize/*.md",
-          "LICENSE", "requirements*.txt"]
+          "LICENSE", "requirements*.txt", "paper/generated/*"]
 EXCLUDE = re.compile(r"(ledger|smoke_ledger|\.env|node_modules|__pycache__|\.pyc$|latency/|predictions\.csv|"
-                     r"repro_|/cache/|commit_hash_map|paper/tools/checks\.py|pyproject\.toml)", re.I)
+                     r"repro_|/cache/|commit_hash_map|paper/tools/checks\.py|pyproject\.toml|_mnli_snli\.)", re.I)
 REPL = [(re.compile(r"DataAgent[\w-]*/[\w.-]+", re.I), "anonymous/reader-adapter"),
         (re.compile(r"Copyright \(c\) (\d{4}) .+"), r"Copyright (c) \1 Anonymous authors"),
         (re.compile(r"github\.com/A-baoYang/Quorum", re.I), "anonymous.repository"),
         (re.compile(r"huggingface\.co/(?:spaces/)?(?:DataAgent|A-baoYang)/[\w.-]+", re.I), "anonymous.hub.page"),
         (re.compile(r"QUORUM"), "R24"), (re.compile(r"Quorum"), "R24"), (re.compile(r"quorum"), "r24"),
         (re.compile(r"\bDataAgent\b", re.I), "anonymous"),
-        (re.compile(r'("[\w]*(?:git|commit)[\w]*"\s*:\s*")[0-9a-f]{7,40}(")'), r"\1anonymised\2")]
-STRIP = {"member_probs", "reader_probs", "knn_probs", "perm_reader_probs"}   # per-member vectors; no generator reads them
+        (re.compile(r'("[\w]*(?:git|commit)[\w]*"\s*:\s*")[0-9a-f]{7,40}(")'), r"\1anonymised\2"),
+        # wording that hints at the authors' setting (the datasets are not firmware) or their agreement with the vendor
+        (re.compile(r"code and firmware dev/test decisions"), "code decisions"),
+        (re.compile(r"code/firmware decision sets"), "code decision sets"),
+        (re.compile(r"TypeSafe MCA"), "the provider's terms")]
+STRIP = {"member_probs", "reader_probs", "knn_probs", "perm_reader_probs",   # per-member vectors; no generator reads them
+         "text"}                                                               # item text: no generator reads it
 # (file pattern, scan pattern) pairs that are dataset content, not identifying text
 ALLOW = [(re.compile(r"results/predictions/massive_"), r"\bDell\b")]   # MASSIVE utterances mention the brand
-SCAN_EXTRA = [r"quorum", r"dataagent", r"a-?bao-?yang", r"/home/", r"/root/", r"\bsession_01"]   # personal terms: the local list
+SCAN_EXTRA = [r"quorum", r"dataagent", r"a-?bao-?yang", r"/home/", r"/root/", r"\bsession_01", r"firmware",
+              r"\bMCA\b"]   # personal terms: the local list
 
 
 def scan_patterns():
@@ -146,7 +153,8 @@ README = """# Supplementary material (anonymised for review)
 - `results/`: request manifests (sha256 of every request body, examples kept, retrieved indices), per-item
   predictions and probabilities, run summaries and the pre-declared analysis outputs.
 - `paper/scripts/`: the generators that compute every number in the paper from the per-item files
-  (`python paper/scripts/numbers_poolsize.py`, and so on).
+  (`python paper/scripts/numbers_poolsize.py`, and so on); `paper/generated/` holds their outputs as we obtained
+  them, to compare a re-run against (and as inputs where a generator reads another's output).
 - `scripts/`, `r24/`, `examples/`: the run code, the library and the label descriptions.
 
 Not included: the public reproduction's instruction, definitions and predictions file, which carry no licence (the
@@ -155,8 +163,11 @@ scripts fetch them at run time; `numbers_24shot.py` and `jev_swap_analysis.py` n
 redistribution (see `results/decision13/LICENSES.md`). To stay within the size limit, the per-item files omit the
 per-member probability vectors (`member_probs` of the zero-shot jury; `reader_probs`, `knn_probs` and
 `perm_reader_probs` of the 24-shot stack); the combined probabilities, predictions and every other field are
-unchanged. No generator in `paper/scripts/` reads them except the combiner ablation of Appendix A
-(`combiner_ablation.py`), which is reproducible from the full release. Identifiers that would reveal the authors were replaced;
+unchanged; item texts are omitted too (no generator reads them; the scripts load the datasets themselves). No
+generator in `paper/scripts/` reads the per-member vectors except the combiner ablation of Appendix A
+(`combiner_ablation.py`), which is reproducible from the full release. The per-item files of the SNLI/MNLI jury
+(Appendix A only) are omitted for size; its accuracies and temperature result are in `paper/generated/`. Identifiers that would reveal the authors, and three phrases that describe their setting (a
+word in two task-group names, the name of their agreement with the API provider), were replaced;
 sha256 values recorded for code files refer to the original files, which the de-anonymised release provides.
 """
 
