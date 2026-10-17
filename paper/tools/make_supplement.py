@@ -50,7 +50,7 @@ REPL = [(re.compile(r"DataAgent[\w-]*/[\w.-]+", re.I), "anonymous/reader-adapter
 STRIP = {"member_probs", "reader_probs", "knn_probs", "perm_reader_probs"}   # per-member vectors; no generator reads them
 # (file pattern, scan pattern) pairs that are dataset content, not identifying text
 ALLOW = [(re.compile(r"results/predictions/massive_"), r"\bDell\b")]   # MASSIVE utterances mention the brand
-SCAN_EXTRA = [r"quorum", r"dataagent", r"a-?bao-?yang", r"rubyyang", r"/home/", r"/root/", r"\bsession_01"]
+SCAN_EXTRA = [r"quorum", r"dataagent", r"a-?bao-?yang", r"/home/", r"/root/", r"\bsession_01"]   # personal terms: the local list
 
 
 def scan_patterns():
