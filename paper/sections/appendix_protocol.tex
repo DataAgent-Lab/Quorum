@@ -17,5 +17,63 @@ zero-shot run needed \fsJevZsFailedAttempts{} retried attempt with no failed ite
 (new engine, new cells). The serving-engine parity gate compares, item by item on the full Banking77 test set, the
 engine's probabilities with the release code's (argmax agreement and maximum absolute difference).
 
-\pending{Request formats (one example body per setting), the full per-model table of versions and hashes, and the
-over-length policy per model.}
+\paragraph{Request formats.} Every system received the same JSON body; the open models ignore the
+\texttt{model} field. The 24-shot bodies follow the reproduction's format: its instruction and its one-line
+definition of each of the 77 intents, which we read from the reproduction at run time and do not redistribute
+because it carries no licence, and the retrieved examples in rank order, trimmed from the end if the serialised body
+exceeds 30,000 bytes (the reproduction's rule). Schematically: % numbers-ok: the reproduction's byte cap
+\begin{verbatim}
+{"model": "<pinned version>",
+ "state": {"customer_message": "<test utterance>",
+           "labeled_examples": [{"message": "<retrieved text>", "intent": "<label>"},
+                                ... 24 in rank order ...]},
+ "questions": {"intent": {"type": "choice",
+                          "instructions": "<the reproduction's instruction>",
+                          "criteria": {"<label>": "<the reproduction's definition>",
+                                       ... 77 labels ...}}}}
+\end{verbatim}
+The Bitext bodies have the same structure with our own instruction (``Which ONE intent best describes the customer
+message? The labeled examples show messages with their intents. Every message belongs to exactly one of the listed
+intents.'') and the one-line descriptions of \S\ref{sec:systems} as criteria. The zero-shot bodies omit
+\texttt{labeled\_examples} and use either the label names or the descriptions as criteria. The thirteen-task study
+used the bodies built by each dataset's builder or by the workflow harness, recorded by hash in its manifests. The
+released manifests list, for every body, its SHA-256, its size, the number of examples kept and the indices of the
+retrieved examples, so that every body can be rebuilt and checked.
+
+\begin{table}[h]
+\centering\small
+\caption{Versions of every system and component, as recorded in the run metadata.}
+\label{tab:versions}
+\begin{tabular}{@{}lll@{}}
+\toprule
+System or component & Identifier & Revision \\
+\midrule
+\jev{} & vendor API, model field & \texttt{jev-1.13.0} (every response) \\ % numbers-ok: version string
+\clef{} & open weights, release code & \texttt{2f3de3d} \\ % numbers-ok: revision hash
+\flash{} & open weights, release code & \texttt{17f0b0a} \\ % numbers-ok: revision hash
+\pplx{} & open weights, v1.1 & \texttt{3b45dea} \\ % numbers-ok: revision hash
+Serving engine & SGLang container image & digest \texttt{868b0bd8\ldots} \\ % numbers-ok: image digest
+\orb{} reader & Qwen3-4B & \texttt{1cfa9a7} \\ % numbers-ok: model name and revision hash
+\orb{} reader adapter & ours (released) & \texttt{e0765b7} \\ % numbers-ok: revision hash
+\orb{} kNN member & bge-large-en-v1.5 & \texttt{d4aa690} \\ % numbers-ok: model name and revision hash
+\gj{} members & PrismNLI-0.4B; bge-large-en-v1.5; bge-base-en-v1.5 & \texttt{02b9102}; \texttt{d4aa690}; \texttt{a5beb1e} \\ % numbers-ok: model names and revision hashes
+Banking77 & dataset & \texttt{f541215} \\ % numbers-ok: revision hash
+Bitext & dataset & \texttt{430d1a8} \\ % numbers-ok: revision hash
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Over-length requests.} Each model's release code defines what happens to a request that is too long,
+and we applied that rule unchanged (\S\ref{sec:protocol}).
+\begin{itemize}
+  \item \pplx{} refuses a request above \dtLimitPplxRelease{} tokens; the refusal counts as wrong. Its serving
+  engine, given the same limit, refused above \dtLimitPplxServed{} tokens; the one affected item was re-scored
+  with the release rule (\S\ref{sec:find-serving}).
+  \item \clef{} and \flash{} truncate the input state so that the request fits \dtLimitClefRelease{} tokens, the
+  release code's default, and refuse only when the questions alone do not fit.
+  \item \jev{} documents a limit for the state plus the longest question, and in our probe requests above it returned an
+  error, not a truncated answer. No \jev{} request in this study came near it.
+  \item \orb{} never truncates: its reader asserts that every prompt fits its context and stops otherwise.
+\end{itemize}
+No Banking77 or Bitext request reached any of these limits: the longest prompts we recorded had
+\psMaxPromptTokens{} tokens on Banking77 and \btMaxPromptTokens{} on Bitext. The limits matter only in the thirteen-task study.

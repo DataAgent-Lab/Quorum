@@ -108,6 +108,15 @@ def main():
             a = cb[ds][cond]["acc"]
             geo_gt_arith += a["geo"] > a["arith"]; geo_gt_vote += a["geo"] > a["vote"]
     put("GeoGtArith", geo_gt_arith, str(geo_gt_arith)); put("GeoGtVote", geo_gt_vote, str(geo_gt_vote))
+    sig = {k: 0 for k in ("GeoSigArith", "ArithSigGeo", "GeoSigVote", "VoteSigGeo")}   # family F3, Holm over 28
+    for ds, _ in DATASETS:
+        for cond, _ in CONDS:
+            for test, a, b in (("geo_vs_arith", "GeoSigArith", "ArithSigGeo"), ("geo_vs_vote", "GeoSigVote", "VoteSigGeo")):
+                t = cb[ds][cond]["tests"][test]
+                if t["p_holm_F3"] < 0.05:
+                    sig[a if t["b"] > t["c"] else b] += 1
+    for k, v in sig.items():
+        put(k, v, str(v))
 
     # Z8: clean-NLI jury vs its best member, paired exact McNemar, Holm over all 14 conditions; wins counted on the
     # conditions unexposed for every member (CLINC150, MTOP, SNIPS, Bitext) and overall

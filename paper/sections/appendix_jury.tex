@@ -3,9 +3,9 @@
 \label{app:jury}
 
 \paragraph{Design.} \gj{} scores each utterance against every label text (name or one-line description) with three
-encoders: an NLI cross-encoder, which scores the hypothesis ``This example is about \emph{label}'', and two
-bi-encoders, which score cosine similarity between utterance and label text \authorcheck{confirm the exact NLI
-template}. Each member's scores pass through a softmax with temperature one, and the members are pooled by an
+encoders: an NLI cross-encoder, which scores the entailment of the hypothesis ``This message is about
+\emph{label}.'' given the utterance, and two bi-encoders, which score the cosine similarity between the utterance and
+the same templated hypothesis. Each member's scores pass through a softmax with temperature one, and the members are pooled by an
 equal-weight geometric mean. No weight or temperature is fitted per task.
 
 \paragraph{The jury against its members.} With the original NLI member, the jury beats its best single member on
@@ -13,15 +13,40 @@ equal-weight geometric mean. No weight or temperature is fitted per task.
 14). With the documented-clean NLI member it wins on \zxCleanNliWins{} of 14 and on all
 \zxCleanNliUnexposedOf{} conditions that are unexposed for every member. With a weaker NLI member trained only on
 SNLI and MNLI the picture is mixed, so the benefit of pooling depends on member quality.
-\authorcheck{Add the per-dataset table generated from zero\_shot.json.}
+Table~\ref{tab:jury} gives the per-dataset accuracies with the original members.
+
+\begin{table}[h]
+\centering\small
+\caption{Zero-shot accuracy (\%) of \gj{} and its members on each full test set, with label names and with
+one-line descriptions. $^*$: the jury is significantly more accurate than its best single member (exact McNemar,
+Holm over the 14 conditions).}
+\label{tab:jury}
+\begin{tabular}{@{}lrrrrrrrr@{}}
+\toprule
+ & \multicolumn{4}{c}{label names} & \multicolumn{4}{c}{descriptions} \\
+\cmidrule(lr){2-5}\cmidrule(l){6-9}
+Dataset & jury & NLI & bge-L & bge-B & jury & NLI & bge-L & bge-B \\
+\midrule
+Banking77 & \zsBankingNameAcc\ifthenelse{\equal{\zsBankingNameVerdict}{win}}{$^*$}{} & \zsBankingNameAccNli & \zsBankingNameAccBgeL & \zsBankingNameAccBgeB & \zsBankingDescAcc\ifthenelse{\equal{\zsBankingDescVerdict}{win}}{$^*$}{} & \zsBankingDescAccNli & \zsBankingDescAccBgeL & \zsBankingDescAccBgeB \\
+CLINC150 & \zsClincNameAcc\ifthenelse{\equal{\zsClincNameVerdict}{win}}{$^*$}{} & \zsClincNameAccNli & \zsClincNameAccBgeL & \zsClincNameAccBgeB & \zsClincDescAcc\ifthenelse{\equal{\zsClincDescVerdict}{win}}{$^*$}{} & \zsClincDescAccNli & \zsClincDescAccBgeL & \zsClincDescAccBgeB \\
+HWU64 & \zsHwuNameAcc\ifthenelse{\equal{\zsHwuNameVerdict}{win}}{$^*$}{} & \zsHwuNameAccNli & \zsHwuNameAccBgeL & \zsHwuNameAccBgeB & \zsHwuDescAcc\ifthenelse{\equal{\zsHwuDescVerdict}{win}}{$^*$}{} & \zsHwuDescAccNli & \zsHwuDescAccBgeL & \zsHwuDescAccBgeB \\
+MASSIVE & \zsMassiveNameAcc\ifthenelse{\equal{\zsMassiveNameVerdict}{win}}{$^*$}{} & \zsMassiveNameAccNli & \zsMassiveNameAccBgeL & \zsMassiveNameAccBgeB & \zsMassiveDescAcc\ifthenelse{\equal{\zsMassiveDescVerdict}{win}}{$^*$}{} & \zsMassiveDescAccNli & \zsMassiveDescAccBgeL & \zsMassiveDescAccBgeB \\
+MTOP & \zsMtopNameAcc\ifthenelse{\equal{\zsMtopNameVerdict}{win}}{$^*$}{} & \zsMtopNameAccNli & \zsMtopNameAccBgeL & \zsMtopNameAccBgeB & \zsMtopDescAcc\ifthenelse{\equal{\zsMtopDescVerdict}{win}}{$^*$}{} & \zsMtopDescAccNli & \zsMtopDescAccBgeL & \zsMtopDescAccBgeB \\
+SNIPS & \zsSnipsNameAcc\ifthenelse{\equal{\zsSnipsNameVerdict}{win}}{$^*$}{} & \zsSnipsNameAccNli & \zsSnipsNameAccBgeL & \zsSnipsNameAccBgeB & \zsSnipsDescAcc\ifthenelse{\equal{\zsSnipsDescVerdict}{win}}{$^*$}{} & \zsSnipsDescAccNli & \zsSnipsDescAccBgeL & \zsSnipsDescAccBgeB \\
+Bitext & \zsBitextNameAcc\ifthenelse{\equal{\zsBitextNameVerdict}{win}}{$^*$}{} & \zsBitextNameAccNli & \zsBitextNameAccBgeL & \zsBitextNameAccBgeB & \zsBitextDescAcc\ifthenelse{\equal{\zsBitextDescVerdict}{win}}{$^*$}{} & \zsBitextDescAccNli & \zsBitextDescAccBgeL & \zsBitextDescAccBgeB \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \paragraph{Descriptions vs.\ names.} One-line descriptions written by an LLM from the label names alone improve the
-jury on six of seven datasets, most on MTOP (\zsMtopDescVsNameGain{} points) and SNIPS
+jury on all seven datasets, significantly on six (all but HWU64, $p_\text{Holm}=\zsHwuDescVsNamePHolm$; exact
+McNemar, Holm over the seven), most on MTOP (\zsMtopDescVsNameGain{} points) and SNIPS
 (\zsSnipsDescVsNameGain), whose label names are terse identifiers.
 
 \paragraph{Combination rule.} The geometric mean is more accurate than the arithmetic mean on \zxGeoGtArith{} of 14
-conditions and than majority vote on \zxGeoGtVote{} of 14 \authorcheck{add the significant counts from the
-combiner generator}.
+conditions and than majority vote on \zxGeoGtVote{} of 14. Of these differences, \zxGeoSigArith{} against the
+arithmetic mean and \zxGeoSigVote{} against the vote are significant (exact McNemar, Holm over the 28 tests); no
+condition favours either alternative significantly (\zxArithSigGeo{} and \zxVoteSigGeo).
 
 \paragraph{Calibration with one temperature.} The raw jury is under-confident on all \zxRawUnderconfident{}
 conditions (ECE \zxRawEceMin--\zxRawEceMax; on Banking77 with names, mean confidence \zxBankingNameRawConf{} at
