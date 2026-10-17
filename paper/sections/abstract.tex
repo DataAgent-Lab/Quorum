@@ -10,7 +10,8 @@ serving engine other than the release code must first pass a per-item parity gat
 shots, the protocol reproduces a closed API's published accuracy exactly (\fsJevAAcc\% vs.\ \fsJevPubAcc\%) and
 shows that the choice of retrieved examples moves results as much as the choice of model: the closed API gains
 \fsJevBMinusJevAPt{} points from a different retrieval rule ($p=\fsJevBVsJevAP$), and the open baseline whose
-advantage over it was significant ties it once both see the same examples ($p=\fsCleanVsJevBP$). The protocol also
+advantage over it was significant ties it once both see the same examples ($p=\fsCleanVsJevBP$). With fewer
+labelled examples to retrieve from, every system tested loses accuracy but the ranking stays the same. The protocol also
 exposes that the most accurate model is the worst calibrated, that probability rounding makes log loss unusable for
 one API, and that zero-shot numbers of models with undisclosed training data cannot be interpreted.
 On a second 24-shot dataset every system is close to the ceiling, yet the closed API ranks above two open decision

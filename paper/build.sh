@@ -16,3 +16,8 @@ grep -E "Warning.*(undefined|multiply)" build/main.log || true
 "$PY" tools/checks.py layout-tmlr build/main.pdf
 "$PY" tools/checks.py numbers sections
 "$PY" tools/checks.py anonymity build/main.pdf sections main.tex main.bib
+# AI-integrity checks that need no network (`refs`, which queries Crossref/arXiv/ACL, runs by hand before submission)
+"$PY" tools/ai_integrity.py cites main.bib main.tex sections
+"$PY" tools/ai_integrity.py artifacts main.tex sections build/main.pdf
+"$PY" tools/ai_integrity.py hidden build/main.pdf
+"$PY" tools/ai_integrity.py disclosure main.tex sections
